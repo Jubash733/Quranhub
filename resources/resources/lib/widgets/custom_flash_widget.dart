@@ -29,67 +29,72 @@ class CustomFlashWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flash(
+    final accentColor =
+        darkTheme ? kPurplePrimary : (statusColor(status.toLowerCase()) ?? kPurplePrimary);
+    final gradient = darkTheme
+        ? const LinearGradient(
+            colors: [
+              kDarkPurple,
+              kDarkTheme,
+              kDarkTheme,
+            ],
+          )
+        : const LinearGradient(
+            colors: [
+              Colors.white,
+              kGrey92,
+            ],
+          );
+
+    return FlashBar(
       controller: controller,
       behavior: FlashBehavior.floating,
       position: positionBottom ? FlashPosition.bottom : FlashPosition.top,
-      borderRadius: BorderRadius.circular(8.0),
-      borderColor:
-          darkTheme ? kPurplePrimary : statusColor(status.toLowerCase()),
-      backgroundGradient: darkTheme
-          ? const LinearGradient(
-              colors: [
-                kDarkPurple,
-                kDarkTheme,
-                kDarkTheme,
-              ],
-            )
-          : const LinearGradient(
-              colors: [
-                Colors.white,
-                kGrey92,
-              ],
-            ),
       forwardAnimationCurve: Curves.easeInCirc,
       reverseAnimationCurve: Curves.easeOutBack,
-      child: DefaultTextStyle(
-        style: const TextStyle(color: kPurplePrimary),
-        child: FlashBar(
-          title: Text(
-            title,
-            style: kHeading5.copyWith(
-              color: darkTheme ? kGrey92 : statusColor(status.toLowerCase()),
-              fontSize: 16,
-            ),
-          ),
-          content: Text(
-            message,
-            style: kHeading5.copyWith(
-              color: darkTheme ? kGrey92 : statusColor(status.toLowerCase()),
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          indicatorColor:
-              darkTheme ? kPurplePrimary : statusColor(status.toLowerCase()),
-          icon: Icon(
-            status.toLowerCase() == 'success'
-                ? Icons.check_circle
-                : status == 'failed'
-                    ? Icons.warning_rounded
-                    : Icons.info,
-            color: darkTheme ? Colors.white : statusColor(status.toLowerCase()),
-          ),
-          primaryAction: TextButton(
-            onPressed: () => controller.dismiss(),
-            child: Text(
-              'TUTUP',
-              style: kHeading5.copyWith(
-                color: darkTheme ? kGrey92 : statusColor(status.toLowerCase()),
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+      backgroundColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      clipBehavior: Clip.antiAlias,
+      builder: (context, child) => DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: gradient,
+          borderRadius: BorderRadius.circular(8.0),
+          border: Border.all(color: accentColor),
+        ),
+        child: child,
+      ),
+      title: Text(
+        title,
+        style: kHeading5.copyWith(
+          color: darkTheme ? kGrey92 : accentColor,
+          fontSize: 16,
+        ),
+      ),
+      content: Text(
+        message,
+        style: kHeading5.copyWith(
+          color: darkTheme ? kGrey92 : accentColor,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      indicatorColor: accentColor,
+      icon: Icon(
+        status.toLowerCase() == 'success'
+            ? Icons.check_circle
+            : status == 'failed'
+                ? Icons.warning_rounded
+                : Icons.info,
+        color: darkTheme ? Colors.white : accentColor,
+      ),
+      primaryAction: TextButton(
+        onPressed: () => controller.dismiss(),
+        child: Text(
+          'TUTUP',
+          style: kHeading5.copyWith(
+            color: darkTheme ? kGrey92 : accentColor,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),

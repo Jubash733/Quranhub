@@ -9,8 +9,8 @@ class DioHandler {
   Dio _getDio() {
     BaseOptions options = BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: 50000,
-      receiveTimeout: 30000,
+      connectTimeout: const Duration(milliseconds: 50000),
+      receiveTimeout: const Duration(milliseconds: 30000),
     );
     options.headers = _defaultHeader();
     final dio = Dio(options);
