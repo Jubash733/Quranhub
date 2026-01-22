@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dependencies/dio/dio.dart';
 import 'package:quran/data/models/detail_surah_dto.dart';
 import 'package:quran/data/models/juz_dto.dart';
@@ -19,7 +21,9 @@ class QuranRemoteDataSourceImpl extends QuranRemoteDataSource {
   Future<List<SurahDTO>> getAllSurah() async {
     try {
       final response = await dio.get('${ApiConstant.baseUrl}surah');
-      return SurahResponseDTO.fromJson(response.data).data;
+      final payload =
+          response.data is String ? jsonDecode(response.data) : response.data;
+      return SurahResponseDTO.fromJson(payload).data;
     } catch (e) {
       rethrow;
     }
@@ -29,7 +33,9 @@ class QuranRemoteDataSourceImpl extends QuranRemoteDataSource {
   Future<DetailSurahDTO> getDetailSurah(int id) async {
     try {
       final response = await dio.get('${ApiConstant.baseUrl}surah/$id');
-      return DetailSurahResponseDTO.fromJson(response.data).data;
+      final payload =
+          response.data is String ? jsonDecode(response.data) : response.data;
+      return DetailSurahResponseDTO.fromJson(payload).data;
     } catch (e) {
       rethrow;
     }
@@ -39,7 +45,9 @@ class QuranRemoteDataSourceImpl extends QuranRemoteDataSource {
   Future<JuzDTO> getJuz(int id) async {
     try {
       final response = await dio.get('${ApiConstant.baseUrl}juz/$id');
-      return JuzResponseDTO.fromJson(response.data).data;
+      final payload =
+          response.data is String ? jsonDecode(response.data) : response.data;
+      return JuzResponseDTO.fromJson(payload).data;
     } catch (e) {
       rethrow;
     }

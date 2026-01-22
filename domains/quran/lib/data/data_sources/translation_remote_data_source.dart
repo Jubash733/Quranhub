@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dependencies/dio/dio.dart';
 import 'package:quran/data/models/ayah_translation_dto.dart';
 import 'package:quran/data/models/detail_surah_dto.dart';
@@ -17,7 +19,9 @@ class TranslationRemoteDataSourceImpl extends TranslationRemoteDataSource {
   Future<AyahTranslationDTO> getAyahTranslation(AyahRef ref) async {
     try {
       final response = await dio.get('${ApiConstant.baseUrl}surah/${ref.surah}');
-      final detail = DetailSurahResponseDTO.fromJson(response.data).data;
+      final payload =
+          response.data is String ? jsonDecode(response.data) : response.data;
+      final detail = DetailSurahResponseDTO.fromJson(payload).data;
       final verse = detail.verses.firstWhere(
         (item) => item.number.inSurah == ref.ayah,
         orElse: () => throw Exception(

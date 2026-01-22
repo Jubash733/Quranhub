@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:quran/data/database/database_helper.dart';
 import 'package:quran/data/models/bookmark_verses_dto.dart';
 import 'package:quran/data/models/last_read_surah_dto.dart';
@@ -19,14 +20,29 @@ class QuranLocalDataSourceImpl extends QuranLocalDataSource {
 
   QuranLocalDataSourceImpl({required this.databaseHelper});
 
+  bool get _isLocalDbSupported {
+    if (kIsWeb) {
+      return false;
+    }
+    return defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS;
+  }
+
   @override
   Future<List<LastReadSurahDTO>> getLastRead() async {
+    if (!_isLocalDbSupported) {
+      return [];
+    }
     final result = await databaseHelper.getLastReadQuran();
     return result.map((data) => LastReadSurahDTO.fromMap(data)).toList();
   }
 
   @override
   Future<String> insertLastRead(LastReadSurahDTO lastRead) async {
+    if (!_isLocalDbSupported) {
+      return 'Local storage unsupported';
+    }
     try {
       await databaseHelper.insertLastReadQuran(lastRead);
       return 'Insert Last Read Quran';
@@ -37,6 +53,9 @@ class QuranLocalDataSourceImpl extends QuranLocalDataSource {
 
   @override
   Future<String> updateLastRead(LastReadSurahDTO lastRead) async {
+    if (!_isLocalDbSupported) {
+      return 'Local storage unsupported';
+    }
     try {
       await databaseHelper.updateLastReadQuran(lastRead);
       return 'Update Last Read Quran';
@@ -48,12 +67,18 @@ class QuranLocalDataSourceImpl extends QuranLocalDataSource {
   // BOOKMARK VERSES
   @override
   Future<List<BookmarkVersesDTO>> getBookmarkVerses() async {
+    if (!_isLocalDbSupported) {
+      return [];
+    }
     final result = await databaseHelper.getBookmarkVerses();
     return result.map((data) => BookmarkVersesDTO.fromMap(data)).toList();
   }
 
   @override
   Future<String> insertBookmarkVerses(BookmarkVersesDTO bookmark) async {
+    if (!_isLocalDbSupported) {
+      return 'Local storage unsupported';
+    }
     try {
       await databaseHelper.insertBookmarkVerses(bookmark);
       return 'Insert Bookmark Verses';
@@ -64,6 +89,9 @@ class QuranLocalDataSourceImpl extends QuranLocalDataSource {
 
   @override
   Future<String> removeBookmarkVerses(BookmarkVersesDTO bookmark) async {
+    if (!_isLocalDbSupported) {
+      return 'Local storage unsupported';
+    }
     try {
       await databaseHelper.removeBookmarkVerses(bookmark);
       return 'Remove Bookmark Verses';
@@ -74,6 +102,9 @@ class QuranLocalDataSourceImpl extends QuranLocalDataSource {
 
   @override
   Future<BookmarkVersesDTO?> getBookmarkVerseById(int id) async {
+    if (!_isLocalDbSupported) {
+      return null;
+    }
     try {
       final result = await databaseHelper.getBookmarkVerseById(id);
 
