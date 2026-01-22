@@ -64,7 +64,9 @@ class BannerLastReadWidget extends StatelessWidget {
                           child: Text(
                             state.data.isEmpty ? '-' : state.data[0].revelation,
                             style: kHeading6.copyWith(
-                              color: Colors.white.withOpacity(0.8),
+                              color: Colors.white.withValues(
+                                alpha: (0.8 * 255).round(),
+                              ),
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                             ),
@@ -74,7 +76,9 @@ class BannerLastReadWidget extends StatelessWidget {
                         ShowUpAnimation(
                           child: Icon(
                             Icons.circle,
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(
+                              alpha: (0.8 * 255).round(),
+                            ),
                             size: 4,
                           ),
                         ),
@@ -85,7 +89,9 @@ class BannerLastReadWidget extends StatelessWidget {
                                 ? '-'
                                 : '${state.data[0].numberOfVerses} Ayat',
                             style: kHeading6.copyWith(
-                              color: Colors.white.withOpacity(0.8),
+                              color: Colors.white.withValues(
+                                alpha: (0.8 * 255).round(),
+                              ),
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                             ),

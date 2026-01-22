@@ -78,7 +78,9 @@ class BannerVersesWidget extends StatelessWidget {
                     Text(
                       surah.revelation.id,
                       style: kHeading6.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(
+                          alpha: (0.9 * 255).round(),
+                        ),
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                       ),
@@ -86,14 +88,18 @@ class BannerVersesWidget extends StatelessWidget {
                     const SizedBox(width: 5.0),
                     Icon(
                       Icons.circle,
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.white.withValues(
+                        alpha: (0.5 * 255).round(),
+                      ),
                       size: 5,
                     ),
                     const SizedBox(width: 5.0),
                     Text(
                       '${surah.numberOfVerses} Ayat',
                       style: kHeading6.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(
+                          alpha: (0.9 * 255).round(),
+                        ),
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                       ),

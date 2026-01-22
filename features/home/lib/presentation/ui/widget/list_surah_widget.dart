@@ -93,7 +93,9 @@ class SurahWidget extends StatelessWidget {
                       Text(
                         surah.revelation.id,
                         style: kHeading6.copyWith(
-                          color: kGrey.withOpacity(0.8),
+                          color: kGrey.withValues(
+                            alpha: (0.8 * 255).round(),
+                          ),
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),
@@ -101,14 +103,18 @@ class SurahWidget extends StatelessWidget {
                       const SizedBox(width: 4.0),
                       Icon(
                         Icons.circle,
-                        color: kGrey.withOpacity(0.8),
+                        color: kGrey.withValues(
+                          alpha: (0.8 * 255).round(),
+                        ),
                         size: 4,
                       ),
                       const SizedBox(width: 4.0),
                       Text(
                         '${surah.numberOfVerses} Ayat',
                         style: kHeading6.copyWith(
-                          color: kGrey.withOpacity(0.8),
+                          color: kGrey.withValues(
+                            alpha: (0.8 * 255).round(),
+                          ),
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),
@@ -135,7 +141,9 @@ class SurahWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Divider(
               thickness: 1,
-              color: kGrey.withOpacity(0.25),
+              color: kGrey.withValues(
+                alpha: (0.25 * 255).round(),
+              ),
             ),
           ),
         ],

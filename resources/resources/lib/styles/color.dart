@@ -18,12 +18,10 @@ const kColorScheme = ColorScheme(
   secondary: kPurpleSecondary,
   secondaryContainer: kPurpleSecondary,
   surface: kPurplePrimary,
-  background: kPurplePrimary,
   error: Colors.red,
   onPrimary: kDarkPurple,
   onSecondary: Colors.white,
   onSurface: Colors.white,
-  onBackground: Colors.white,
   onError: Colors.white,
   brightness: Brightness.light,
 );

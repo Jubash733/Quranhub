@@ -26,6 +26,9 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
     super.initState();
 
     Future.microtask(() {
+      if (!mounted) {
+        return;
+      }
       context.read<DetailSurahBloc>().add(FetchDetailSurah(id: widget.id));
       context.read<LastReadCubit>().getLastRead();
     });

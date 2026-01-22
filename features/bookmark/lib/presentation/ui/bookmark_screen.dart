@@ -21,7 +21,12 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   void initState() {
     super.initState();
 
-    Future.microtask(() => context.read<BookmarkBloc>().add(FetchBookmark()));
+    Future.microtask(() {
+      if (!mounted) {
+        return;
+      }
+      context.read<BookmarkBloc>().add(FetchBookmark());
+    });
   }
 
   @override

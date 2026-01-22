@@ -25,6 +25,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) {
+        return;
+      }
       context.read<HomeBloc>().add(FetchSurah());
       context.read<LastReadCubit>().getLastRead();
     });
@@ -110,8 +113,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
                           color: prefSetProvider.isDarkTheme
-                              ? kGrey.withOpacity(0.9)
-                              : kGrey.withOpacity(0.7),
+                              ? kGrey.withValues(
+                                  alpha: (0.9 * 255).round(),
+                                )
+                              : kGrey.withValues(
+                                  alpha: (0.7 * 255).round(),
+                                ),
                           letterSpacing: 0.0,
                         ),
                       ),

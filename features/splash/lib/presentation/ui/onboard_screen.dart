@@ -36,7 +36,9 @@ class OnBoardScreen extends StatelessWidget {
                     style: kHeading6.copyWith(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w400,
-                      color: kGrey.withOpacity(0.8),
+                      color: kGrey.withValues(
+                        alpha: 0.8,
+                      ),
                     ),
                   ),
                 ),
