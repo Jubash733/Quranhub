@@ -1,9 +1,13 @@
 import 'package:dependencies/get_it/get_it.dart';
 import 'package:quran/data/data_sources/quran_local_data_source.dart';
 import 'package:quran/data/data_sources/quran_remote_data_source.dart';
+import 'package:quran/data/data_sources/translation_remote_data_source.dart';
 import 'package:quran/data/database/database_helper.dart';
 import 'package:quran/data/repositories/quran_repository_impl.dart';
+import 'package:quran/data/repositories/translation_repository_impl.dart';
 import 'package:quran/domain/repositories/quran_repository.dart';
+import 'package:quran/domain/repositories/translation_repository.dart';
+import 'package:quran/domain/usecases/get_ayah_translation_usecase.dart';
 import 'package:quran/domain/usecases/get_bookmark_verses_usecase.dart';
 import 'package:quran/domain/usecases/get_detail_surah_usecase.dart';
 import 'package:quran/domain/usecases/get_juz_usecase.dart';
@@ -32,9 +36,15 @@ class RegisterQuranModule {
     sl.registerLazySingleton<QuranLocalDataSource>(
         () => QuranLocalDataSourceImpl(databaseHelper: sl()));
 
+    /// Translation Data Source
+    sl.registerLazySingleton<TranslationRemoteDataSource>(
+        () => TranslationRemoteDataSourceImpl(dio: sl()));
+
     /// Repository
     sl.registerLazySingleton<QuranRepository>(() =>
         QuranRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()));
+    sl.registerLazySingleton<TranslationRepository>(
+        () => TranslationRepositoryImpl(remoteDataSource: sl()));
 
     /// Use Case
     sl.registerLazySingleton<GetSurahUsecase>(
@@ -45,6 +55,9 @@ class RegisterQuranModule {
 
     sl.registerLazySingleton<GetJuzUsecase>(
         () => GetJuzUsecase(repository: sl()));
+
+    sl.registerLazySingleton<GetAyahTranslationUsecase>(
+        () => GetAyahTranslationUsecase(repository: sl()));
 
     sl.registerLazySingleton<SaveLastReadUsecase>(
         () => SaveLastReadUsecase(repository: sl()));

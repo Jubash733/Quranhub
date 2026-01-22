@@ -3,10 +3,13 @@
 import 'dart:developer';
 
 import 'package:common/utils/provider/preference_settings_provider.dart';
+import 'package:common/utils/state/view_data_state.dart';
 import 'package:dependencies/bloc/bloc.dart';
 import 'package:dependencies/just_audio/just_audio.dart';
+import 'package:detail_surah/presentation/cubits/ayah_translation/ayah_translation_cubit.dart';
 import 'package:detail_surah/presentation/cubits/bookmark_verses/bookmark_verses_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:quran/domain/entities/detail_surah_entity.dart';
 import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
@@ -16,6 +19,7 @@ class VersesWidget extends StatefulWidget {
   final VerseEntity verses;
   final PreferenceSettingsProvider prefSetProvider;
   final String surah;
+  final int surahNumber;
   final AudioPlayer player = AudioPlayer();
 
   VersesWidget({
@@ -23,6 +27,7 @@ class VersesWidget extends StatefulWidget {
     required this.verses,
     required this.prefSetProvider,
     required this.surah,
+    required this.surahNumber,
   });
 
   @override
@@ -74,6 +79,125 @@ class _VersesWidgetState extends State<VersesWidget> {
     if (state == AppLifecycleState.paused) {
       widget.player.stop();
     }
+  }
+
+  void _showTranslationBottomSheet(BuildContext context) {
+    final ref = AyahRef(
+      surah: widget.surahNumber,
+      ayah: widget.verses.number.inSurah,
+    );
+
+    context.read<AyahTranslationCubit>().fetchTranslation(ref);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      builder: (sheetContext) {
+        return Padding(
+          padding: EdgeInsets.fromLTRB(
+            20.0,
+            16.0,
+            20.0,
+            24.0 + MediaQuery.of(sheetContext).viewInsets.bottom,
+          ),
+          child: BlocBuilder<AyahTranslationCubit, AyahTranslationState>(
+            builder: (context, state) {
+              final status = state.status.status;
+
+              if (status.isLoading || status.isInitial) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: widget.prefSetProvider.isDarkTheme
+                        ? Colors.white
+                        : kPurplePrimary,
+                  ),
+                );
+              }
+
+              if (status.isError) {
+                return Text(
+                  state.status.message,
+                  style: kHeading6.copyWith(
+                    fontSize: 12.0,
+                    color: widget.prefSetProvider.isDarkTheme
+                        ? kGreyLight
+                        : kDarkPurple,
+                  ),
+                );
+              }
+
+              if (!status.isHasData || state.status.data == null) {
+                return Text(
+                  'No Translation',
+                  style: kHeading6.copyWith(
+                    fontSize: 12.0,
+                    color: widget.prefSetProvider.isDarkTheme
+                        ? kGreyLight
+                        : kDarkPurple,
+                  ),
+                );
+              }
+
+              final translation = state.status.data!;
+
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 40.0,
+                        height: 4.0,
+                        decoration: BoxDecoration(
+                          color: kGrey.withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      'Translation',
+                      style: kHeading6.copyWith(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        color: widget.prefSetProvider.isDarkTheme
+                            ? Colors.white
+                            : kDarkPurple,
+                      ),
+                    ),
+                    const SizedBox(height: 6.0),
+                    Text(
+                      '${widget.surah} : ${widget.verses.number.inSurah}',
+                      style: kHeading6.copyWith(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        color: widget.prefSetProvider.isDarkTheme
+                            ? kGreyLight
+                            : kDarkPurple.withOpacity(0.6),
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      translation.text,
+                      style: kHeading6.copyWith(
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.w400,
+                        color: widget.prefSetProvider.isDarkTheme
+                            ? kGreyLight
+                            : kDarkPurple,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -209,39 +333,39 @@ class _VersesWidgetState extends State<VersesWidget> {
             ),
           ),
           const SizedBox(height: 12.0),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              widget.verses.text.arab,
-              textAlign: TextAlign.right,
-              style: kHeading6.copyWith(
-                fontSize: 28.0,
-                fontWeight: FontWeight.w500,
-                color: widget.prefSetProvider.isDarkTheme
-                    ? Colors.white
-                    : kDarkPurple,
-              ),
-            ),
-          ),
-          const SizedBox(height: 18.0),
-          Text(
-            widget.verses.text.transliteration.en,
-            style: kHeading6.copyWith(
-              fontSize: 12.0,
-              fontWeight: FontWeight.w400,
-              color:
-                  widget.prefSetProvider.isDarkTheme ? kGreyLight : kDarkPurple,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          Text(
-            widget.verses.translation.id,
-            style: kHeading6.copyWith(
-              fontSize: 12.0,
-              fontWeight: FontWeight.w400,
-              color: widget.prefSetProvider.isDarkTheme
-                  ? kGreyLight
-                  : kDarkPurple.withOpacity(0.7),
+          InkWell(
+            onTap: () => _showTranslationBottomSheet(context),
+            borderRadius: BorderRadius.circular(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    widget.verses.text.arab,
+                    textAlign: TextAlign.right,
+                    style: kHeading6.copyWith(
+                      fontSize: 28.0,
+                      fontWeight: FontWeight.w500,
+                      color: widget.prefSetProvider.isDarkTheme
+                          ? Colors.white
+                          : kDarkPurple,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18.0),
+                Text(
+                  widget.verses.text.transliteration.en,
+                  style: kHeading6.copyWith(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w400,
+                    color: widget.prefSetProvider.isDarkTheme
+                        ? kGreyLight
+                        : kDarkPurple,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

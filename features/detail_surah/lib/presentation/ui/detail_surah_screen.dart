@@ -117,6 +117,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                                               prefSetProvider: prefSetProvider,
                                               surah:
                                                   surah.name.transliteration.id,
+                                              surahNumber: surah.number,
                                             );
                                           },
                                         ),
