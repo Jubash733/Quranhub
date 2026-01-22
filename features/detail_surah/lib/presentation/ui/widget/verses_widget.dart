@@ -47,6 +47,9 @@ class _VersesWidgetState extends State<VersesWidget> {
       await context
           .read<BookmarkVersesCubit>()
           .loadBookmarkVerse(widget.verses.number.inQuran);
+      if (!context.mounted) {
+        return;
+      }
 
       if (context.read<BookmarkVersesCubit>().state.isBookmark) {
         setState(() {
@@ -118,14 +121,30 @@ class _VersesWidgetState extends State<VersesWidget> {
               }
 
               if (status.isError) {
-                return Text(
-                  state.status.message,
-                  style: kHeading6.copyWith(
-                    fontSize: 12.0,
-                    color: widget.prefSetProvider.isDarkTheme
-                        ? kGreyLight
-                        : kDarkPurple,
-                  ),
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      state.status.message,
+                      style: kHeading6.copyWith(
+                        fontSize: 12.0,
+                        color: widget.prefSetProvider.isDarkTheme
+                            ? kGreyLight
+                            : kDarkPurple,
+                      ),
+                    ),
+                    const SizedBox(height: 12.0),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () => context
+                            .read<AyahTranslationCubit>()
+                            .fetchTranslation(ref),
+                        child: const Text('Retry'),
+                      ),
+                    ),
+                  ],
                 );
               }
 
@@ -296,6 +315,9 @@ class _VersesWidgetState extends State<VersesWidget> {
                         await context
                             .read<BookmarkVersesCubit>()
                             .removeBookmarkVerse(widget.verses, widget.surah);
+                        if (!context.mounted) {
+                          return;
+                        }
 
                         context.showCustomFlashMessage(
                           status: 'success',
@@ -308,6 +330,9 @@ class _VersesWidgetState extends State<VersesWidget> {
                         await context
                             .read<BookmarkVersesCubit>()
                             .saveBookmarkVerse(widget.verses, widget.surah);
+                        if (!context.mounted) {
+                          return;
+                        }
 
                         context.showCustomFlashMessage(
                           status: 'success',
