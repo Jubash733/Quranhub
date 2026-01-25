@@ -40,6 +40,9 @@ class _VersesWidgetState extends State<VersesWidget> {
       await context
           .read<BookmarkVersesCubit>()
           .loadBookmarkVerse(widget.bookmark.id);
+      if (!context.mounted) {
+        return;
+      }
 
       if (context.read<BookmarkVersesCubit>().state.isBookmark) {
         setState(() {
@@ -88,7 +91,7 @@ class _VersesWidgetState extends State<VersesWidget> {
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 13.0),
             decoration: BoxDecoration(
               color: kPurplePrimary.withValues(
-                alpha: (0.065 * 255).round(),
+                alpha: 0.065,
               ),
               borderRadius: BorderRadius.circular(14.0),
             ),
@@ -192,6 +195,9 @@ class _VersesWidgetState extends State<VersesWidget> {
                                   tafsir: null),
                               widget.bookmark.surah,
                             );
+                        if (!context.mounted) {
+                          return;
+                        }
 
                         context.showCustomFlashMessage(
                           status: 'success',
@@ -222,6 +228,9 @@ class _VersesWidgetState extends State<VersesWidget> {
                                   tafsir: null),
                               widget.bookmark.surah,
                             );
+                        if (!context.mounted) {
+                          return;
+                        }
                         context.showCustomFlashMessage(
                           status: 'success',
                           title: 'Tambah Bookmark Ayat',
@@ -300,7 +309,7 @@ class _VersesWidgetState extends State<VersesWidget> {
               color: widget.prefSetProvider.isDarkTheme
                   ? kGreyLight
                   : kDarkPurple.withValues(
-                      alpha: (0.7 * 255).round(),
+                      alpha: 0.7,
                     ),
             ),
           ),

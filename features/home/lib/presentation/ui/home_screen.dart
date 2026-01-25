@@ -114,10 +114,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                           fontWeight: FontWeight.w500,
                           color: prefSetProvider.isDarkTheme
                               ? kGrey.withValues(
-                                  alpha: (0.9 * 255).round(),
+                                  alpha: 0.9,
                                 )
                               : kGrey.withValues(
-                                  alpha: (0.7 * 255).round(),
+                                  alpha: 0.7,
                                 ),
                           letterSpacing: 0.0,
                         ),

@@ -174,7 +174,7 @@ class _VersesWidgetState extends State<VersesWidget> {
                           height: 4.0,
                           decoration: BoxDecoration(
                           color: kGrey.withValues(
-                            alpha: (0.4 * 255).round(),
+                            alpha: 0.4,
                           ),
                             borderRadius: BorderRadius.circular(12.0),
                           ),
@@ -198,10 +198,10 @@ class _VersesWidgetState extends State<VersesWidget> {
                           fontSize: 12.0,
                           fontWeight: FontWeight.w400,
                           color: widget.prefSetProvider.isDarkTheme
-                            ? kGreyLight
-                            : kDarkPurple.withValues(
-                                alpha: (0.6 * 255).round(),
-                              ),
+                              ? kGreyLight
+                              : kDarkPurple.withValues(
+                                  alpha: 0.6,
+                                ),
                         ),
                       ),
                       const SizedBox(height: 16.0),
@@ -238,7 +238,7 @@ class _VersesWidgetState extends State<VersesWidget> {
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 13.0),
             decoration: BoxDecoration(
               color: kPurplePrimary.withValues(
-                alpha: (0.065 * 255).round(),
+                alpha: 0.065,
               ),
               borderRadius: BorderRadius.circular(14.0),
             ),
