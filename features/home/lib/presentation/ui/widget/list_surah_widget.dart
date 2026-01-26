@@ -147,36 +147,33 @@ class SurahWidget extends StatelessWidget {
                           color: secondaryColor,
                         ),
                       ),
-                      const SizedBox(height: 4.0),
-                      Row(
+                      const SizedBox(height: 6.0),
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 6.0,
+                        runSpacing: 4.0,
                         children: [
-                          Flexible(
-                            child: Text(
-                              isArabic
-                                  ? surah.revelation.arab
-                                  : surah.revelation.en,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: kSubtitle.copyWith(
-                                color: secondaryColor,
-                              ),
+                          Text(
+                            isArabic
+                                ? surah.revelation.arab
+                                : surah.revelation.en,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: kSubtitle.copyWith(
+                              color: secondaryColor,
                             ),
                           ),
-                          const SizedBox(width: 6.0),
                           Icon(
                             Icons.circle,
                             color: secondaryColor,
                             size: 4,
                           ),
-                          const SizedBox(width: 6.0),
-                          Flexible(
-                            child: Text(
-                              '${surah.numberOfVerses} ${context.l10n.ayah}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: kSubtitle.copyWith(
-                                color: secondaryColor,
-                              ),
+                          Text(
+                            '${surah.numberOfVerses} ${context.l10n.ayah}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: kSubtitle.copyWith(
+                              color: secondaryColor,
                             ),
                           ),
                         ],

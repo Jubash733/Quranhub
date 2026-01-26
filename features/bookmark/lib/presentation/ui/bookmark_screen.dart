@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
+import 'package:resources/widgets/state_message.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen({super.key});
@@ -134,49 +135,24 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                           );
                         }
                         if (status.isError) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20.0),
-                            child: Text(
-                              state.statusBookmark.message,
-                              style: kSubtitle.copyWith(
-                                color: prefSetProvider.isDarkTheme
-                                    ? Colors.white70
-                                    : kGrey,
-                              ),
-                            ),
+                          return StateMessage(
+                            title: context.l10n.unexpectedError,
+                            message: state.statusBookmark.message,
+                            icon: Icons.bookmark_remove_outlined,
+                            isDarkTheme: prefSetProvider.isDarkTheme,
+                            actionLabel: context.l10n.retry,
+                            onAction: () =>
+                                context.read<BookmarkBloc>().add(FetchBookmark()),
                           );
                         }
                         if (status.isHasData) {
                           final bookmark = state.statusBookmark.data ?? [];
                           if (bookmark.isEmpty) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 24.0),
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    ShowUpAnimation(
-                                      child: Image.asset(
-                                        'assets/no_data.png',
-                                        width: 80.0,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10.0),
-                                    ShowUpAnimation(
-                                      child: Text(
-                                        context.l10n.bookmarksEmpty,
-                                        style: kHeading6.copyWith(
-                                          fontSize: 16.0,
-                                          color: prefSetProvider.isDarkTheme
-                                              ? Colors.white70
-                                              : kPurplePrimary,
-                                          letterSpacing: 0,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            return StateMessage(
+                              title: context.l10n.bookmarksEmpty,
+                              message: context.l10n.lastReadEmptyMessage,
+                              icon: Icons.bookmark_border_rounded,
+                              isDarkTheme: prefSetProvider.isDarkTheme,
                             );
                           }
                           return ListView.builder(

@@ -3,20 +3,29 @@ import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 
 ThemeData lightTheme = ThemeData.light().copyWith(
-  colorScheme: kColorScheme,
+  colorScheme: kColorScheme.copyWith(
+    brightness: Brightness.light,
+    surface: Colors.white,
+    onSurface: kDarkPurple,
+    primary: kPurplePrimary,
+    onPrimary: Colors.white,
+  ),
   appBarTheme: const AppBarTheme(elevation: 0),
   scaffoldBackgroundColor: Colors.white,
   textTheme: kTextTheme.apply(
-    bodyColor: kPurpleSecondary,
-    decorationColor: kPurpleSecondary,
-    displayColor: kPurpleSecondary,
+    bodyColor: kDarkPurple,
+    decorationColor: kDarkPurple,
+    displayColor: kDarkPurple,
   ),
 );
 
 ThemeData darkTheme = ThemeData.dark().copyWith(
   colorScheme: kColorScheme.copyWith(
-    primary: kDarkTheme,
+    brightness: Brightness.dark,
+    primary: kPurplePrimary,
     onPrimary: Colors.white,
+    surface: kDarkTheme,
+    onSurface: Colors.white,
   ),
   appBarTheme: const AppBarTheme(elevation: 0),
   scaffoldBackgroundColor: kDarkTheme,

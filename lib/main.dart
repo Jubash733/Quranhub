@@ -59,16 +59,23 @@ class MyApp extends StatelessWidget {
             theme: prefSetProvider.themeData,
             navigatorKey: navigatorKey,
             navigatorObservers: [routeObserver],
-            debugShowCheckedModeBanner: false,
-            locale: prefSetProvider.locale,
-            supportedLocales: const [
-              Locale('ar'),
-              Locale('en'),
-            ],
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
+          debugShowCheckedModeBanner: false,
+          locale: prefSetProvider.locale,
+          supportedLocales: const [
+            Locale('ar'),
+            Locale('en'),
+          ],
+          builder: (context, child) {
+            final isArabic = prefSetProvider.locale.languageCode == 'ar';
+            return Directionality(
+              textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
+              child: child ?? const SizedBox.shrink(),
+            );
+          },
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
             initialRoute: NamedRoutes.splashScreen,

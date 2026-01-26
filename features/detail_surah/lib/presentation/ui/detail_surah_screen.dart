@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
+import 'package:resources/widgets/state_message.dart';
 
 class DetailSurahScreen extends StatefulWidget {
   final int id;
@@ -84,12 +85,25 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                       ),
                     );
                   } else if (status.isNoData) {
-                    return Center(child: Text(context.l10n.noData));
+                    return StateMessage(
+                      title: context.l10n.noData,
+                      message: context.l10n.unexpectedError,
+                      icon: Icons.menu_book_outlined,
+                      isDarkTheme: prefSetProvider.isDarkTheme,
+                    );
                   } else if (status.isError) {
-                    return Center(
-                        child: Text(state.statusDetailSurah.message.isNotEmpty
-                            ? state.statusDetailSurah.message
-                            : context.l10n.unexpectedError));
+                    return StateMessage(
+                      title: context.l10n.unexpectedError,
+                      message: state.statusDetailSurah.message.isNotEmpty
+                          ? state.statusDetailSurah.message
+                          : context.l10n.unexpectedError,
+                      icon: Icons.wifi_off_rounded,
+                      isDarkTheme: prefSetProvider.isDarkTheme,
+                      actionLabel: context.l10n.retry,
+                      onAction: () => context
+                          .read<DetailSurahBloc>()
+                          .add(FetchDetailSurah(id: widget.id)),
+                    );
                   } else if (status.isHasData) {
                     final surah = state.statusDetailSurah.data;
                     final isArabic = context.l10n.isArabic;

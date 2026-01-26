@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
+import 'package:resources/widgets/skeleton.dart';
 
 class BannerLastReadWidget extends StatelessWidget {
   const BannerLastReadWidget({super.key});
@@ -57,6 +58,55 @@ class BannerLastReadWidget extends StatelessWidget {
             ),
             child: BlocBuilder<LastReadCubit, LastReadState>(
               builder: (context, state) {
+                if (state.message == 'initial') {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SkeletonBox(
+                        height: 18,
+                        width: 120,
+                        baseColor: Colors.white.withValues(alpha: 0.2),
+                        highlightColor: Colors.white.withValues(alpha: 0.35),
+                      ),
+                      const SizedBox(height: 18.0),
+                      SkeletonBox(
+                        height: 20,
+                        width: 160,
+                        baseColor: Colors.white.withValues(alpha: 0.2),
+                        highlightColor: Colors.white.withValues(alpha: 0.35),
+                      ),
+                      const SizedBox(height: 10.0),
+                      SkeletonBox(
+                        height: 14,
+                        width: 140,
+                        baseColor: Colors.white.withValues(alpha: 0.2),
+                        highlightColor: Colors.white.withValues(alpha: 0.35),
+                      ),
+                    ],
+                  );
+                }
+                if (state.data.isEmpty) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        context.l10n.lastReadEmptyTitle,
+                        style: kHeading6.copyWith(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 6.0),
+                      Text(
+                        context.l10n.lastReadEmptyMessage,
+                        style: kSubtitle.copyWith(
+                          color: Colors.white.withValues(alpha: 0.85),
+                        ),
+                      ),
+                    ],
+                  );
+                }
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

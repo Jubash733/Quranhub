@@ -11,6 +11,7 @@ import 'package:resources/constant/named_routes.dart';
 import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
+import 'package:resources/widgets/state_message.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -102,16 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                           final actionChildren = isRtl
-                              ? [
-                                  settingsIcon,
-                                  const SizedBox(width: 10.0),
-                                  savedIcon,
-                                ]
-                              : [
-                                  savedIcon,
-                                  const SizedBox(width: 10.0),
-                                  settingsIcon,
-                                ];
+                              ? [settingsIcon, savedIcon]
+                              : [savedIcon, settingsIcon];
 
                           return Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,8 +115,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               const SizedBox(width: 8.0),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
+                              Wrap(
+                                spacing: 10.0,
+                                runSpacing: 8.0,
                                 children: actionChildren,
                               ),
                             ],
@@ -301,12 +295,24 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           );
                         } else if (status.isNoData) {
-                          return Center(child: Text(context.l10n.noData));
+                          return StateMessage(
+                            title: context.l10n.noData,
+                            message: context.l10n.searchHint,
+                            icon: Icons.menu_book_outlined,
+                            isDarkTheme: prefSetProvider.isDarkTheme,
+                          );
                         } else if (status.isError) {
-                          return Center(
-                              child: Text(state.statusSurah.message.isNotEmpty
-                                  ? state.statusSurah.message
-                                  : context.l10n.unexpectedError));
+                          return StateMessage(
+                            title: context.l10n.unexpectedError,
+                            message: state.statusSurah.message.isNotEmpty
+                                ? state.statusSurah.message
+                                : context.l10n.unexpectedError,
+                            icon: Icons.wifi_off_rounded,
+                            isDarkTheme: prefSetProvider.isDarkTheme,
+                            actionLabel: context.l10n.retry,
+                            onAction: () =>
+                                context.read<HomeBloc>().add(FetchSurah()),
+                          );
                         } else if (status.isHasData) {
                           final surah = state.statusSurah.data ?? [];
                           return ShowUpAnimation(

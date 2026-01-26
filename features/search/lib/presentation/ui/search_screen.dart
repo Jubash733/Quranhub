@@ -8,6 +8,7 @@ import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 import 'package:resources/constant/route_args.dart';
+import 'package:resources/widgets/state_message.dart';
 import 'package:search/presentation/cubit/search_cubit.dart';
 import 'package:search/presentation/ui/widget/search_result_tile.dart';
 
@@ -83,19 +84,25 @@ class _SearchScreenState extends State<SearchScreen> {
                       }
 
                       if (status.isError) {
-                        return Center(
-                          child: Text(
-                            state.status.message.isNotEmpty
-                                ? state.status.message
-                                : context.l10n.unexpectedError,
-                          ),
+                        return StateMessage(
+                          title: context.l10n.unexpectedError,
+                          message: state.status.message.isNotEmpty
+                              ? state.status.message
+                              : context.l10n.unexpectedError,
+                          icon: Icons.search_off_rounded,
+                          isDarkTheme: prefSetProvider.isDarkTheme,
                         );
                       }
 
                       if (status.isHasData) {
                         final results = state.status.data ?? [];
                         if (results.isEmpty) {
-                          return Center(child: Text(context.l10n.noResults));
+                          return StateMessage(
+                            title: context.l10n.noResults,
+                            message: context.l10n.searchHint,
+                            icon: Icons.search_off_rounded,
+                            isDarkTheme: prefSetProvider.isDarkTheme,
+                          );
                         }
                         return ListView.separated(
                           itemCount: results.length,
@@ -121,13 +128,11 @@ class _SearchScreenState extends State<SearchScreen> {
                         );
                       }
 
-                      return Center(
-                        child: Text(
-                          context.l10n.searchResults,
-                          style: kSubtitle.copyWith(
-                            color: kGrey.withValues(alpha: 0.7),
-                          ),
-                        ),
+                      return StateMessage(
+                        title: context.l10n.searchResults,
+                        message: context.l10n.searchHint,
+                        icon: Icons.search_rounded,
+                        isDarkTheme: prefSetProvider.isDarkTheme,
                       );
                     },
                   ),
