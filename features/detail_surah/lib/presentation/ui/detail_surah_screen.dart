@@ -7,23 +7,32 @@ import 'package:detail_surah/presentation/bloc/bloc.dart';
 import 'package:detail_surah/presentation/cubits/last_read/last_read_cubit.dart';
 import 'package:detail_surah/presentation/ui/widget/banner_verses_widget.dart';
 import 'package:detail_surah/presentation/ui/widget/verses_widget.dart';
+import 'package:detail_surah/presentation/ui/widget/verse_skeleton_item.dart';
 import 'package:flutter/material.dart';
+import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 
 class DetailSurahScreen extends StatefulWidget {
   final int id;
+  final int? highlightAyah;
 
-  const DetailSurahScreen({super.key, required this.id});
+  const DetailSurahScreen({super.key, required this.id, this.highlightAyah});
 
   @override
   State<DetailSurahScreen> createState() => _DetailSurahScreenState();
 }
 
 class _DetailSurahScreenState extends State<DetailSurahScreen> {
+  GlobalKey? _highlightKey;
+  bool _didScrollToHighlight = false;
+
   @override
   void initState() {
     super.initState();
+    if (widget.highlightAyah != null) {
+      _highlightKey = GlobalKey();
+    }
 
     Future.microtask(() {
       if (!mounted) {
@@ -48,19 +57,59 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                   final status = state.statusDetailSurah.status;
 
                   if (status.isLoading) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: prefSetProvider.isDarkTheme
-                            ? Colors.white
-                            : kPurplePrimary,
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 160,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: prefSetProvider.isDarkTheme
+                                  ? kDarkPurple.withValues(alpha: 0.6)
+                                  : kGrey92,
+                            ),
+                          ),
+                          const SizedBox(height: 30.0),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 6,
+                            itemBuilder: (context, index) {
+                              return VerseSkeletonItem(
+                                isDarkTheme: prefSetProvider.isDarkTheme,
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     );
                   } else if (status.isNoData) {
-                    return Center(child: Text(state.statusDetailSurah.message));
+                    return Center(child: Text(context.l10n.noData));
                   } else if (status.isError) {
-                    return Center(child: Text(state.statusDetailSurah.message));
+                    return Center(
+                        child: Text(state.statusDetailSurah.message.isNotEmpty
+                            ? state.statusDetailSurah.message
+                            : context.l10n.unexpectedError));
                   } else if (status.isHasData) {
                     final surah = state.statusDetailSurah.data;
+                    final isArabic = context.l10n.isArabic;
+
+                    if (widget.highlightAyah != null &&
+                        !_didScrollToHighlight) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        final current = _highlightKey?.currentContext;
+                        if (current != null && mounted) {
+                          Scrollable.ensureVisible(
+                            current,
+                            duration: const Duration(milliseconds: 450),
+                            curve: Curves.easeInOut,
+                          );
+                          setState(() {
+                            _didScrollToHighlight = true;
+                          });
+                        }
+                      });
+                    }
 
                     if (context.read<LastReadCubit>().state.data.isEmpty) {
                       context.read<LastReadCubit>().addLastRead(surah!);
@@ -84,7 +133,9 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                               const SizedBox(width: 18.0),
                               Expanded(
                                 child: Text(
-                                  surah.name.transliteration.en,
+                                  isArabic
+                                      ? surah.name.short
+                                      : surah.name.transliteration.en,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: kHeading6.copyWith(
@@ -104,9 +155,15 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
-                                BannerVersesWidget(
-                                  surah: surah,
-                                  prefSetProvider: prefSetProvider,
+                                Hero(
+                                  tag: 'surah-card-${surah.number}',
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: BannerVersesWidget(
+                                      surah: surah,
+                                      prefSetProvider: prefSetProvider,
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(height: 30.0),
                                 ShowUpAnimation(
@@ -122,8 +179,18 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                                             return VersesWidget(
                                               verses: surah.verses[index],
                                               prefSetProvider: prefSetProvider,
-                                              surah: surah.name.short,
+                                              surah: isArabic
+                                                  ? surah.name.short
+                                                  : surah.name.transliteration.en,
                                               surahNumber: surah.number,
+                                              highlight: widget.highlightAyah ==
+                                                  surah.verses[index].number
+                                                      .inSurah,
+                                              key: widget.highlightAyah ==
+                                                      surah.verses[index].number
+                                                          .inSurah
+                                                  ? _highlightKey
+                                                  : null,
                                             );
                                           },
                                         ),
@@ -138,7 +205,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                       ],
                     );
                   } else {
-                    return const Center(child: Text('حدث خطأ غير متوقع'));
+                    return Center(child: Text(context.l10n.unexpectedError));
                   }
                 },
               ),

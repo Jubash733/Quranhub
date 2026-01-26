@@ -10,6 +10,7 @@ import 'package:dependencies/provider/provider.dart';
 import 'package:dependencies/shared_preferences/shared_preferences.dart';
 import 'package:detail_surah/presentation/bloc/bloc.dart';
 import 'package:detail_surah/presentation/cubits/ayah_translation/ayah_translation_cubit.dart';
+import 'package:detail_surah/presentation/cubits/ayah_tafsir/ayah_tafsir_cubit.dart';
 import 'package:detail_surah/presentation/cubits/bookmark_verses/bookmark_verses_cubit.dart';
 import 'package:detail_surah/presentation/cubits/last_read/last_read_cubit.dart';
 import 'package:detail_surah/presentation/ui/detail_surah_screen.dart';
@@ -96,6 +97,11 @@ class MyApp extends StatelessWidget {
                       BlocProvider(
                         create: (_) => AyahTranslationCubit(
                           getAyahTranslationUsecase: sl(),
+                        ),
+                      ),
+                      BlocProvider(
+                        create: (_) => AyahTafsirCubit(
+                          getAyahTafsirUsecase: sl(),
                         ),
                       ),
                       BlocProvider(

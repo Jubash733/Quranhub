@@ -13,11 +13,11 @@ class AyahTranslationCubit extends Cubit<AyahTranslationState> {
   AyahTranslationCubit({required this.getAyahTranslationUsecase})
       : super(AyahTranslationState(status: ViewData.initial()));
 
-  Future<void> fetchTranslation(AyahRef ref) async {
-    emit(AyahTranslationState(
-        status: ViewData.loading(message: 'جارٍ تحميل الترجمة')));
+  Future<void> fetchTranslation(AyahRef ref, String languageCode) async {
+    emit(AyahTranslationState(status: ViewData.loading(message: '')));
 
-    final response = await getAyahTranslationUsecase.call(ref);
+    final response =
+        await getAyahTranslationUsecase.call(ref, languageCode: languageCode);
 
     response.fold(
       (failure) => emit(AyahTranslationState(

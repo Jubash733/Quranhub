@@ -1,14 +1,15 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 
 import 'package:common/utils/provider/preference_settings_provider.dart';
 import 'package:common/utils/state/view_data_state.dart';
 import 'package:dependencies/bloc/bloc.dart';
 import 'package:dependencies/just_audio/just_audio.dart';
+import 'package:dependencies/share_plus/share_plus.dart';
 import 'package:detail_surah/presentation/cubits/ayah_translation/ayah_translation_cubit.dart';
+import 'package:detail_surah/presentation/cubits/ayah_tafsir/ayah_tafsir_cubit.dart';
 import 'package:detail_surah/presentation/cubits/bookmark_verses/bookmark_verses_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:quran/domain/entities/detail_surah_entity.dart';
 import 'package:resources/extensions/context_extensions.dart';
@@ -20,6 +21,7 @@ class VersesWidget extends StatefulWidget {
   final PreferenceSettingsProvider prefSetProvider;
   final String surah;
   final int surahNumber;
+  final bool highlight;
   final AudioPlayer player = AudioPlayer();
 
   VersesWidget({
@@ -28,6 +30,7 @@ class VersesWidget extends StatefulWidget {
     required this.prefSetProvider,
     required this.surah,
     required this.surahNumber,
+    this.highlight = false,
   });
 
   @override
@@ -44,14 +47,13 @@ class _VersesWidgetState extends State<VersesWidget> {
     // setAudioUrl();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await context
-          .read<BookmarkVersesCubit>()
-          .loadBookmarkVerse(widget.verses.number.inQuran);
-      if (!context.mounted) {
+      final bookmarkCubit = context.read<BookmarkVersesCubit>();
+      await bookmarkCubit.loadBookmarkVerse(widget.verses.number.inQuran);
+      if (!mounted) {
         return;
       }
 
-      if (context.read<BookmarkVersesCubit>().state.isBookmark) {
+      if (bookmarkCubit.state.isBookmark) {
         setState(() {
           isBookmark = true;
         });
@@ -84,13 +86,18 @@ class _VersesWidgetState extends State<VersesWidget> {
     }
   }
 
+
   void _showTranslationBottomSheet(BuildContext context) {
     final ref = AyahRef(
       surah: widget.surahNumber,
       ayah: widget.verses.number.inSurah,
     );
 
-    context.read<AyahTranslationCubit>().fetchTranslation(ref);
+    final languageCode = widget.prefSetProvider.locale.languageCode;
+    context
+        .read<AyahTranslationCubit>()
+        .fetchTranslation(ref, languageCode);
+    context.read<AyahTafsirCubit>().fetchTafsir(ref, languageCode);
 
     showModalBottomSheet(
       context: context,
@@ -99,164 +106,93 @@ class _VersesWidgetState extends State<VersesWidget> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (sheetContext) {
-        return BlocProvider.value(
-          value: context.read<AyahTranslationCubit>(),
+        final sheetHeight = MediaQuery.of(sheetContext).size.height * 0.78;
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: context.read<AyahTranslationCubit>(),
+            ),
+            BlocProvider.value(
+              value: context.read<AyahTafsirCubit>(),
+            ),
+          ],
           child: Padding(
             padding: EdgeInsets.fromLTRB(
               20.0,
-              16.0,
+              12.0,
               20.0,
               24.0 + MediaQuery.of(sheetContext).viewInsets.bottom,
             ),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(sheetContext).size.height * 0.75,
-              ),
-              child: BlocBuilder<AyahTranslationCubit, AyahTranslationState>(
-                builder: (context, state) {
-                  final status = state.status.status;
-                  final dragHandle = Center(
-                    child: Container(
-                      width: 40.0,
-                      height: 4.0,
-                      decoration: BoxDecoration(
-                        color: kGrey.withValues(
-                          alpha: 0.4,
+            child: SizedBox(
+              height: sheetHeight,
+              child: DefaultTabController(
+                length: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 40.0,
+                        height: 4.0,
+                        decoration: BoxDecoration(
+                          color: kGrey.withValues(
+                            alpha: 0.4,
+                          ),
+                          borderRadius: BorderRadius.circular(12.0),
                         ),
-                        borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
-                  );
-
-                  if (status.isLoading || status.isInitial) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        dragHandle,
-                        const SizedBox(height: 16.0),
-                        Center(
-                          child: CircularProgressIndicator(
-                            color: widget.prefSetProvider.isDarkTheme
-                                ? Colors.white
-                                : kPurplePrimary,
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-
-                  if (status.isError) {
-                    return SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          dragHandle,
-                          const SizedBox(height: 16.0),
-                          Text(
-                            'تعذر تحميل الترجمة',
-                            style: kHeading6.copyWith(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                              color: widget.prefSetProvider.isDarkTheme
-                                  ? Colors.white
-                                  : kDarkPurple,
-                            ),
-                          ),
-                          const SizedBox(height: 6.0),
-                          Text(
-                            state.status.message,
-                            style: kHeading6.copyWith(
-                              fontSize: 12.0,
-                              color: widget.prefSetProvider.isDarkTheme
-                                  ? kGreyLight
-                                  : kDarkPurple,
-                            ),
-                          ),
-                          const SizedBox(height: 16.0),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton.icon(
-                              onPressed: () => context
-                                  .read<AyahTranslationCubit>()
-                                  .fetchTranslation(ref),
-                              icon: const Icon(Icons.refresh),
-                              label: const Text('إعادة المحاولة'),
-                            ),
-                          ),
-                        ],
+                    const SizedBox(height: 12.0),
+                    Text(
+                      context.l10n.verseDetails,
+                      style: kHeading6.copyWith(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        color: widget.prefSetProvider.isDarkTheme
+                            ? Colors.white
+                            : kDarkPurple,
                       ),
-                    );
-                  }
-
-                  if (!status.isHasData || state.status.data == null) {
-                    return SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          dragHandle,
-                          const SizedBox(height: 16.0),
-                          Text(
-                            'لا توجد ترجمة',
-                            style: kHeading6.copyWith(
-                              fontSize: 12.0,
-                              color: widget.prefSetProvider.isDarkTheme
-                                  ? kGreyLight
-                                  : kDarkPurple,
-                            ),
-                          ),
-                        ],
+                    ),
+                    const SizedBox(height: 4.0),
+                    Text(
+                      context.l10n.formatSurahAyah(
+                        widget.surah,
+                        widget.verses.number.inSurah,
                       ),
-                    );
-                  }
-
-                  final translation = state.status.data!;
-
-                  return SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        dragHandle,
-                        const SizedBox(height: 16.0),
-                        Text(
-                          'الترجمة',
-                          style: kHeading6.copyWith(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w600,
-                            color: widget.prefSetProvider.isDarkTheme
-                                ? Colors.white
-                                : kDarkPurple,
-                          ),
-                        ),
-                        const SizedBox(height: 6.0),
-                        Text(
-                          'سورة ${widget.surah} · آية ${widget.verses.number.inSurah}',
-                          style: kHeading6.copyWith(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w400,
-                            color: widget.prefSetProvider.isDarkTheme
-                                ? kGreyLight
-                                : kDarkPurple.withValues(
-                                    alpha: 0.6,
-                                  ),
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        SelectableText(
-                          translation.text,
-                          textAlign: TextAlign.start,
-                          style: kHeading6.copyWith(
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w400,
-                            color: widget.prefSetProvider.isDarkTheme
-                                ? kGreyLight
-                                : kDarkPurple,
-                          ),
-                        ),
+                      style: kHeading6.copyWith(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        color: widget.prefSetProvider.isDarkTheme
+                            ? kGreyLight
+                            : kDarkPurple.withValues(
+                                alpha: 0.6,
+                              ),
+                      ),
+                    ),
+                    const SizedBox(height: 12.0),
+                    TabBar(
+                      labelColor: widget.prefSetProvider.isDarkTheme
+                          ? Colors.white
+                          : kDarkPurple,
+                      indicatorColor: widget.prefSetProvider.isDarkTheme
+                          ? Colors.white
+                          : kPurplePrimary,
+                      tabs: [
+                        Tab(text: context.l10n.translation),
+                        Tab(text: context.l10n.tafsir),
                       ],
                     ),
-                  );
-                },
+                    const SizedBox(height: 12.0),
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          _buildTranslationTab(ref, languageCode),
+                          _buildTafsirTab(ref, languageCode),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -265,10 +201,214 @@ class _VersesWidgetState extends State<VersesWidget> {
     );
   }
 
+  Widget _buildTranslationTab(AyahRef ref, String languageCode) {
+    return BlocBuilder<AyahTranslationCubit, AyahTranslationState>(
+      builder: (context, state) {
+        final status = state.status.status;
+
+        if (status.isLoading || status.isInitial) {
+          return _buildLoadingState();
+        }
+
+        if (status.isError) {
+          return _buildErrorState(
+            title: context.l10n.translationErrorTitle,
+            message: state.status.message,
+            onRetry: () => context
+                .read<AyahTranslationCubit>()
+                .fetchTranslation(ref, languageCode),
+          );
+        }
+
+        if (!status.isHasData || state.status.data == null) {
+          return _buildEmptyState(context.l10n.noTranslation);
+        }
+
+        final translation = state.status.data!;
+        if (translation.text.trim().isEmpty) {
+          return _buildEmptyState(context.l10n.noTranslation);
+        }
+        return _buildContentState(
+          text: translation.text,
+          onCopy: () => _copyText(context, translation.text),
+          onShare: () => _shareText(translation.text),
+        );
+      },
+    );
+  }
+
+  Widget _buildTafsirTab(AyahRef ref, String languageCode) {
+    return BlocBuilder<AyahTafsirCubit, AyahTafsirState>(
+      builder: (context, state) {
+        final status = state.status.status;
+
+        if (status.isLoading || status.isInitial) {
+          return _buildLoadingState();
+        }
+
+        if (status.isError) {
+          return _buildErrorState(
+            title: context.l10n.tafsirErrorTitle,
+            message: state.status.message,
+            onRetry: () => context
+                .read<AyahTafsirCubit>()
+                .fetchTafsir(ref, languageCode),
+          );
+        }
+
+        if (!status.isHasData || state.status.data == null) {
+          return _buildEmptyState(context.l10n.noTafsir);
+        }
+
+        final tafsir = state.status.data!;
+        if (tafsir.text.trim().isEmpty) {
+          return _buildEmptyState(context.l10n.noTafsir);
+        }
+        return _buildContentState(
+          text: tafsir.text,
+          onCopy: () => _copyText(context, tafsir.text),
+          onShare: () => _shareText(tafsir.text),
+        );
+      },
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return Center(
+      child: CircularProgressIndicator(
+        color: widget.prefSetProvider.isDarkTheme ? Colors.white : kPurplePrimary,
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(String message) {
+    return Center(
+      child: Text(
+        message,
+        style: kHeading6.copyWith(
+          fontSize: 12.0,
+          color: widget.prefSetProvider.isDarkTheme ? kGreyLight : kDarkPurple,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorState({
+    required String title,
+    required String message,
+    required VoidCallback onRetry,
+  }) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: kHeading6.copyWith(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w600,
+              color: widget.prefSetProvider.isDarkTheme
+                  ? Colors.white
+                  : kDarkPurple,
+            ),
+          ),
+          const SizedBox(height: 6.0),
+          Text(
+            message,
+            style: kHeading6.copyWith(
+              fontSize: 12.0,
+              color: widget.prefSetProvider.isDarkTheme
+                  ? kGreyLight
+                  : kDarkPurple,
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh),
+              label: Text(context.l10n.retry),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContentState({
+    required String text,
+    required VoidCallback onCopy,
+    required VoidCallback onShare,
+  }) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            IconButton(
+              onPressed: onCopy,
+              icon: const Icon(Icons.copy_rounded),
+              color: widget.prefSetProvider.isDarkTheme
+                  ? Colors.white
+                  : kPurplePrimary,
+              tooltip: context.l10n.copy,
+            ),
+            IconButton(
+              onPressed: onShare,
+              icon: const Icon(Icons.share_rounded),
+              color: widget.prefSetProvider.isDarkTheme
+                  ? Colors.white
+                  : kPurplePrimary,
+              tooltip: context.l10n.share,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8.0),
+        Expanded(
+          child: SingleChildScrollView(
+            child: SelectableText(
+              text,
+              textAlign: TextAlign.start,
+              style: kHeading6.copyWith(
+                fontSize: 13.0,
+                fontWeight: FontWeight.w400,
+                height: 1.6,
+                color: widget.prefSetProvider.isDarkTheme
+                    ? kGreyLight
+                    : kDarkPurple,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _copyText(BuildContext context, String text) {
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.copied)),
+    );
+  }
+
+  void _shareText(String text) {
+    SharePlus.instance.share(ShareParams(text: text));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 18.0),
+    final highlightColor = kPurplePrimary.withValues(alpha: 0.12);
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      padding: const EdgeInsets.all(12.0),
+      margin: const EdgeInsets.only(bottom: 12.0),
+      decoration: BoxDecoration(
+        color: widget.highlight ? highlightColor : Colors.transparent,
+        borderRadius: BorderRadius.circular(16.0),
+        border: widget.highlight
+            ? Border.all(color: kPurplePrimary.withValues(alpha: 0.4))
+            : null,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -369,10 +509,12 @@ class _VersesWidgetState extends State<VersesWidget> {
 
                         context.showCustomFlashMessage(
                           status: 'success',
-                          title: 'حذف علامة الآية',
+                          title: context.l10n.bookmarkRemovedTitle,
                           darkTheme: widget.prefSetProvider.isDarkTheme,
-                          message:
-                              'تم حذف علامة الآية من سورة ${widget.surah} آية ${widget.verses.number.inSurah}.',
+                          message: context.l10n.bookmarkRemovedMessage(
+                            widget.surah,
+                            widget.verses.number.inSurah,
+                          ),
                         );
                       } else {
                         await context
@@ -384,10 +526,12 @@ class _VersesWidgetState extends State<VersesWidget> {
 
                         context.showCustomFlashMessage(
                           status: 'success',
-                          title: 'إضافة علامة الآية',
+                          title: context.l10n.bookmarkAddedTitle,
                           darkTheme: widget.prefSetProvider.isDarkTheme,
-                          message:
-                              'تمت إضافة علامة الآية إلى سورة ${widget.surah} آية ${widget.verses.number.inSurah}.',
+                          message: context.l10n.bookmarkAddedMessage(
+                            widget.surah,
+                            widget.verses.number.inSurah,
+                          ),
                         );
                       }
 
@@ -417,10 +561,7 @@ class _VersesWidgetState extends State<VersesWidget> {
                   child: Text(
                     widget.verses.text.arab,
                     textAlign: TextAlign.right,
-                    style: kHeading6.copyWith(
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.w500,
-                      height: 1.6,
+                    style: kArabicVerse.copyWith(
                       color: widget.prefSetProvider.isDarkTheme
                           ? Colors.white
                           : kDarkPurple,

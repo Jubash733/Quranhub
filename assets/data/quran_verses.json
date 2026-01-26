@@ -1,0 +1,106 @@
+[
+  {
+    "surah": 1,
+    "ayah": 1,
+    "surahName": {"ar": "الفاتحة", "en": "Al-Fatihah"},
+    "text": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+    "translation": {
+      "ar": "باسم الله الرحمن الرحيم",
+      "en": "In the name of Allah, the Most Compassionate, the Most Merciful."
+    },
+    "tafsir": {
+      "ar": "افتتاحٌ بالبسملة تعظيمًا لله وطلبًا للبركة والرحمة في كل أمر."
+    }
+  },
+  {
+    "surah": 1,
+    "ayah": 2,
+    "surahName": {"ar": "الفاتحة", "en": "Al-Fatihah"},
+    "text": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+    "translation": {
+      "ar": "الحمد لله رب العالمين",
+      "en": "All praise belongs to Allah, Lord of all worlds."
+    },
+    "tafsir": {
+      "ar": "إقرارٌ بأن جميع المحامد لله وحده، فهو رب الخلق والمدبر لشؤونهم."
+    }
+  },
+  {
+    "surah": 1,
+    "ayah": 3,
+    "surahName": {"ar": "الفاتحة", "en": "Al-Fatihah"},
+    "text": "الرَّحْمَٰنِ الرَّحِيمِ",
+    "translation": {
+      "ar": "الرحمن الرحيم",
+      "en": "The Most Compassionate, the Most Merciful."
+    },
+    "tafsir": {
+      "ar": "بيانٌ لسعة رحمة الله العامة والخاصة بعباده."
+    }
+  },
+  {
+    "surah": 1,
+    "ayah": 4,
+    "surahName": {"ar": "الفاتحة", "en": "Al-Fatihah"},
+    "text": "مَالِكِ يَوْمِ الدِّينِ",
+    "translation": {
+      "ar": "مالك يوم الدين",
+      "en": "Master of the Day of Judgment."
+    },
+    "tafsir": {
+      "ar": "تذكيرٌ بالآخرة والحساب، وأن الملك الحقيقي يومئذٍ لله وحده."
+    }
+  },
+  {
+    "surah": 1,
+    "ayah": 5,
+    "surahName": {"ar": "الفاتحة", "en": "Al-Fatihah"},
+    "text": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+    "translation": {
+      "ar": "إياك نعبد وإياك نستعين",
+      "en": "You alone we worship, and You alone we ask for help."
+    },
+    "tafsir": {
+      "ar": "توحيد العبادة والاستعانة، فلا تُصرف إلا لله تعالى."
+    }
+  },
+  {
+    "surah": 1,
+    "ayah": 6,
+    "surahName": {"ar": "الفاتحة", "en": "Al-Fatihah"},
+    "text": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+    "translation": {
+      "ar": "اهدنا الصراط المستقيم",
+      "en": "Guide us to the straight path."
+    },
+    "tafsir": {
+      "ar": "دعاءٌ بالهداية للحق والثبات عليه في العقيدة والعمل."
+    }
+  },
+  {
+    "surah": 1,
+    "ayah": 7,
+    "surahName": {"ar": "الفاتحة", "en": "Al-Fatihah"},
+    "text": "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
+    "translation": {
+      "ar": "صراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضالين",
+      "en": "The path of those You have blessed, not of those who incur anger nor of those who go astray."
+    },
+    "tafsir": {
+      "ar": "طلبُ سلوك طريق أهل الطاعة والابتعاد عن طريق الغضب والضلال."
+    }
+  },
+  {
+    "surah": 2,
+    "ayah": 255,
+    "surahName": {"ar": "البقرة", "en": "Al-Baqarah"},
+    "text": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
+    "translation": {
+      "ar": "الله لا إله إلا هو الحي القيوم... وهو العلي العظيم.",
+      "en": "Allah—there is no deity except Him, the Ever‑Living, the Sustainer of all... and He is the Most High, the عظَيم."
+    },
+    "tafsir": {
+      "ar": "آية الكرسي تبيّن عظمة الله ووحدانيته وكمال علمه وقدرته وحفظه للسماوات والأرض."
+    }
+  }
+]

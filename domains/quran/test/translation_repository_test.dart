@@ -1,6 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:quran/data/data_sources/quran_asset_data_source.dart';
+import 'package:quran/data/data_sources/translation_local_data_source.dart';
 import 'package:quran/data/data_sources/translation_remote_data_source.dart';
 import 'package:quran/data/models/ayah_translation_dto.dart';
+import 'package:quran/data/models/local_ayah_data.dart';
 import 'package:quran/data/models/surah_dto.dart';
 import 'package:quran/data/repositories/translation_repository_impl.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
@@ -20,9 +23,39 @@ class FakeTranslationRemoteDataSource implements TranslationRemoteDataSource {
   }
 }
 
+class FakeQuranAssetDataSource implements QuranAssetDataSource {
+  FakeQuranAssetDataSource(this.data);
+
+  final List<LocalAyahData> data;
+
+  @override
+  Future<List<LocalAyahData>> getAllAyah() async => data;
+
+  @override
+  Future<LocalAyahData?> getAyah(AyahRef ref) async {
+    try {
+      return data.firstWhere(
+          (item) => item.surah == ref.surah && item.ayah == ref.ayah);
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
 void main() {
   test('returns translation for matching AyahRef', () async {
     const ref = AyahRef(surah: 1, ayah: 2);
+    final assetDataSource = FakeQuranAssetDataSource([
+      LocalAyahData(
+        surah: 1,
+        ayah: 2,
+        surahNameAr: 'الفاتحة',
+        surahNameEn: 'Al-Fatihah',
+        textArabic: 'الحمد لله رب العالمين',
+        translation: {'ar': 'الحمد لله رب العالمين'},
+        tafsir: const {},
+      ),
+    ]);
     final dataSource = FakeTranslationRemoteDataSource({
       ref: AyahTranslationDTO(
         surahNumber: 1,
@@ -34,16 +67,20 @@ void main() {
       ),
     });
     final repository =
-        TranslationRepositoryImpl(remoteDataSource: dataSource);
+        TranslationRepositoryImpl(
+          remoteDataSource: dataSource,
+          localDataSource:
+              TranslationLocalDataSource(assetDataSource: assetDataSource),
+        );
 
-    final result = await repository.getAyahTranslation(ref);
+    final result = await repository.getAyahTranslation(ref, languageCode: 'ar');
 
     result.fold(
       (failure) => fail('Expected Right, got Left: ${failure.message}'),
       (data) {
         expect(data.ref, ref);
-        expect(data.text, 'Segala puji');
-        expect(data.languageCode, 'id');
+        expect(data.text, 'الحمد لله رب العالمين');
+        expect(data.languageCode, 'ar');
       },
     );
   });
@@ -51,9 +88,11 @@ void main() {
   test('returns failure when data source throws', () async {
     const ref = AyahRef(surah: 1, ayah: 999);
     final repository = TranslationRepositoryImpl(
-        remoteDataSource: FakeTranslationRemoteDataSource({}));
+        remoteDataSource: FakeTranslationRemoteDataSource({}),
+        localDataSource: TranslationLocalDataSource(
+            assetDataSource: FakeQuranAssetDataSource(const [])));
 
-    final result = await repository.getAyahTranslation(ref);
+    final result = await repository.getAyahTranslation(ref, languageCode: 'ar');
 
     result.fold(
       (failure) => expect(failure.message, contains('Exception')),
@@ -71,9 +110,13 @@ void main() {
       ),
     });
     final repository =
-        TranslationRepositoryImpl(remoteDataSource: dataSource);
+        TranslationRepositoryImpl(
+          remoteDataSource: dataSource,
+          localDataSource: TranslationLocalDataSource(
+              assetDataSource: FakeQuranAssetDataSource(const [])),
+        );
 
-    final result = await repository.getAyahTranslation(ref);
+    final result = await repository.getAyahTranslation(ref, languageCode: 'en');
 
     result.fold(
       (failure) => expect(failure.message, contains('AyahRef mismatch')),

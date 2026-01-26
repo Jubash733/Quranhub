@@ -4,5 +4,8 @@ import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:quran/domain/entities/ayah_tafsir_entity.dart';
 
 abstract class TafsirRepository {
-  Future<Either<FailureResponse, AyahTafsirEntity>> getAyahTafsir(AyahRef ref);
+  Future<Either<FailureResponse, AyahTafsirEntity>> getAyahTafsir(
+    AyahRef ref, {
+    String languageCode,
+  });
 }
