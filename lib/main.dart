@@ -14,6 +14,7 @@ import 'package:detail_surah/presentation/cubits/bookmark_verses/bookmark_verses
 import 'package:detail_surah/presentation/cubits/last_read/last_read_cubit.dart';
 import 'package:detail_surah/presentation/ui/detail_surah_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:home/presentation/bloc/home_bloc.dart';
 import 'package:home/presentation/ui/home_screen.dart';
 import 'package:quran_app/di/injections.dart';
@@ -51,10 +52,15 @@ class MyApp extends StatelessWidget {
             navigatorKey: navigatorKey,
             navigatorObservers: [routeObserver],
             debugShowCheckedModeBanner: false,
-            builder: (context, child) => Directionality(
-              textDirection: TextDirection.rtl,
-              child: child ?? const SizedBox.shrink(),
-            ),
+            locale: const Locale('ar'),
+            supportedLocales: const [
+              Locale('ar'),
+            ],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
             initialRoute: NamedRoutes.splashScreen,
             routes: {
               NamedRoutes.splashScreen: (_) => SplashScreen(),
