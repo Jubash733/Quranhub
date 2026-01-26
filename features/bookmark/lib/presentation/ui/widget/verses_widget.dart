@@ -290,7 +290,10 @@ class _VersesWidgetState extends State<VersesWidget> {
             child: Text(
               widget.bookmark.textArab,
               textAlign: TextAlign.right,
-              style: kArabicVerse.copyWith(
+              style: arabicVerseStyle(
+                widget.prefSetProvider.arabicFontFamily,
+                scale: widget.prefSetProvider.arabicFontScale,
+              ).copyWith(
                 color: widget.prefSetProvider.isDarkTheme
                     ? Colors.white
                     : kDarkPurple,
@@ -309,19 +312,20 @@ class _VersesWidgetState extends State<VersesWidget> {
               fontStyle: FontStyle.italic,
             ),
           ),
-          Text(
-            widget.bookmark.translation,
-            style: kHeading6.copyWith(
-              fontSize: 12.0,
-              fontWeight: FontWeight.w400,
-              height: 1.4,
-              color: widget.prefSetProvider.isDarkTheme
-                  ? Colors.white70
-                  : kDarkPurple.withValues(
-                      alpha: 0.85,
-                    ),
+          if (widget.prefSetProvider.showTranslation)
+            Text(
+              widget.bookmark.translation,
+              style: kHeading6.copyWith(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w400,
+                height: 1.4,
+                color: widget.prefSetProvider.isDarkTheme
+                    ? Colors.white70
+                    : kDarkPurple.withValues(
+                        alpha: 0.85,
+                      ),
+              ),
             ),
-          ),
         ],
       ),
     );

@@ -483,6 +483,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  settings:
+    dependency: "direct main"
+    description:
+      path: "features/settings"
+      relative: true
+    source: path
+    version: "0.0.1"
   share_plus:
     dependency: transitive
     description:

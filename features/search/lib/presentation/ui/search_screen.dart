@@ -112,6 +112,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                   highlightAyah: result.ref.ayah,
                                 ),
                               ),
+                              arabicFontFamily:
+                                  prefSetProvider.arabicFontFamily,
+                              arabicFontScale: prefSetProvider.arabicFontScale,
+                              showTranslation: prefSetProvider.showTranslation,
                             );
                           },
                         );

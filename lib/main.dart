@@ -26,6 +26,7 @@ import 'package:resources/constant/route_args.dart';
 import 'package:resources/localization/app_localizations.dart';
 import 'package:search/presentation/cubit/search_cubit.dart';
 import 'package:search/presentation/ui/search_screen.dart';
+import 'package:settings/presentation/ui/settings_screen.dart';
 import 'package:splash/presentation/ui/onboard_screen.dart';
 import 'package:splash/presentation/ui/splash_screen.dart';
 
@@ -79,13 +80,6 @@ class MyApp extends StatelessWidget {
                       BlocProvider(
                         create: (_) => HomeBloc(
                           getSurahUsecase: sl(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (_) => LastReadCubit(
-                          getLastReadUsecase: sl(),
-                          saveLastReadUsecase: sl(),
-                          updateLastReadUsecase: sl(),
                         ),
                       ),
                     ],
@@ -153,6 +147,13 @@ class MyApp extends StatelessWidget {
                           statusBookmarkVerseUsecase: sl(),
                         ),
                       ),
+                      BlocProvider(
+                        create: (_) => LastReadCubit(
+                          getLastReadUsecase: sl(),
+                          saveLastReadUsecase: sl(),
+                          updateLastReadUsecase: sl(),
+                        ),
+                      ),
                     ],
                     child: const BookmarkScreen(),
                   ),
@@ -168,6 +169,7 @@ class MyApp extends StatelessWidget {
                     ),
                     child: const AiAssistantScreen(),
                   ),
+              NamedRoutes.settingsScreen: (_) => const SettingsScreen(),
             },
           );
         },

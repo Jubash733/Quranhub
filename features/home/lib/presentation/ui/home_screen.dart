@@ -1,13 +1,10 @@
 import 'package:common/utils/provider/preference_settings_provider.dart';
-import 'package:common/utils/route_observer/route_observer.dart';
 import 'package:common/utils/state/view_data_state.dart';
 import 'package:dependencies/bloc/bloc.dart';
 import 'package:dependencies/provider/provider.dart';
 import 'package:dependencies/show_up_animation/show_up_animation.dart';
-import 'package:detail_surah/presentation/cubits/last_read/last_read_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:home/presentation/bloc/bloc.dart';
-import 'package:home/presentation/ui/widget/banner_last_read_widget.dart';
 import 'package:home/presentation/ui/widget/list_surah_widget.dart';
 import 'package:home/presentation/ui/widget/surah_skeleton_item.dart';
 import 'package:resources/constant/named_routes.dart';
@@ -22,7 +19,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with RouteAware {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
@@ -31,19 +28,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         return;
       }
       context.read<HomeBloc>().add(FetchSurah());
-      context.read<LastReadCubit>().getLastRead();
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context)!);
-  }
-
-  @override
-  void didPopNext() {
-    context.read<LastReadCubit>().getLastRead();
   }
 
   @override
@@ -92,42 +77,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                   const SizedBox(width: 6.0),
                                   titleWidget,
                                 ];
-                          final languageToggle = InkWell(
-                            onTap: () {
-                              final nextLocale = prefSetProvider
-                                          .locale.languageCode ==
-                                      'ar'
-                                  ? const Locale('en')
-                                  : const Locale('ar');
-                              prefSetProvider.setLocale(nextLocale);
-                            },
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0,
-                                vertical: 6.0,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                                border: Border.all(
-                                  color: prefSetProvider.isDarkTheme
-                                      ? Colors.white
-                                      : kPurplePrimary,
-                                ),
-                              ),
-                              child: Text(
-                                context.l10n.languageToggleShort,
-                                style: kHeading6.copyWith(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w700,
-                                  color: prefSetProvider.isDarkTheme
-                                      ? Colors.white
-                                      : kPurplePrimary,
-                                ),
-                              ),
-                            ),
-                          );
-                          final bookmarkIcon = InkWell(
+                          final savedIcon = InkWell(
                             onTap: () => Navigator.pushNamed(
                                 context, NamedRoutes.bookmarkScreen),
                             child: Image.asset(
@@ -137,15 +87,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                               width: 16.0,
                             ),
                           );
-                          final themeToggle = InkWell(
-                            onTap: () => prefSetProvider
-                                .enableDarkTheme(!prefSetProvider.isDarkTheme),
+                          final settingsIcon = InkWell(
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              NamedRoutes.settingsScreen,
+                            ),
                             borderRadius: BorderRadius.circular(10.0),
                             child: Icon(
-                              prefSetProvider.isDarkTheme
-                                  ? Icons.light_mode_sharp
-                                  : Icons.dark_mode_sharp,
-                              size: 24.0,
+                              Icons.settings_rounded,
+                              size: 22.0,
                               color: prefSetProvider.isDarkTheme
                                   ? Colors.white
                                   : kPurplePrimary,
@@ -153,18 +103,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                           );
                           final actionChildren = isRtl
                               ? [
-                                  themeToggle,
-                                  const SizedBox(width: 8.0),
-                                  bookmarkIcon,
+                                  settingsIcon,
                                   const SizedBox(width: 10.0),
-                                  languageToggle,
+                                  savedIcon,
                                 ]
                               : [
-                                  languageToggle,
+                                  savedIcon,
                                   const SizedBox(width: 10.0),
-                                  bookmarkIcon,
-                                  const SizedBox(width: 8.0),
-                                  themeToggle,
+                                  settingsIcon,
                                 ];
 
                           return Row(
@@ -222,11 +168,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                             ),
                           ),
                           const SizedBox(width: 6.0),
-                          Text(
-                            '🙏',
-                            style: kHeading6.copyWith(
-                              fontSize: 18.0,
-                            ),
+                          Icon(
+                            Icons.waving_hand_rounded,
+                            size: 18.0,
+                            color: prefSetProvider.isDarkTheme
+                                ? Colors.white70
+                                : kPurplePrimary,
                           ),
                         ],
                       ),
@@ -273,8 +220,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                       ),
                     ),
                     const SizedBox(height: 18.0),
-                    const BannerLastReadWidget(),
-                    const SizedBox(height: 16.0),
                     ShowUpAnimation(
                       child: InkWell(
                         onTap: () => Navigator.pushNamed(
@@ -385,9 +330,4 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     );
   }
 
-  @override
-  void dispose() {
-    routeObserver.unsubscribe(this);
-    super.dispose();
-  }
 }

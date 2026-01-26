@@ -8,4 +8,5 @@ class NamedRoutes {
   static const bookmarkScreen = 'bookmarkScreen';
   static const searchScreen = 'searchScreen';
   static const aiAssistantScreen = 'aiAssistantScreen';
+  static const settingsScreen = 'settingsScreen';
 }

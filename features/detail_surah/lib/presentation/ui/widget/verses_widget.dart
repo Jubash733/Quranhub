@@ -94,10 +94,16 @@ class _VersesWidgetState extends State<VersesWidget> {
     );
 
     final languageCode = widget.prefSetProvider.locale.languageCode;
-    context
-        .read<AyahTranslationCubit>()
-        .fetchTranslation(ref, languageCode);
-    context.read<AyahTafsirCubit>().fetchTafsir(ref, languageCode);
+    final showTranslation = widget.prefSetProvider.showTranslation;
+    final showTafsir = widget.prefSetProvider.showTafsir;
+    if (showTranslation) {
+      context
+          .read<AyahTranslationCubit>()
+          .fetchTranslation(ref, languageCode);
+    }
+    if (showTafsir) {
+      context.read<AyahTafsirCubit>().fetchTafsir(ref, languageCode);
+    }
 
     showModalBottomSheet(
       context: context,
@@ -107,6 +113,20 @@ class _VersesWidgetState extends State<VersesWidget> {
       ),
       builder: (sheetContext) {
         final sheetHeight = MediaQuery.of(sheetContext).size.height * 0.8;
+        final tabs = <Tab>[];
+        final views = <Widget>[];
+        if (showTranslation) {
+          tabs.add(Tab(text: context.l10n.translation));
+          views.add(_buildTranslationTab(
+            ref,
+            languageCode,
+            showTafsirButton: showTafsir,
+          ));
+        }
+        if (showTafsir) {
+          tabs.add(Tab(text: context.l10n.tafsir));
+          views.add(_buildTafsirTab(ref, languageCode));
+        }
         return MultiBlocProvider(
           providers: [
             BlocProvider.value(
@@ -126,7 +146,7 @@ class _VersesWidgetState extends State<VersesWidget> {
             child: SizedBox(
               height: sheetHeight,
               child: DefaultTabController(
-                length: 2,
+                length: tabs.isEmpty ? 1 : tabs.length,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -170,26 +190,36 @@ class _VersesWidgetState extends State<VersesWidget> {
                       ),
                     ),
                     const SizedBox(height: 12.0),
-                    TabBar(
-                      labelColor: widget.prefSetProvider.isDarkTheme
-                          ? Colors.white
-                          : kDarkPurple,
-                      indicatorColor: widget.prefSetProvider.isDarkTheme
-                          ? Colors.white
-                          : kPurplePrimary,
-                      tabs: [
-                        Tab(text: context.l10n.translation),
-                        Tab(text: context.l10n.tafsir),
-                      ],
-                    ),
-                    const SizedBox(height: 12.0),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          _buildTranslationTab(ref, languageCode),
-                          _buildTafsirTab(ref, languageCode),
-                        ],
+                    if (tabs.length > 1)
+                      TabBar(
+                        labelColor: widget.prefSetProvider.isDarkTheme
+                            ? Colors.white
+                            : kDarkPurple,
+                        indicatorColor: widget.prefSetProvider.isDarkTheme
+                            ? Colors.white
+                            : kPurplePrimary,
+                        tabs: tabs,
                       ),
+                    if (tabs.length > 1) const SizedBox(height: 12.0),
+                    Expanded(
+                      child: tabs.isEmpty
+                          ? Center(
+                              child: Text(
+                                context.l10n.contentDisabled,
+                                textAlign: TextAlign.center,
+                                style: kHeading6.copyWith(
+                                  fontSize: 13.0,
+                                  color: widget.prefSetProvider.isDarkTheme
+                                      ? Colors.white70
+                                      : kDarkPurple.withValues(alpha: 0.8),
+                                ),
+                              ),
+                            )
+                          : tabs.length == 1
+                              ? views.first
+                              : TabBarView(
+                                  children: views,
+                                ),
                     ),
                   ],
                 ),
@@ -201,7 +231,11 @@ class _VersesWidgetState extends State<VersesWidget> {
     );
   }
 
-  Widget _buildTranslationTab(AyahRef ref, String languageCode) {
+  Widget _buildTranslationTab(
+    AyahRef ref,
+    String languageCode, {
+    required bool showTafsirButton,
+  }) {
     return BlocBuilder<AyahTranslationCubit, AyahTranslationState>(
       builder: (context, state) {
         final status = state.status.status;
@@ -233,8 +267,12 @@ class _VersesWidgetState extends State<VersesWidget> {
           isArabic: languageCode == 'ar',
           onCopy: () => _copyText(context, translation.text),
           onShare: () => _shareText(translation.text),
-          showTafsirButton: true,
-          onShowTafsir: () => DefaultTabController.of(context).animateTo(1),
+          showTafsirButton: showTafsirButton,
+          onShowTafsir: showTafsirButton
+              ? () {
+                  DefaultTabController.of(context).animateTo(1);
+                }
+              : null,
         );
       },
     );
@@ -352,6 +390,10 @@ class _VersesWidgetState extends State<VersesWidget> {
         ? Colors.white
         : kPurplePrimary;
     final lineHeight = isArabic ? 1.9 : 1.6;
+    final arabicStyle = arabicBodyStyle(
+      widget.prefSetProvider.arabicFontFamily,
+      scale: widget.prefSetProvider.arabicFontScale,
+    );
     return Column(
       children: [
         Wrap(
@@ -385,15 +427,22 @@ class _VersesWidgetState extends State<VersesWidget> {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: SelectableText(
               text,
-              textAlign: TextAlign.start,
-              style: kHeading6.copyWith(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w400,
-                height: lineHeight,
-                color: widget.prefSetProvider.isDarkTheme
-                    ? Colors.white
-                    : kDarkPurple,
-              ),
+              textAlign: isArabic ? TextAlign.right : TextAlign.start,
+              style: isArabic
+                  ? arabicStyle.copyWith(
+                      height: lineHeight,
+                      color: widget.prefSetProvider.isDarkTheme
+                          ? Colors.white
+                          : kDarkPurple,
+                    )
+                  : kHeading6.copyWith(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w400,
+                      height: lineHeight,
+                      color: widget.prefSetProvider.isDarkTheme
+                          ? Colors.white
+                          : kDarkPurple,
+                    ),
             ),
           ),
         ),
@@ -601,7 +650,10 @@ class _VersesWidgetState extends State<VersesWidget> {
                   child: Text(
                     widget.verses.text.arab,
                     textAlign: TextAlign.right,
-                    style: kArabicVerse.copyWith(
+                    style: arabicVerseStyle(
+                      widget.prefSetProvider.arabicFontFamily,
+                      scale: widget.prefSetProvider.arabicFontScale,
+                    ).copyWith(
                       color: widget.prefSetProvider.isDarkTheme
                           ? Colors.white
                           : kDarkPurple,

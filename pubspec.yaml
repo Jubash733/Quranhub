@@ -28,6 +28,8 @@ dependencies:
     path: features/search
   ai_assistant:
     path: features/ai_assistant
+  settings:
+    path: features/settings
 
   # Domains
   quran:

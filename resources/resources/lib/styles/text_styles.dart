@@ -1,6 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+enum ArabicFontFamily { amiri, cairo }
+
+ArabicFontFamily arabicFontFamilyFromString(String? value) {
+  switch (value) {
+    case 'cairo':
+      return ArabicFontFamily.cairo;
+    case 'amiri':
+    default:
+      return ArabicFontFamily.amiri;
+  }
+}
+
+String arabicFontFamilyKey(ArabicFontFamily family) {
+  return family == ArabicFontFamily.cairo ? 'cairo' : 'amiri';
+}
+
+TextStyle arabicVerseStyle(
+  ArabicFontFamily family, {
+  double scale = 1.0,
+}) {
+  final isAmiri = family == ArabicFontFamily.amiri;
+  final base = isAmiri ? GoogleFonts.amiri() : GoogleFonts.cairo();
+  return base.copyWith(
+    fontSize: (isAmiri ? 30 : 28) * scale,
+    fontWeight: FontWeight.w400,
+    height: isAmiri ? 1.8 : 1.6,
+  );
+}
+
+TextStyle arabicBodyStyle(
+  ArabicFontFamily family, {
+  double scale = 1.0,
+}) {
+  final isAmiri = family == ArabicFontFamily.amiri;
+  final base = isAmiri ? GoogleFonts.amiri() : GoogleFonts.cairo();
+  return base.copyWith(
+    fontSize: (isAmiri ? 18 : 17) * scale,
+    fontWeight: FontWeight.w400,
+    height: isAmiri ? 1.7 : 1.55,
+  );
+}
+
 // text style
 final TextStyle kHeading5 = GoogleFonts.cairo(
   fontSize: 24,
@@ -23,16 +65,8 @@ final TextStyle kBodyText = GoogleFonts.cairo(
   height: 1.4,
 );
 
-final TextStyle kArabicVerse = GoogleFonts.amiri(
-  fontSize: 30,
-  fontWeight: FontWeight.w400,
-  height: 1.8,
-);
-final TextStyle kArabicBody = GoogleFonts.amiri(
-  fontSize: 18,
-  fontWeight: FontWeight.w400,
-  height: 1.7,
-);
+final TextStyle kArabicVerse = arabicVerseStyle(ArabicFontFamily.amiri);
+final TextStyle kArabicBody = arabicBodyStyle(ArabicFontFamily.amiri);
 
 // text theme
 final kTextTheme = TextTheme(
