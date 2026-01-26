@@ -1,5 +1,5 @@
 import 'package:dependencies/dio/dio.dart';
-import 'package:resources/constant/api_constant.dart';
+import 'package:common/utils/config/app_config.dart';
 
 abstract class AiAssistantRemoteDataSource {
   Future<String> generateTadabbur({required String prompt});
@@ -12,20 +12,20 @@ class AiAssistantRemoteDataSourceImpl extends AiAssistantRemoteDataSource {
 
   @override
   Future<String> generateTadabbur({required String prompt}) async {
-    if (ApiConstant.aiBaseUrl.isEmpty) {
+    if (AppConfig.aiBaseUrl.isEmpty) {
       throw Exception('AI endpoint not configured');
     }
 
     final response = await dio.post(
-      ApiConstant.aiBaseUrl,
+      AppConfig.aiBaseUrl,
       data: {
         'prompt': prompt,
       },
       options: Options(
-        headers: ApiConstant.aiApiKey.isEmpty
+        headers: AppConfig.aiApiKey.isEmpty
             ? null
             : {
-                'Authorization': 'Bearer ${ApiConstant.aiApiKey}',
+                'Authorization': 'Bearer ${AppConfig.aiApiKey}',
               },
       ),
     );

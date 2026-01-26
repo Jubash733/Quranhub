@@ -10,9 +10,10 @@ class AiAssistantLocalDataSource {
   Future<AiTadabburEntity?> getCached(
     AyahRef ref,
     String languageCode,
+    String promptVersion,
   ) async {
     final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_key(ref, languageCode));
+    final raw = prefs.getString(_key(ref, languageCode, promptVersion));
     if (raw == null) {
       return null;
     }
@@ -26,6 +27,8 @@ class AiAssistantLocalDataSource {
       languageCode: payload['languageCode'] as String? ?? languageCode,
       createdAt: DateTime.tryParse(payload['createdAt'] as String? ?? '') ??
           DateTime.now(),
+      promptVersion:
+          payload['promptVersion'] as String? ?? promptVersion,
     );
   }
 
@@ -37,11 +40,15 @@ class AiAssistantLocalDataSource {
       'response': entity.response,
       'languageCode': entity.languageCode,
       'createdAt': entity.createdAt.toIso8601String(),
+      'promptVersion': entity.promptVersion,
     });
-    await prefs.setString(_key(entity.ref, entity.languageCode), payload);
+    await prefs.setString(
+      _key(entity.ref, entity.languageCode, entity.promptVersion),
+      payload,
+    );
   }
 
-  String _key(AyahRef ref, String languageCode) {
-    return '$_cachePrefix:$languageCode:${ref.surah}:${ref.ayah}';
+  String _key(AyahRef ref, String languageCode, String promptVersion) {
+    return '$_cachePrefix:$promptVersion:$languageCode:${ref.surah}:${ref.ayah}';
   }
 }

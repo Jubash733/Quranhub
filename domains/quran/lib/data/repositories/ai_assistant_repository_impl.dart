@@ -1,3 +1,5 @@
+import 'package:common/utils/config/app_config.dart';
+import 'package:common/utils/config/app_config.dart';
 import 'package:common/utils/error/failure_response.dart';
 import 'package:dependencies/dartz/dartz.dart';
 import 'package:quran/data/data_sources/ai_assistant_local_data_source.dart';
@@ -30,7 +32,8 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
     String languageCode = 'ar',
   }) async {
     try {
-      final cached = await localDataSource.getCached(ref, languageCode);
+      final promptVersion = AppConfig.promptVersion;
+      final cached = await localDataSource.getCached(ref, languageCode, promptVersion);
       if (cached != null) {
         return Right(cached);
       }
@@ -52,6 +55,7 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
         translation: translation,
         tafsir: tafsir,
         languageCode: languageCode,
+        promptVersion: promptVersion,
       );
 
       String response;
@@ -71,6 +75,7 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
         response: response,
         languageCode: languageCode,
         createdAt: DateTime.now(),
+        promptVersion: promptVersion,
       );
       await localDataSource.cache(entity);
       return Right(entity);
@@ -79,18 +84,21 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
     }
   }
 
+  
   String _buildPrompt({
     required String verseText,
     required String translation,
     required String tafsir,
     required String languageCode,
+    required String promptVersion,
   }) {
     final isArabic = languageCode == 'ar';
     final intro = isArabic
-        ? 'أنت مساعد تدبر للقرآن الكريم. اكتب إجابة عربية واضحة.'
+        ? '??? ????? ???? ?????? ??????. ???? ????? ????? ????? ??????.'
         : 'You are a Quran reflection assistant. Write in clear English.';
     return '''
 $intro
+Prompt version: $promptVersion
 
 Verse Text:
 $verseText
@@ -101,14 +109,16 @@ $translation
 Tafsir (if available):
 $tafsir
 
-Please respond with:
-1) Summary of meaning
-2) Key lessons
-3) Suggested actions
-4) Related verses (if any)
+Please respond with these sections:
+1) Summary of meaning (short)
+2) Main keywords (comma-separated)
+3) Related verses (if any, include surah:ayah)
+4) Actionable reminders (3 bullets)
+5) Disclaimer: "AI output is assistant only, not fatwa"
 ''';
   }
 
+  
   String _fallbackResponse({
     required String verseText,
     required String translation,
@@ -118,41 +128,39 @@ Please respond with:
     final isArabic = languageCode == 'ar';
     if (isArabic) {
       return '''
-ملخص المعنى:
+???? ??????:
 $translation
 
-الدروس المستفادة:
-- التأمل في ألفاظ الآية ومعانيها.
-- تذكر عظمة الله ورحمته وتدبيره.
-
-خطوات عملية مقترحة:
-- قراءة الآية بتدبر مرة يوميًا.
-- ربط معناها بموقف عملي في اليوم.
-- الدعاء بالثبات والهداية.
-
-آيات ذات صلة:
+??????? ????????:
 - ...
 
-ملاحظة: هذه خلاصة مساعدة وليست تفسيرًا معتمدًا.
+???? ??? ???:
+- ...
+
+??????? ?????:
+- ???? ????? ????? ?????.
+- ???? ?????? ????? ???? ????.
+- ???? ????? ???????.
+
+?????: "?????? ?????? ????? ????".
 ''';
     }
     return '''
 Summary of meaning:
 $translation
 
-Key lessons:
-- Reflect on the verse wording and meanings.
-- Remember Allah's mercy, wisdom, and guidance.
-
-Suggested actions:
-- Revisit the verse daily with reflection.
-- Connect its meaning to a real-life situation.
-- Make a short dua for guidance and steadfastness.
+Main keywords:
+- ...
 
 Related verses:
 - ...
 
-Note: This is an assistant summary, not authoritative tafsir.
+Actionable reminders:
+- Revisit the verse with reflection today.
+- Connect the meaning to a small real-life action.
+- End with a short dua for guidance.
+
+Disclaimer: "AI output is assistant only, not fatwa".
 ''';
   }
 }

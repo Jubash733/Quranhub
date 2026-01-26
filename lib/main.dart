@@ -2,6 +2,7 @@ import 'package:ai_assistant/presentation/cubit/ai_assistant_cubit.dart';
 import 'package:ai_assistant/presentation/ui/ai_assistant_screen.dart';
 import 'package:bookmark/presentation/bloc/bloc.dart';
 import 'package:bookmark/presentation/ui/bookmark_screen.dart';
+import 'package:common/utils/config/app_config.dart';
 import 'package:common/utils/helper/preference_settings_helper.dart';
 import 'package:common/utils/navigation/navigation.dart';
 import 'package:common/utils/provider/preference_settings_provider.dart';
@@ -32,6 +33,7 @@ import 'package:splash/presentation/ui/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AppConfig.load();
   Injections().init();
 
   runApp(const MyApp());
