@@ -7,10 +7,6 @@ class TafsirLocalDataSource {
   TafsirLocalDataSource({required this.assetDataSource});
 
   Future<String?> getAyahTafsir(AyahRef ref, String languageCode) async {
-    final entry = await assetDataSource.getAyah(ref);
-    if (entry == null) {
-      return null;
-    }
-    return entry.tafsirFor(languageCode);
+    return assetDataSource.getTafsir(ref, languageCode);
   }
 }

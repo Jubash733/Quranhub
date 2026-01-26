@@ -73,8 +73,11 @@ class RegisterQuranModule {
         () => AiAssistantLocalDataSource());
 
     /// Repository
-    sl.registerLazySingleton<QuranRepository>(() =>
-        QuranRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()));
+    sl.registerLazySingleton<QuranRepository>(() => QuranRepositoryImpl(
+          remoteDataSource: sl(),
+          localDataSource: sl(),
+          assetDataSource: sl(),
+        ));
     sl.registerLazySingleton<TranslationRepository>(
         () => TranslationRepositoryImpl(
               remoteDataSource: sl(),

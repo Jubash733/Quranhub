@@ -32,7 +32,10 @@ class TranslationRepositoryImpl extends TranslationRepository {
         ));
       }
 
-      final result = await remoteDataSource.getAyahTranslation(ref);
+      final result = await remoteDataSource.getAyahTranslation(
+        ref,
+        languageCode: languageCode,
+      );
       final mappedRef = _mapRef(result);
       if (mappedRef != ref) {
         return Left(FailureResponse(
@@ -58,15 +61,18 @@ class TranslationRepositoryImpl extends TranslationRepository {
     AyahTranslationDTO dto,
     String languageCode,
   ) {
-    if (languageCode == 'id') {
-      return dto.translation.id;
+    if (languageCode == 'ar') {
+      return dto.translation.en;
+    }
+    if (languageCode == 'en') {
+      return dto.translation.en;
     }
     return dto.translation.en;
   }
 
   String _resolveLanguageCode(String languageCode) {
-    if (languageCode == 'id') {
-      return 'id';
+    if (languageCode == 'ar') {
+      return 'ar';
     }
     return 'en';
   }

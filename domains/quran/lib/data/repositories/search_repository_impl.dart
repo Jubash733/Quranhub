@@ -77,15 +77,16 @@ class SearchRepositoryImpl extends SearchRepository {
 
   String _normalize(String text) {
     var normalized = text.toLowerCase().trim();
-    normalized = normalized.replaceAll(RegExp(r'[\\u0610-\\u061A\\u064B-\\u065F\\u06D6-\\u06ED]'), '');
+    normalized = normalized.replaceAll(
+        RegExp(r'[\\u0610-\\u061A\\u064B-\\u065F\\u06D6-\\u06ED]'), '');
     normalized = normalized
-        .replaceAll('أ', 'ا')
-        .replaceAll('إ', 'ا')
-        .replaceAll('آ', 'ا')
-        .replaceAll('ى', 'ي')
-        .replaceAll('ؤ', 'و')
-        .replaceAll('ئ', 'ي')
-        .replaceAll('ة', 'ه');
+        .replaceAll('\u0623', '\u0627')
+        .replaceAll('\u0625', '\u0627')
+        .replaceAll('\u0622', '\u0627')
+        .replaceAll('\u0649', '\u064a')
+        .replaceAll('\u0624', '\u0648')
+        .replaceAll('\u0626', '\u064a')
+        .replaceAll('\u0629', '\u0647');
     normalized = normalized.replaceAll(RegExp(r'\\s+'), ' ');
     return normalized;
   }

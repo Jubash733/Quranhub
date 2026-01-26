@@ -4,6 +4,7 @@ import 'package:quran/data/data_sources/translation_local_data_source.dart';
 import 'package:quran/data/data_sources/translation_remote_data_source.dart';
 import 'package:quran/data/models/ayah_translation_dto.dart';
 import 'package:quran/data/models/local_ayah_data.dart';
+import 'package:quran/data/models/detail_surah_dto.dart';
 import 'package:quran/data/models/surah_dto.dart';
 import 'package:quran/data/repositories/translation_repository_impl.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
@@ -14,7 +15,10 @@ class FakeTranslationRemoteDataSource implements TranslationRemoteDataSource {
   final Map<AyahRef, AyahTranslationDTO> data;
 
   @override
-  Future<AyahTranslationDTO> getAyahTranslation(AyahRef ref) async {
+  Future<AyahTranslationDTO> getAyahTranslation(
+    AyahRef ref, {
+    String languageCode = 'ar',
+  }) async {
     final result = data[ref];
     if (result == null) {
       throw Exception('Not found');
@@ -40,6 +44,24 @@ class FakeQuranAssetDataSource implements QuranAssetDataSource {
       return null;
     }
   }
+
+  @override
+  Future<String?> getTranslation(AyahRef ref, String languageCode) async {
+    final entry = await getAyah(ref);
+    return entry?.translation[languageCode];
+  }
+
+  @override
+  Future<String?> getTafsir(AyahRef ref, String languageCode) async {
+    final entry = await getAyah(ref);
+    return entry?.tafsir[languageCode];
+  }
+
+  @override
+  Future<List<SurahDTO>> getSurahList() async => [];
+
+  @override
+  Future<DetailSurahDTO?> getDetailSurah(int id) async => null;
 }
 
 void main() {

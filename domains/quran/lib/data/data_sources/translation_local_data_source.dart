@@ -7,10 +7,6 @@ class TranslationLocalDataSource {
   TranslationLocalDataSource({required this.assetDataSource});
 
   Future<String?> getAyahTranslation(AyahRef ref, String languageCode) async {
-    final entry = await assetDataSource.getAyah(ref);
-    if (entry == null) {
-      return null;
-    }
-    return entry.translationFor(languageCode);
+    return assetDataSource.getTranslation(ref, languageCode);
   }
 }

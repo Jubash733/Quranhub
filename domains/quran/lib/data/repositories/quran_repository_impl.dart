@@ -1,6 +1,7 @@
 import 'package:dependencies/dartz/dartz.dart';
 import 'package:quran/data/data_sources/quran_local_data_source.dart';
 import 'package:quran/data/data_sources/quran_remote_data_source.dart';
+import 'package:quran/data/data_sources/quran_asset_data_source.dart';
 import 'package:quran/data/models/bookmark_verses_dto.dart';
 import 'package:quran/data/models/last_read_surah_dto.dart';
 import 'package:quran/domain/entities/bookmark_verses_entity.dart';
@@ -14,15 +15,21 @@ import 'package:quran/domain/repositories/quran_repository.dart';
 class QuranRepositoryImpl extends QuranRepository {
   final QuranRemoteDataSource remoteDataSource;
   final QuranLocalDataSource localDataSource;
+  final QuranAssetDataSource assetDataSource;
 
   QuranRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
+    required this.assetDataSource,
   });
 
   @override
   Future<Either<FailureResponse, List<SurahEntity>>> getAllSurah() async {
     try {
+      final local = await assetDataSource.getSurahList();
+      if (local.isNotEmpty) {
+        return Right(local.map((model) => model.toEntity()).toList());
+      }
       final result = await remoteDataSource.getAllSurah();
       return Right(result.map((model) => model.toEntity()).toList());
     } on Exception catch (e) {
@@ -34,6 +41,10 @@ class QuranRepositoryImpl extends QuranRepository {
   Future<Either<FailureResponse, DetailSurahEntity>> getDetailSurah(
       int id) async {
     try {
+      final local = await assetDataSource.getDetailSurah(id);
+      if (local != null && local.verses.isNotEmpty) {
+        return Right(local.toEntity());
+      }
       final result = await remoteDataSource.getDetailSurah(id);
       return Right(result.toEntity());
     } on Exception catch (e) {

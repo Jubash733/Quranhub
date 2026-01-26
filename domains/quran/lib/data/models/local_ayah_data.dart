@@ -35,6 +35,34 @@ class LocalAyahData {
     );
   }
 
+  factory LocalAyahData.fromTextJson(Map<String, dynamic> json) {
+    final surahName = json['surahName'] as Map<String, dynamic>? ?? {};
+    return LocalAyahData(
+      surah: json['surah'] as int,
+      ayah: json['ayah'] as int,
+      surahNameAr: surahName['ar'] as String? ?? '',
+      surahNameEn: surahName['en'] as String? ?? '',
+      textArabic: json['text'] as String? ?? '',
+      translation: const {},
+      tafsir: const {},
+    );
+  }
+
+  LocalAyahData copyWith({
+    Map<String, String>? translation,
+    Map<String, String>? tafsir,
+  }) {
+    return LocalAyahData(
+      surah: surah,
+      ayah: ayah,
+      surahNameAr: surahNameAr,
+      surahNameEn: surahNameEn,
+      textArabic: textArabic,
+      translation: translation ?? this.translation,
+      tafsir: tafsir ?? this.tafsir,
+    );
+  }
+
   String key() => '$surah:$ayah';
 
   String? translationFor(String languageCode) =>
