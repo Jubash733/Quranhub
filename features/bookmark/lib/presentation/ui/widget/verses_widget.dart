@@ -316,9 +316,9 @@ class _VersesWidgetState extends State<VersesWidget> {
               fontWeight: FontWeight.w400,
               height: 1.4,
               color: widget.prefSetProvider.isDarkTheme
-                  ? kGreyLight
+                  ? Colors.white70
                   : kDarkPurple.withValues(
-                      alpha: 0.7,
+                      alpha: 0.85,
                     ),
             ),
           ),

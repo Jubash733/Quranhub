@@ -59,18 +59,21 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                     return Column(
                       children: [
                         ShowUpAnimation(
-                          child: Row(
-                            children: [
-                              InkWell(
+                          child: Builder(
+                            builder: (context) {
+                              final isRtl =
+                                  Directionality.of(context) == TextDirection.rtl;
+                              final backButton = InkWell(
                                 onTap: () => Navigator.pop(context),
-                                child: const Icon(
-                                  Icons.arrow_back,
+                                child: Icon(
+                                  isRtl
+                                      ? Icons.arrow_forward
+                                      : Icons.arrow_back,
                                   size: 24.0,
                                   color: kGrey,
                                 ),
-                              ),
-                              const SizedBox(width: 18.0),
-                              Text(
+                              );
+                              final titleWidget = Text(
                                 context.l10n.bookmarksTitle,
                                 style: kHeading6.copyWith(
                                   fontSize: 20.0,
@@ -79,8 +82,22 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                                       ? Colors.white
                                       : kPurpleSecondary,
                                 ),
-                              ),
-                            ],
+                              );
+                              final headerChildren = isRtl
+                                  ? [
+                                      titleWidget,
+                                      const SizedBox(width: 18.0),
+                                      backButton,
+                                    ]
+                                  : [
+                                      backButton,
+                                      const SizedBox(width: 18.0),
+                                      titleWidget,
+                                    ];
+                              return Row(
+                                children: headerChildren,
+                              );
+                            },
                           ),
                         ),
                         const SizedBox(height: 24.0),

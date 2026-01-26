@@ -40,6 +40,7 @@ class AppLocalizations {
       'retry': 'Retry',
       'copy': 'Copy',
       'share': 'Share',
+      'showTafsir': 'Show Tafsir',
       'copied': 'Copied',
       'search': 'Search',
       'searchHint': 'Search the Quran...',
@@ -80,6 +81,7 @@ class AppLocalizations {
       'retry': 'إعادة المحاولة',
       'copy': 'نسخ',
       'share': 'مشاركة',
+      'showTafsir': 'عرض التفسير',
       'copied': 'تم النسخ',
       'search': 'بحث',
       'searchHint': 'ابحث في القرآن...',
@@ -124,6 +126,7 @@ class AppLocalizations {
   String get retry => _t('retry');
   String get copy => _t('copy');
   String get share => _t('share');
+  String get showTafsir => _t('showTafsir');
   String get copied => _t('copied');
   String get search => _t('search');
   String get searchHint => _t('searchHint');

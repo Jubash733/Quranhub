@@ -62,6 +62,9 @@ class SurahWidget extends StatelessWidget {
         isArabic ? surah.name.short : surah.name.transliteration.en;
     final secondaryName =
         isArabic ? surah.name.transliteration.en : surah.name.short;
+    final secondaryColor = prefSetProvider.isDarkTheme
+        ? Colors.white70
+        : kDarkPurple.withValues(alpha: 0.7);
     final chevronIcon = isArabic
         ? Icons.chevron_left_rounded
         : Icons.chevron_right_rounded;
@@ -135,18 +138,16 @@ class SurahWidget extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 4.0),
+                      const SizedBox(height: 2.0),
                       Text(
                         secondaryName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: kSubtitle.copyWith(
-                          color: kGrey.withValues(
-                            alpha: 0.8,
-                          ),
+                          color: secondaryColor,
                         ),
                       ),
-                      const SizedBox(height: 6.0),
+                      const SizedBox(height: 4.0),
                       Row(
                         children: [
                           Flexible(
@@ -157,18 +158,14 @@ class SurahWidget extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: kSubtitle.copyWith(
-                                color: kGrey.withValues(
-                                  alpha: 0.8,
-                                ),
+                                color: secondaryColor,
                               ),
                             ),
                           ),
                           const SizedBox(width: 6.0),
                           Icon(
                             Icons.circle,
-                            color: kGrey.withValues(
-                              alpha: 0.7,
-                            ),
+                            color: secondaryColor,
                             size: 4,
                           ),
                           const SizedBox(width: 6.0),
@@ -178,9 +175,7 @@ class SurahWidget extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: kSubtitle.copyWith(
-                                color: kGrey.withValues(
-                                  alpha: 0.8,
-                                ),
+                                color: secondaryColor,
                               ),
                             ),
                           ),

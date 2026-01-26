@@ -106,7 +106,7 @@ class _VersesWidgetState extends State<VersesWidget> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (sheetContext) {
-        final sheetHeight = MediaQuery.of(sheetContext).size.height * 0.78;
+        final sheetHeight = MediaQuery.of(sheetContext).size.height * 0.8;
         return MultiBlocProvider(
           providers: [
             BlocProvider.value(
@@ -118,10 +118,10 @@ class _VersesWidgetState extends State<VersesWidget> {
           ],
           child: Padding(
             padding: EdgeInsets.fromLTRB(
-              20.0,
-              12.0,
-              20.0,
-              24.0 + MediaQuery.of(sheetContext).viewInsets.bottom,
+              24.0,
+              16.0,
+              24.0,
+              28.0 + MediaQuery.of(sheetContext).viewInsets.bottom,
             ),
             child: SizedBox(
               height: sheetHeight,
@@ -163,9 +163,9 @@ class _VersesWidgetState extends State<VersesWidget> {
                         fontSize: 12.0,
                         fontWeight: FontWeight.w400,
                         color: widget.prefSetProvider.isDarkTheme
-                            ? kGreyLight
+                            ? Colors.white70
                             : kDarkPurple.withValues(
-                                alpha: 0.6,
+                                alpha: 0.8,
                               ),
                       ),
                     ),
@@ -230,8 +230,11 @@ class _VersesWidgetState extends State<VersesWidget> {
         }
         return _buildContentState(
           text: translation.text,
+          isArabic: languageCode == 'ar',
           onCopy: () => _copyText(context, translation.text),
           onShare: () => _shareText(translation.text),
+          showTafsirButton: true,
+          onShowTafsir: () => DefaultTabController.of(context).animateTo(1),
         );
       },
     );
@@ -266,6 +269,7 @@ class _VersesWidgetState extends State<VersesWidget> {
         }
         return _buildContentState(
           text: tafsir.text,
+          isArabic: languageCode == 'ar',
           onCopy: () => _copyText(context, tafsir.text),
           onShare: () => _shareText(tafsir.text),
         );
@@ -340,47 +344,83 @@ class _VersesWidgetState extends State<VersesWidget> {
     required String text,
     required VoidCallback onCopy,
     required VoidCallback onShare,
+    bool showTafsirButton = false,
+    VoidCallback? onShowTafsir,
+    bool isArabic = false,
   }) {
+    final actionColor = widget.prefSetProvider.isDarkTheme
+        ? Colors.white
+        : kPurplePrimary;
+    final lineHeight = isArabic ? 1.9 : 1.6;
     return Column(
       children: [
-        Row(
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 8.0,
           children: [
-            IconButton(
+            _actionButton(
+              icon: Icons.copy_rounded,
+              label: context.l10n.copy,
               onPressed: onCopy,
-              icon: const Icon(Icons.copy_rounded),
-              color: widget.prefSetProvider.isDarkTheme
-                  ? Colors.white
-                  : kPurplePrimary,
-              tooltip: context.l10n.copy,
+              color: actionColor,
             ),
-            IconButton(
+            _actionButton(
+              icon: Icons.share_rounded,
+              label: context.l10n.share,
               onPressed: onShare,
-              icon: const Icon(Icons.share_rounded),
-              color: widget.prefSetProvider.isDarkTheme
-                  ? Colors.white
-                  : kPurplePrimary,
-              tooltip: context.l10n.share,
+              color: actionColor,
             ),
+            if (showTafsirButton)
+              _actionButton(
+                icon: Icons.menu_book_rounded,
+                label: context.l10n.showTafsir,
+                onPressed: onShowTafsir ?? () {},
+                color: actionColor,
+              ),
           ],
         ),
-        const SizedBox(height: 8.0),
+        const SizedBox(height: 14.0),
         Expanded(
           child: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: SelectableText(
               text,
               textAlign: TextAlign.start,
               style: kHeading6.copyWith(
-                fontSize: 13.0,
+                fontSize: 14.0,
                 fontWeight: FontWeight.w400,
-                height: 1.6,
+                height: lineHeight,
                 color: widget.prefSetProvider.isDarkTheme
-                    ? kGreyLight
+                    ? Colors.white
                     : kDarkPurple,
               ),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _actionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+    required Color color,
+  }) {
+    return OutlinedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, size: 18),
+      label: Text(label),
+      style: OutlinedButton.styleFrom(
+        foregroundColor: color,
+        side: BorderSide(color: color.withValues(alpha: 0.5)),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+        textStyle: kSubtitle.copyWith(
+          fontWeight: FontWeight.w600,
+          fontSize: 12.0,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
     );
   }
 

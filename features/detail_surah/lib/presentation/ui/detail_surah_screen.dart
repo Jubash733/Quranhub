@@ -117,37 +117,49 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                       context.read<LastReadCubit>().updateLastRead(surah!);
                     }
 
+                    final isRtl =
+                        Directionality.of(context) == TextDirection.rtl;
+                    final backButton = InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(
+                        isRtl ? Icons.arrow_forward : Icons.arrow_back,
+                        size: 24.0,
+                        color: kGrey,
+                      ),
+                    );
+                    final titleWidget = Expanded(
+                      child: Text(
+                        isArabic
+                            ? surah.name.short
+                            : surah.name.transliteration.en,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: kHeading6.copyWith(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: prefSetProvider.isDarkTheme
+                              ? Colors.white
+                              : kPurpleSecondary,
+                        ),
+                      ),
+                    );
+                    final headerChildren = isRtl
+                        ? [
+                            titleWidget,
+                            const SizedBox(width: 18.0),
+                            backButton,
+                          ]
+                        : [
+                            backButton,
+                            const SizedBox(width: 18.0),
+                            titleWidget,
+                          ];
+
                     return Column(
                       children: [
                         ShowUpAnimation(
                           child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () => Navigator.pop(context),
-                                child: const Icon(
-                                  Icons.arrow_back,
-                                  size: 24.0,
-                                  color: kGrey,
-                                ),
-                              ),
-                              const SizedBox(width: 18.0),
-                              Expanded(
-                                child: Text(
-                                  isArabic
-                                      ? surah.name.short
-                                      : surah.name.transliteration.en,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: kHeading6.copyWith(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: prefSetProvider.isDarkTheme
-                                        ? Colors.white
-                                        : kPurpleSecondary,
-                                  ),
-                                ),
-                              ),
-                            ],
+                            children: headerChildren,
                           ),
                         ),
                         const SizedBox(height: 24.0),

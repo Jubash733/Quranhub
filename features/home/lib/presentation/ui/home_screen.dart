@@ -60,18 +60,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ShowUpAnimation(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Image.asset(
-                            prefSetProvider.isDarkTheme
-                                ? 'assets/icon_quran_white.png'
-                                : 'assets/icon_quran.png',
-                            width: 28.0,
-                          ),
-                          const SizedBox(width: 6.0),
-                          Expanded(
+                      child: Builder(
+                        builder: (context) {
+                          final isRtl =
+                              Directionality.of(context) == TextDirection.rtl;
+                          final titleWidget = Expanded(
                             child: Text(
                               context.l10n.appTitle,
                               maxLines: 1,
@@ -81,9 +74,25 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 8.0),
-                          InkWell(
+                          );
+                          final logoWidget = Image.asset(
+                            prefSetProvider.isDarkTheme
+                                ? 'assets/icon_quran_white.png'
+                                : 'assets/icon_quran.png',
+                            width: 28.0,
+                          );
+                          final leadingChildren = isRtl
+                              ? [
+                                  titleWidget,
+                                  const SizedBox(width: 6.0),
+                                  logoWidget,
+                                ]
+                              : [
+                                  logoWidget,
+                                  const SizedBox(width: 6.0),
+                                  titleWidget,
+                                ];
+                          final languageToggle = InkWell(
                             onTap: () {
                               final nextLocale = prefSetProvider
                                           .locale.languageCode ==
@@ -117,9 +126,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 10.0),
-                          InkWell(
+                          );
+                          final bookmarkIcon = InkWell(
                             onTap: () => Navigator.pushNamed(
                                 context, NamedRoutes.bookmarkScreen),
                             child: Image.asset(
@@ -128,9 +136,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                   : 'assets/icon_bookmark.png',
                               width: 16.0,
                             ),
-                          ),
-                          const SizedBox(width: 8.0),
-                          InkWell(
+                          );
+                          final themeToggle = InkWell(
                             onTap: () => prefSetProvider
                                 .enableDarkTheme(!prefSetProvider.isDarkTheme),
                             borderRadius: BorderRadius.circular(10.0),
@@ -143,8 +150,39 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                   ? Colors.white
                                   : kPurplePrimary,
                             ),
-                          )
-                        ],
+                          );
+                          final actionChildren = isRtl
+                              ? [
+                                  themeToggle,
+                                  const SizedBox(width: 8.0),
+                                  bookmarkIcon,
+                                  const SizedBox(width: 10.0),
+                                  languageToggle,
+                                ]
+                              : [
+                                  languageToggle,
+                                  const SizedBox(width: 10.0),
+                                  bookmarkIcon,
+                                  const SizedBox(width: 8.0),
+                                  themeToggle,
+                                ];
+
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: leadingChildren,
+                                ),
+                              ),
+                              const SizedBox(width: 8.0),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: actionChildren,
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                     const SizedBox(height: 28.0),
@@ -155,11 +193,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
                           color: prefSetProvider.isDarkTheme
-                              ? kGrey.withValues(
-                                  alpha: 0.9,
-                                )
-                              : kGrey.withValues(
-                                  alpha: 0.7,
+                              ? Colors.white70
+                              : kDarkPurple.withValues(
+                                  alpha: 0.8,
                                 ),
                           letterSpacing: 0.0,
                         ),

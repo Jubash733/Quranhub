@@ -59,7 +59,7 @@ class BannerVersesWidget extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 4.0),
+                const SizedBox(height: 2.0),
                 Text(
                   isArabic ? surah.name.long : surah.name.translation.en,
                   maxLines: 1,
