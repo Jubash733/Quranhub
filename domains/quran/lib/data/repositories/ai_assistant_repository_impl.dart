@@ -1,5 +1,4 @@
 import 'package:common/utils/config/app_config.dart';
-import 'package:common/utils/config/app_config.dart';
 import 'package:common/utils/error/failure_response.dart';
 import 'package:dependencies/dartz/dartz.dart';
 import 'package:quran/data/data_sources/ai_assistant_local_data_source.dart';

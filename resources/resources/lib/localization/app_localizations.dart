@@ -187,6 +187,8 @@ class AppLocalizations {
   String get appearance => _t('appearance');
   String get darkMode => _t('darkMode');
   String get contentDisabled => _t('contentDisabled');
+  String get lastReadEmptyTitle => _t('lastReadEmptyTitle');
+  String get lastReadEmptyMessage => _t('lastReadEmptyMessage');
   String get language => _t('language');
   String get arabicLanguage => _t('arabicLanguage');
   String get englishLanguage => _t('englishLanguage');
