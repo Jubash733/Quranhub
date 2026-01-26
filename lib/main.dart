@@ -1,3 +1,5 @@
+import 'package:ai_assistant/presentation/cubit/ai_assistant_cubit.dart';
+import 'package:ai_assistant/presentation/ui/ai_assistant_screen.dart';
 import 'package:bookmark/presentation/bloc/bloc.dart';
 import 'package:bookmark/presentation/ui/bookmark_screen.dart';
 import 'package:common/utils/helper/preference_settings_helper.dart';
@@ -159,6 +161,12 @@ class MyApp extends StatelessWidget {
                       searchVersesUsecase: sl(),
                     ),
                     child: const SearchScreen(),
+                  ),
+              NamedRoutes.aiAssistantScreen: (context) => BlocProvider(
+                    create: (_) => AiAssistantCubit(
+                      getAiTadabburUsecase: sl(),
+                    ),
+                    child: const AiAssistantScreen(),
                   ),
             },
           );
