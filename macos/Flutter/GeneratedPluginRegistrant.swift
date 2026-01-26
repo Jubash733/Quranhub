@@ -7,9 +7,9 @@ import Foundation
 
 import audio_session
 import just_audio
-import path_provider_macos
-import shared_preferences_macos
-import sqflite
+import path_provider_foundation
+import shared_preferences_foundation
+import sqflite_darwin
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   AudioSessionPlugin.register(with: registry.registrar(forPlugin: "AudioSessionPlugin"))
