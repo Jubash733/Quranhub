@@ -2,6 +2,7 @@ import 'package:dependencies/bloc/bloc.dart';
 import 'package:dependencies/show_up_animation/show_up_animation.dart';
 import 'package:detail_surah/presentation/cubits/last_read/last_read_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 
@@ -15,6 +16,23 @@ class BannerLastReadWidget extends StatelessWidget {
     }
     if (normalized.contains('madani')) {
       return 'مدنية';
+    }
+    return value;
+  }
+
+  String _englishRevelation(String value) {
+    if (value.contains('مكي') || value.contains('مكية')) {
+      return 'Makkiyah';
+    }
+    if (value.contains('مدني') || value.contains('مدنية')) {
+      return 'Madaniyah';
+    }
+    final normalized = value.toLowerCase();
+    if (normalized.contains('makki')) {
+      return 'Makkiyah';
+    }
+    if (normalized.contains('madani')) {
+      return 'Madaniyah';
     }
     return value;
   }
@@ -51,7 +69,7 @@ class BannerLastReadWidget extends StatelessWidget {
                           ),
                           const SizedBox(width: 6.0),
                           Text(
-                            'آخر قراءة',
+                            context.l10n.lastRead,
                             style: kHeading6.copyWith(color: Colors.white),
                           )
                         ],
@@ -78,8 +96,11 @@ class BannerLastReadWidget extends StatelessWidget {
                             child: Text(
                               state.data.isEmpty
                                   ? '-'
-                                  : _arabicRevelation(
-                                      state.data[0].revelation),
+                                  : (context.l10n.isArabic
+                                      ? _arabicRevelation(
+                                          state.data[0].revelation)
+                                      : _englishRevelation(
+                                          state.data[0].revelation)),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: kHeading6.copyWith(
@@ -108,7 +129,7 @@ class BannerLastReadWidget extends StatelessWidget {
                             child: Text(
                               state.data.isEmpty
                                   ? '-'
-                                  : '${state.data[0].numberOfVerses} آية',
+                                  : '${state.data[0].numberOfVerses} ${context.l10n.ayah}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: kHeading6.copyWith(

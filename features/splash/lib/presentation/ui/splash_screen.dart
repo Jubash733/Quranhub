@@ -2,6 +2,7 @@ import 'package:common/utils/navigation/navigation.dart';
 import 'package:dependencies/show_up_animation/show_up_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:resources/constant/named_routes.dart';
+import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 
@@ -49,7 +50,7 @@ class SplashScreen extends StatelessWidget {
               offset: -1,
               delayStart: const Duration(seconds: 1),
               child: Text(
-                'تطبيق القرآن',
+                context.l10n.appTitle,
                 style: kHeading6.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

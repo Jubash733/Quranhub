@@ -19,6 +19,8 @@ import 'package:home/presentation/bloc/home_bloc.dart';
 import 'package:home/presentation/ui/home_screen.dart';
 import 'package:quran_app/di/injections.dart';
 import 'package:resources/constant/named_routes.dart';
+import 'package:resources/constant/route_args.dart';
+import 'package:resources/localization/app_localizations.dart';
 import 'package:splash/presentation/ui/onboard_screen.dart';
 import 'package:splash/presentation/ui/splash_screen.dart';
 
@@ -47,16 +49,18 @@ class MyApp extends StatelessWidget {
       child: Consumer<PreferenceSettingsProvider>(
         builder: (context, prefSetProvider, _) {
           return MaterialApp(
-            title: 'تطبيق القرآن',
+            onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
             theme: prefSetProvider.themeData,
             navigatorKey: navigatorKey,
             navigatorObservers: [routeObserver],
             debugShowCheckedModeBanner: false,
-            locale: const Locale('ar'),
+            locale: prefSetProvider.locale,
             supportedLocales: const [
               Locale('ar'),
+              Locale('en'),
             ],
             localizationsDelegates: const [
+              AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
@@ -108,8 +112,22 @@ class MyApp extends StatelessWidget {
                             statusBookmarkVerseUsecase: sl()),
                       ),
                     ],
-                    child: DetailSurahScreen(
-                        id: ModalRoute.of(context)?.settings.arguments as int),
+                    child: Builder(
+                      builder: (context) {
+                        final args =
+                            ModalRoute.of(context)?.settings.arguments;
+                        final surahId = args is DetailScreenArgs
+                            ? args.surahNumber
+                            : args as int;
+                        final highlightAyah = args is DetailScreenArgs
+                            ? args.highlightAyah
+                            : null;
+                        return DetailSurahScreen(
+                          id: surahId,
+                          highlightAyah: highlightAyah,
+                        );
+                      },
+                    ),
                   ),
               NamedRoutes.bookmarkScreen: (context) => MultiBlocProvider(
                     providers: [

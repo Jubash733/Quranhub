@@ -23,6 +23,17 @@ final TextStyle kBodyText = GoogleFonts.cairo(
   height: 1.4,
 );
 
+final TextStyle kArabicVerse = GoogleFonts.amiri(
+  fontSize: 30,
+  fontWeight: FontWeight.w400,
+  height: 1.8,
+);
+final TextStyle kArabicBody = GoogleFonts.amiri(
+  fontSize: 18,
+  fontWeight: FontWeight.w400,
+  height: 1.7,
+);
+
 // text theme
 final kTextTheme = TextTheme(
   headlineSmall: kHeading5,

@@ -6,6 +6,7 @@ import 'package:dependencies/bloc/bloc.dart';
 import 'package:dependencies/provider/provider.dart';
 import 'package:dependencies/show_up_animation/show_up_animation.dart';
 import 'package:flutter/material.dart';
+import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 
@@ -70,7 +71,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                               ),
                               const SizedBox(width: 18.0),
                               Text(
-                                'الآيات المحفوظة',
+                                context.l10n.bookmarksTitle,
                                 style: kHeading6.copyWith(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
@@ -99,7 +100,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                                       const SizedBox(height: 10.0),
                                       ShowUpAnimation(
                                         child: Text(
-                                          'لا توجد علامات محفوظة',
+                                          context.l10n.bookmarksEmpty,
                                           style: kHeading6.copyWith(
                                             fontSize: 18.0,
                                             color: prefSetProvider.isDarkTheme
@@ -131,7 +132,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                       ],
                     );
                   } else {
-                    return const Center(child: Text('حدث خطأ غير متوقع'));
+                    return Center(child: Text(context.l10n.unexpectedError));
                   }
                 },
               ),

@@ -1,5 +1,6 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:resources/localization/app_localizations.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 
@@ -90,7 +91,7 @@ class CustomFlashWidget extends StatelessWidget {
       primaryAction: TextButton(
         onPressed: () => controller.dismiss(),
         child: Text(
-          'إغلاق',
+          AppLocalizations.of(context).close,
           style: kHeading5.copyWith(
             color: darkTheme ? kGrey92 : accentColor,
             fontSize: 12,

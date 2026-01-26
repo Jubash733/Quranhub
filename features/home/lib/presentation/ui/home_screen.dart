@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:home/presentation/bloc/bloc.dart';
 import 'package:home/presentation/ui/widget/banner_last_read_widget.dart';
 import 'package:home/presentation/ui/widget/list_surah_widget.dart';
+import 'package:home/presentation/ui/widget/surah_skeleton_item.dart';
 import 'package:resources/constant/named_routes.dart';
+import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 
@@ -69,14 +71,54 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                             width: 28.0,
                           ),
                           const SizedBox(width: 6.0),
-                          Text(
-                            'تطبيق القرآن',
-                            style: kHeading6.copyWith(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Text(
+                              context.l10n.appTitle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: kHeading6.copyWith(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                          const Spacer(),
+                          const SizedBox(width: 8.0),
+                          InkWell(
+                            onTap: () {
+                              final nextLocale = prefSetProvider
+                                          .locale.languageCode ==
+                                      'ar'
+                                  ? const Locale('en')
+                                  : const Locale('ar');
+                              prefSetProvider.setLocale(nextLocale);
+                            },
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0,
+                                vertical: 6.0,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                border: Border.all(
+                                  color: prefSetProvider.isDarkTheme
+                                      ? Colors.white
+                                      : kPurplePrimary,
+                                ),
+                              ),
+                              child: Text(
+                                context.l10n.languageToggleShort,
+                                style: kHeading6.copyWith(
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w700,
+                                  color: prefSetProvider.isDarkTheme
+                                      ? Colors.white
+                                      : kPurplePrimary,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10.0),
                           InkWell(
                             onTap: () => Navigator.pushNamed(
                                 context, NamedRoutes.bookmarkScreen),
@@ -108,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                     const SizedBox(height: 28.0),
                     ShowUpAnimation(
                       child: Text(
-                        'السلام عليكم',
+                        context.l10n.greetingAssalam,
                         style: kHeading6.copyWith(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
@@ -130,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                         children: [
                           Expanded(
                             child: Text(
-                              'أهلًا وسهلًا',
+                              context.l10n.greetingWelcome,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: kHeading6.copyWith(
@@ -154,11 +196,92 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                       ),
                     ),
                     const SizedBox(height: 22.0),
+                    ShowUpAnimation(
+                      child: InkWell(
+                        onTap: () =>
+                            Navigator.pushNamed(context, NamedRoutes.searchScreen),
+                        borderRadius: BorderRadius.circular(14.0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 14.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14.0),
+                            color: prefSetProvider.isDarkTheme
+                                ? kDarkPurple.withValues(alpha: 0.5)
+                                : kGrey92,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: prefSetProvider.isDarkTheme
+                                    ? Colors.white70
+                                    : kPurplePrimary,
+                              ),
+                              const SizedBox(width: 10.0),
+                              Expanded(
+                                child: Text(
+                                  context.l10n.searchHint,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: kSubtitle.copyWith(
+                                    color: prefSetProvider.isDarkTheme
+                                        ? Colors.white70
+                                        : kGrey.withValues(alpha: 0.8),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 18.0),
                     const BannerLastReadWidget(),
+                    const SizedBox(height: 16.0),
+                    ShowUpAnimation(
+                      child: InkWell(
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          NamedRoutes.aiAssistantScreen,
+                        ),
+                        borderRadius: BorderRadius.circular(14.0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 14.0,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14.0),
+                            gradient: const LinearGradient(
+                              colors: [kLinearPurple1, kLinearPurple2],
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.auto_awesome,
+                                  color: Colors.white),
+                              const SizedBox(width: 10.0),
+                              Expanded(
+                                child: Text(
+                                  context.l10n.aiAssistant,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: kHeading6.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 24.0),
                     ShowUpAnimation(
                       child: Text(
-                        'السور',
+                        context.l10n.surah,
                         style: kHeading6.copyWith(
                           fontSize: 18.0,
                           color: prefSetProvider.isDarkTheme
@@ -186,30 +309,33 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                         final status = state.statusSurah.status;
 
                         if (status.isLoading) {
-                          return Center(
-                              child: CircularProgressIndicator(
-                            color: prefSetProvider.isDarkTheme
-                                ? Colors.white
-                                : kPurplePrimary,
-                          ));
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 6,
+                            itemBuilder: (context, index) {
+                              return SurahSkeletonItem(
+                                isDarkTheme: prefSetProvider.isDarkTheme,
+                              );
+                            },
+                          );
                         } else if (status.isNoData) {
-                          return Center(child: Text(state.statusSurah.message));
+                          return Center(child: Text(context.l10n.noData));
                         } else if (status.isError) {
-                          return Center(child: Text(state.statusSurah.message));
+                          return Center(
+                              child: Text(state.statusSurah.message.isNotEmpty
+                                  ? state.statusSurah.message
+                                  : context.l10n.unexpectedError));
                         } else if (status.isHasData) {
                           final surah = state.statusSurah.data ?? [];
                           return ShowUpAnimation(
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height / 2.1,
-                              child: ListSurahWidget(
-                                surah: surah,
-                                prefSetProvider: prefSetProvider,
-                              ),
+                            child: ListSurahWidget(
+                              surah: surah,
+                              prefSetProvider: prefSetProvider,
                             ),
                           );
                         } else {
-                          return const Center(
-                              child: Text('حدث خطأ غير متوقع'));
+                          return Center(child: Text(context.l10n.unexpectedError));
                         }
                       },
                     ),

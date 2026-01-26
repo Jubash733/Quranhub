@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 
 import 'package:common/utils/provider/preference_settings_provider.dart';
@@ -37,14 +35,13 @@ class _VersesWidgetState extends State<VersesWidget> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await context
-          .read<BookmarkVersesCubit>()
-          .loadBookmarkVerse(widget.bookmark.id);
-      if (!context.mounted) {
+      final bookmarkCubit = context.read<BookmarkVersesCubit>();
+      await bookmarkCubit.loadBookmarkVerse(widget.bookmark.id);
+      if (!mounted) {
         return;
       }
 
-      if (context.read<BookmarkVersesCubit>().state.isBookmark) {
+      if (bookmarkCubit.state.isBookmark) {
         setState(() {
           isBookmark = true;
         });
@@ -108,7 +105,10 @@ class _VersesWidgetState extends State<VersesWidget> {
                       color: kPurplePrimary,
                     ),
                     child: Text(
-                      'سورة ${widget.bookmark.surah} · آية ${widget.bookmark.inSurah}',
+                      context.l10n.formatSurahAyah(
+                        widget.bookmark.surah,
+                        widget.bookmark.inSurah,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
@@ -206,10 +206,12 @@ class _VersesWidgetState extends State<VersesWidget> {
 
                         context.showCustomFlashMessage(
                           status: 'success',
-                          title: 'حذف علامة الآية',
+                          title: context.l10n.bookmarkRemovedTitle,
                           darkTheme: widget.prefSetProvider.isDarkTheme,
-                          message:
-                              'تم حذف علامة الآية من سورة ${widget.bookmark.surah} آية ${widget.bookmark.inSurah}.',
+                          message: context.l10n.bookmarkRemovedMessage(
+                            widget.bookmark.surah,
+                            widget.bookmark.inSurah,
+                          ),
                         );
                       } else {
                         await context
@@ -238,10 +240,12 @@ class _VersesWidgetState extends State<VersesWidget> {
                         }
                         context.showCustomFlashMessage(
                           status: 'success',
-                          title: 'إضافة علامة الآية',
+                          title: context.l10n.bookmarkAddedTitle,
                           darkTheme: widget.prefSetProvider.isDarkTheme,
-                          message:
-                              'تمت إضافة علامة الآية إلى سورة ${widget.bookmark.surah} آية ${widget.bookmark.inSurah}.',
+                          message: context.l10n.bookmarkAddedMessage(
+                            widget.bookmark.surah,
+                            widget.bookmark.inSurah,
+                          ),
                         );
                       }
 
@@ -286,10 +290,7 @@ class _VersesWidgetState extends State<VersesWidget> {
             child: Text(
               widget.bookmark.textArab,
               textAlign: TextAlign.right,
-              style: kHeading6.copyWith(
-                fontSize: 28.0,
-                fontWeight: FontWeight.w500,
-                height: 1.6,
+              style: kArabicVerse.copyWith(
                 color: widget.prefSetProvider.isDarkTheme
                     ? Colors.white
                     : kDarkPurple,
