@@ -22,6 +22,8 @@ import 'package:quran_app/di/injections.dart';
 import 'package:resources/constant/named_routes.dart';
 import 'package:resources/constant/route_args.dart';
 import 'package:resources/localization/app_localizations.dart';
+import 'package:search/presentation/cubit/search_cubit.dart';
+import 'package:search/presentation/ui/search_screen.dart';
 import 'package:splash/presentation/ui/onboard_screen.dart';
 import 'package:splash/presentation/ui/splash_screen.dart';
 
@@ -151,6 +153,12 @@ class MyApp extends StatelessWidget {
                       ),
                     ],
                     child: const BookmarkScreen(),
+                  ),
+              NamedRoutes.searchScreen: (context) => BlocProvider(
+                    create: (_) => SearchCubit(
+                      searchVersesUsecase: sl(),
+                    ),
+                    child: const SearchScreen(),
                   ),
             },
           );

@@ -1,0 +1,35 @@
+name: search
+description: Search feature for Quran app.
+version: 0.0.1
+publish_to: "none"
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Domain
+  quran:
+    path: ../../domains/quran
+
+  # Resources
+  resources:
+    path: ../../resources/resources
+
+  # Shared libraries
+  common:
+    path: ../../shared_libraries/common
+  core:
+    path: ../../shared_libraries/core
+  dependencies:
+    path: ../../shared_libraries/dependencies
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:

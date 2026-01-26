@@ -24,6 +24,8 @@ dependencies:
     path: features/detail_surah
   bookmark:
     path: features/bookmark
+  search:
+    path: features/search
 
   # Domains
   quran:
