@@ -16,14 +16,14 @@ class DetailSurahBloc extends Bloc<DetailSurahEvent, DetailSurahState> {
     Emitter emit,
   ) async {
     emit(state.copyWith(
-        statusDetailSurah: ViewData.loading(message: 'Loading')));
+        statusDetailSurah: ViewData.loading(message: 'جارٍ التحميل')));
 
     final response = await getDetailSurahUsecase.call(event.id);
 
     try {
       if (response.length() == 0) {
         emit(state.copyWith(
-            statusDetailSurah: ViewData.noData(message: 'No Data')));
+            statusDetailSurah: ViewData.noData(message: 'لا توجد بيانات')));
       } else {
         response.fold(
             (failure) => emit(state.copyWith(

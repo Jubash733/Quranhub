@@ -8,6 +8,17 @@ import 'package:resources/styles/text_styles.dart';
 class BannerLastReadWidget extends StatelessWidget {
   const BannerLastReadWidget({super.key});
 
+  String _arabicRevelation(String value) {
+    final normalized = value.toLowerCase();
+    if (normalized.contains('makki')) {
+      return 'مكية';
+    }
+    if (normalized.contains('madani')) {
+      return 'مدنية';
+    }
+    return value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -40,7 +51,7 @@ class BannerLastReadWidget extends StatelessWidget {
                           ),
                           const SizedBox(width: 6.0),
                           Text(
-                            'Last Read',
+                            'آخر قراءة',
                             style: kHeading6.copyWith(color: Colors.white),
                           )
                         ],
@@ -50,6 +61,8 @@ class BannerLastReadWidget extends StatelessWidget {
                     ShowUpAnimation(
                       child: Text(
                         state.data.isEmpty ? '-' : state.data[0].surah,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: kHeading6.copyWith(
                           color: Colors.white,
                           fontSize: 18.0,
@@ -60,15 +73,22 @@ class BannerLastReadWidget extends StatelessWidget {
                     const SizedBox(height: 2.0),
                     Row(
                       children: [
-                        ShowUpAnimation(
-                          child: Text(
-                            state.data.isEmpty ? '-' : state.data[0].revelation,
-                            style: kHeading6.copyWith(
-                              color: Colors.white.withValues(
-                                alpha: 0.8,
+                        Flexible(
+                          child: ShowUpAnimation(
+                            child: Text(
+                              state.data.isEmpty
+                                  ? '-'
+                                  : _arabicRevelation(
+                                      state.data[0].revelation),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: kHeading6.copyWith(
+                                color: Colors.white.withValues(
+                                  alpha: 0.8,
+                                ),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
                               ),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
@@ -83,17 +103,21 @@ class BannerLastReadWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 4.0),
-                        ShowUpAnimation(
-                          child: Text(
-                            state.data.isEmpty
-                                ? '-'
-                                : '${state.data[0].numberOfVerses} Ayat',
-                            style: kHeading6.copyWith(
-                              color: Colors.white.withValues(
-                                alpha: 0.8,
+                        Flexible(
+                          child: ShowUpAnimation(
+                            child: Text(
+                              state.data.isEmpty
+                                  ? '-'
+                                  : '${state.data[0].numberOfVerses} آية',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: kHeading6.copyWith(
+                                color: Colors.white.withValues(
+                                  alpha: 0.8,
+                                ),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
                               ),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),

@@ -46,11 +46,15 @@ class MyApp extends StatelessWidget {
       child: Consumer<PreferenceSettingsProvider>(
         builder: (context, prefSetProvider, _) {
           return MaterialApp(
-            title: 'Quran App',
+            title: 'تطبيق القرآن',
             theme: prefSetProvider.themeData,
             navigatorKey: navigatorKey,
             navigatorObservers: [routeObserver],
             debugShowCheckedModeBanner: false,
+            builder: (context, child) => Directionality(
+              textDirection: TextDirection.rtl,
+              child: child ?? const SizedBox.shrink(),
+            ),
             initialRoute: NamedRoutes.splashScreen,
             routes: {
               NamedRoutes.splashScreen: (_) => SplashScreen(),

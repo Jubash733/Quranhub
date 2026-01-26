@@ -49,7 +49,7 @@ class SplashScreen extends StatelessWidget {
               offset: -1,
               delayStart: const Duration(seconds: 1),
               child: Text(
-                'Quran App',
+                'تطبيق القرآن',
                 style: kHeading6.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

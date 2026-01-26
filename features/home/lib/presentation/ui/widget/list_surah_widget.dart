@@ -47,9 +47,10 @@ class SurahWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 75,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
@@ -61,6 +62,8 @@ class SurahWidget extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         surah.number.toString(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: kHeading6.copyWith(
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
@@ -73,70 +76,89 @@ class SurahWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(width: 15.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    surah.name.transliteration.id,
-                    style: kHeading6.copyWith(
-                      fontSize: 16.0,
-                      color: prefSetProvider.isDarkTheme
-                          ? Colors.white
-                          : kDarkPurple,
-                      letterSpacing: 0.0,
-                      fontWeight: FontWeight.w600,
+              const SizedBox(width: 12.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      surah.name.transliteration.en,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: kHeading6.copyWith(
+                        fontSize: 16.0,
+                        color: prefSetProvider.isDarkTheme
+                            ? Colors.white
+                            : kDarkPurple,
+                        letterSpacing: 0.0,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        surah.revelation.id,
-                        style: kHeading6.copyWith(
+                    const SizedBox(height: 4.0),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            surah.revelation.arab,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: kHeading6.copyWith(
+                              color: kGrey.withValues(
+                                alpha: 0.8,
+                              ),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 4.0),
+                        Icon(
+                          Icons.circle,
                           color: kGrey.withValues(
                             alpha: 0.8,
                           ),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
+                          size: 4,
                         ),
-                      ),
-                      const SizedBox(width: 4.0),
-                      Icon(
-                        Icons.circle,
-                        color: kGrey.withValues(
-                          alpha: 0.8,
-                        ),
-                        size: 4,
-                      ),
-                      const SizedBox(width: 4.0),
-                      Text(
-                        '${surah.numberOfVerses} Ayat',
-                        style: kHeading6.copyWith(
-                          color: kGrey.withValues(
-                            alpha: 0.8,
+                        const SizedBox(width: 4.0),
+                        Flexible(
+                          child: Text(
+                            '${surah.numberOfVerses} آية',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: kHeading6.copyWith(
+                              color: kGrey.withValues(
+                                alpha: 0.8,
+                              ),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              const Spacer(),
-              Text(
-                surah.name.short,
-                style: kHeading6.copyWith(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: prefSetProvider.isDarkTheme
-                      ? kPurplePrimary
-                      : kDarkPurple,
+              const SizedBox(width: 8.0),
+              Flexible(
+                child: Text(
+                  surah.name.short,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
+                  style: kHeading6.copyWith(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    height: 1.4,
+                    color: prefSetProvider.isDarkTheme
+                        ? kPurplePrimary
+                        : kDarkPurple,
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 5.0),
+          const SizedBox(height: 8.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Divider(

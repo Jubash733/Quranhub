@@ -97,16 +97,21 @@ class _VersesWidgetState extends State<VersesWidget> {
             ),
             child: Row(
               children: [
-                Container(
-                  width: 205.0,
-                  height: 35.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: kPurplePrimary,
-                  ),
-                  child: Center(
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0,
+                      vertical: 6.0,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: kPurplePrimary,
+                    ),
                     child: Text(
-                      'Surah ${widget.bookmark.surah}, Ayat ${widget.bookmark.inSurah}',
+                      'سورة ${widget.bookmark.surah} · آية ${widget.bookmark.inSurah}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                       style: kHeading6.copyWith(
                         color: Colors.white,
                         fontSize: 12.0,
@@ -115,7 +120,7 @@ class _VersesWidgetState extends State<VersesWidget> {
                     ),
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 12.0),
                 StreamBuilder<PlayerState>(
                   stream: widget.player.playerStateStream,
                   builder: (context, snapshot) {
@@ -201,10 +206,10 @@ class _VersesWidgetState extends State<VersesWidget> {
 
                         context.showCustomFlashMessage(
                           status: 'success',
-                          title: 'Hapus Bookmark Ayat',
+                          title: 'حذف علامة الآية',
                           darkTheme: widget.prefSetProvider.isDarkTheme,
                           message:
-                              'Surah ${widget.bookmark.surah} Ayat ${widget.bookmark.inSurah} berhasil dihapus dari Bookmark',
+                              'تم حذف علامة الآية من سورة ${widget.bookmark.surah} آية ${widget.bookmark.inSurah}.',
                         );
                       } else {
                         await context
@@ -233,10 +238,10 @@ class _VersesWidgetState extends State<VersesWidget> {
                         }
                         context.showCustomFlashMessage(
                           status: 'success',
-                          title: 'Tambah Bookmark Ayat',
+                          title: 'إضافة علامة الآية',
                           darkTheme: widget.prefSetProvider.isDarkTheme,
                           message:
-                              'Surah ${widget.bookmark.surah} Ayat ${widget.bookmark.inSurah} berhasil ditambah ke Bookmark',
+                              'تمت إضافة علامة الآية إلى سورة ${widget.bookmark.surah} آية ${widget.bookmark.inSurah}.',
                         );
                       }
 
@@ -284,6 +289,7 @@ class _VersesWidgetState extends State<VersesWidget> {
               style: kHeading6.copyWith(
                 fontSize: 28.0,
                 fontWeight: FontWeight.w500,
+                height: 1.6,
                 color: widget.prefSetProvider.isDarkTheme
                     ? Colors.white
                     : kDarkPurple,
@@ -296,6 +302,7 @@ class _VersesWidgetState extends State<VersesWidget> {
             style: kHeading6.copyWith(
               fontSize: 12.0,
               fontWeight: FontWeight.w400,
+              height: 1.4,
               color:
                   widget.prefSetProvider.isDarkTheme ? kGreyLight : kDarkPurple,
               fontStyle: FontStyle.italic,
@@ -306,6 +313,7 @@ class _VersesWidgetState extends State<VersesWidget> {
             style: kHeading6.copyWith(
               fontSize: 12.0,
               fontWeight: FontWeight.w400,
+              height: 1.4,
               color: widget.prefSetProvider.isDarkTheme
                   ? kGreyLight
                   : kDarkPurple.withValues(

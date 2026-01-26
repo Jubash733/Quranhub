@@ -82,14 +82,18 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                                 ),
                               ),
                               const SizedBox(width: 18.0),
-                              Text(
-                                surah.name.transliteration.id,
-                                style: kHeading6.copyWith(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: prefSetProvider.isDarkTheme
-                                      ? Colors.white
-                                      : kPurpleSecondary,
+                              Expanded(
+                                child: Text(
+                                  surah.name.transliteration.en,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: kHeading6.copyWith(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: prefSetProvider.isDarkTheme
+                                        ? Colors.white
+                                        : kPurpleSecondary,
+                                  ),
                                 ),
                               ),
                             ],
@@ -118,8 +122,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                                             return VersesWidget(
                                               verses: surah.verses[index],
                                               prefSetProvider: prefSetProvider,
-                                              surah:
-                                                  surah.name.transliteration.id,
+                                              surah: surah.name.short,
                                               surahNumber: surah.number,
                                             );
                                           },
@@ -135,7 +138,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                       ],
                     );
                   } else {
-                    return const Center(child: Text('Error BLoC'));
+                    return const Center(child: Text('حدث خطأ غير متوقع'));
                   }
                 },
               ),

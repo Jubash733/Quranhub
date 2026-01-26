@@ -14,8 +14,8 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
 
   void _fetchBookmark(FetchBookmark event, Emitter<BookmarkState> emit) async {
     try {
-      emit(
-          state.copyWith(statusBookmark: ViewData.loading(message: 'Loading')));
+      emit(state.copyWith(
+          statusBookmark: ViewData.loading(message: 'جارٍ التحميل')));
 
       final response = await getBookmarkVersesUsecase.call();
 

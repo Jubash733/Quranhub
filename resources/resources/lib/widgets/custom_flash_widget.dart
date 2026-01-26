@@ -90,7 +90,7 @@ class CustomFlashWidget extends StatelessWidget {
       primaryAction: TextButton(
         onPressed: () => controller.dismiss(),
         child: Text(
-          'TUTUP',
+          'إغلاق',
           style: kHeading5.copyWith(
             color: darkTheme ? kGrey92 : accentColor,
             fontSize: 12,

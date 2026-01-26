@@ -15,7 +15,7 @@ class AyahTranslationCubit extends Cubit<AyahTranslationState> {
 
   Future<void> fetchTranslation(AyahRef ref) async {
     emit(AyahTranslationState(
-        status: ViewData.loading(message: 'Loading translation')));
+        status: ViewData.loading(message: 'جارٍ تحميل الترجمة')));
 
     final response = await getAyahTranslationUsecase.call(ref);
 

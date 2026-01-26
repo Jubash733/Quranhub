@@ -4,8 +4,8 @@ import 'package:resources/widgets/custom_flash_widget.dart';
 
 extension ContextExtensions on BuildContext {
   void showCustomFlashMessage({
-    String title = 'Coming Soon!',
-    String message = 'We will notify you once this feature is ready 🙌',
+    String title = 'قريباً',
+    String message = 'سنخطرك فور جاهزية هذه الميزة.',
     bool positionBottom = false,
     bool darkTheme = false,
     required String status,

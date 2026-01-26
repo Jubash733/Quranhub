@@ -48,7 +48,9 @@ class BannerVersesWidget extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  surah.name.transliteration.id,
+                  surah.name.transliteration.en,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: kHeading6.copyWith(
                     fontSize: 26.0,
                     color: Colors.white,
@@ -57,7 +59,9 @@ class BannerVersesWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 4.0),
                 Text(
-                  surah.name.translation.id,
+                  surah.name.long,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: kHeading6.copyWith(
                     fontSize: 16.0,
                     color: Colors.white,
@@ -72,11 +76,13 @@ class BannerVersesWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 6.0,
                   children: [
                     Text(
-                      surah.revelation.id,
+                      surah.revelation.arab,
                       style: kHeading6.copyWith(
                         color: Colors.white.withValues(
                           alpha: 0.9,
@@ -85,7 +91,6 @@ class BannerVersesWidget extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const SizedBox(width: 5.0),
                     Icon(
                       Icons.circle,
                       color: Colors.white.withValues(
@@ -93,9 +98,8 @@ class BannerVersesWidget extends StatelessWidget {
                       ),
                       size: 5,
                     ),
-                    const SizedBox(width: 5.0),
                     Text(
-                      '${surah.numberOfVerses} Ayat',
+                      '${surah.numberOfVerses} آية',
                       style: kHeading6.copyWith(
                         color: Colors.white.withValues(
                           alpha: 0.9,

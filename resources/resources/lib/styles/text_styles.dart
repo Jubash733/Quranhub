@@ -2,14 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // text style
-final TextStyle kHeading5 =
-    GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w400);
-final TextStyle kHeading6 = GoogleFonts.poppins(
-    fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.15);
-final TextStyle kSubtitle = GoogleFonts.poppins(
-    fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.15);
-final TextStyle kBodyText = GoogleFonts.poppins(
-    fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.25);
+final TextStyle kHeading5 = GoogleFonts.cairo(
+  fontSize: 24,
+  fontWeight: FontWeight.w600,
+  height: 1.2,
+);
+final TextStyle kHeading6 = GoogleFonts.cairo(
+  fontSize: 18,
+  fontWeight: FontWeight.w600,
+  height: 1.25,
+);
+final TextStyle kSubtitle = GoogleFonts.cairo(
+  fontSize: 14,
+  fontWeight: FontWeight.w400,
+  height: 1.35,
+);
+final TextStyle kBodyText = GoogleFonts.cairo(
+  fontSize: 12,
+  fontWeight: FontWeight.w400,
+  height: 1.4,
+);
 
 // text theme
 final kTextTheme = TextTheme(

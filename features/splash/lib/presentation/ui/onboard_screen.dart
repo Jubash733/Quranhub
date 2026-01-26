@@ -21,7 +21,7 @@ class OnBoardScreen extends StatelessWidget {
               children: [
                 ShowUpAnimation(
                   child: Text(
-                    'Quran App',
+                    'تطبيق القرآن',
                     style: kHeading6.copyWith(
                       fontSize: 28.0,
                       fontWeight: FontWeight.w700,
@@ -31,7 +31,7 @@ class OnBoardScreen extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 ShowUpAnimation(
                   child: Text(
-                    'Pelajari Quran dan\nBacalah sekali setiap hari',
+                    'تعلّم القرآن وداوم على قراءته يوميًا',
                     textAlign: TextAlign.center,
                     style: kHeading6.copyWith(
                       fontSize: 18.0,
@@ -79,7 +79,7 @@ class OnBoardScreen extends StatelessWidget {
                             child: Consumer<PreferenceSettingsProvider>(
                               builder: (context, prefSetProvider, _) {
                                 return Text(
-                                  ' Mulai Yuk! ',
+                                  'ابدأ الآن',
                                   style: kHeading6.copyWith(
                                       color: prefSetProvider.isDarkTheme
                                           ? kBlackPurple

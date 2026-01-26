@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                           ),
                           const SizedBox(width: 6.0),
                           Text(
-                            'Quran App',
+                            'تطبيق القرآن',
                             style: kHeading6.copyWith(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                     const SizedBox(height: 28.0),
                     ShowUpAnimation(
                       child: Text(
-                        "Assalamu'alaikum",
+                        'السلام عليكم',
                         style: kHeading6.copyWith(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
@@ -128,19 +128,24 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            'Ahlan Wa Sahlan',
-                            style: kHeading6.copyWith(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.w700,
-                              color: prefSetProvider.isDarkTheme
-                                  ? Colors.white
-                                  : kBlackPurple,
-                              letterSpacing: 0.0,
+                          Expanded(
+                            child: Text(
+                              'أهلًا وسهلًا',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: kHeading6.copyWith(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w700,
+                                color: prefSetProvider.isDarkTheme
+                                    ? Colors.white
+                                    : kBlackPurple,
+                                letterSpacing: 0.0,
+                              ),
                             ),
                           ),
+                          const SizedBox(width: 6.0),
                           Text(
-                            ' 🙏',
+                            '🙏',
                             style: kHeading6.copyWith(
                               fontSize: 18.0,
                             ),
@@ -153,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                     const SizedBox(height: 24.0),
                     ShowUpAnimation(
                       child: Text(
-                        'Surah',
+                        'السور',
                         style: kHeading6.copyWith(
                           fontSize: 18.0,
                           color: prefSetProvider.isDarkTheme
@@ -203,7 +208,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                             ),
                           );
                         } else {
-                          return const Center(child: Text('Error BLoC'));
+                          return const Center(
+                              child: Text('حدث خطأ غير متوقع'));
                         }
                       },
                     ),
