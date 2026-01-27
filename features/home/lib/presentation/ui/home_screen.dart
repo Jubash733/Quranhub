@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
                           color: prefSetProvider.isDarkTheme
-                              ? Colors.white70
+                              ? kGreyLight
                               : kDarkPurple.withValues(
                                   alpha: 0.8,
                                 ),
@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Icons.waving_hand_rounded,
                             size: 18.0,
                             color: prefSetProvider.isDarkTheme
-                                ? Colors.white70
+                                ? kGreyLight
                                 : kPurplePrimary,
                           ),
                         ],
@@ -206,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Icon(
                                 Icons.search,
                                 color: prefSetProvider.isDarkTheme
-                                    ? Colors.white70
+                                    ? kGreyLight
                                     : kPurplePrimary,
                               ),
                               const SizedBox(width: 10.0),
@@ -217,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   overflow: TextOverflow.ellipsis,
                                   style: kSubtitle.copyWith(
                                     color: prefSetProvider.isDarkTheme
-                                        ? Colors.white70
+                                        ? kGreyLight
                                         : kGrey.withValues(alpha: 0.8),
                                   ),
                                 ),

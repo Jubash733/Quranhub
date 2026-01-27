@@ -35,7 +35,7 @@ class SettingsScreen extends StatelessWidget {
                             isRtl ? Icons.arrow_forward : Icons.arrow_back,
                             size: 24.0,
                             color: prefSetProvider.isDarkTheme
-                                ? Colors.white70
+                                ? kGreyLight
                                 : kGrey,
                           ),
                         );
@@ -231,7 +231,7 @@ class SettingsScreen extends StatelessWidget {
                                 style: kSubtitle.copyWith(
                                   fontSize: 12.0,
                                   color: prefSetProvider.isDarkTheme
-                                      ? Colors.white70
+                                      ? kGreyLight
                                       : kGrey,
                                 ),
                               ),
@@ -246,7 +246,7 @@ class SettingsScreen extends StatelessWidget {
                           context.l10n.unexpectedError,
                           style: kSubtitle.copyWith(
                             color: prefSetProvider.isDarkTheme
-                                ? Colors.white70
+                                ? kGreyLight
                                 : kGrey,
                           ),
                         ),

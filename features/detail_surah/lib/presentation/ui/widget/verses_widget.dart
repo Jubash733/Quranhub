@@ -183,7 +183,7 @@ class _VersesWidgetState extends State<VersesWidget> {
                         fontSize: 12.0,
                         fontWeight: FontWeight.w400,
                         color: widget.prefSetProvider.isDarkTheme
-                            ? Colors.white70
+                            ? kGreyLight
                             : kDarkPurple.withValues(
                                 alpha: 0.8,
                               ),
@@ -210,7 +210,7 @@ class _VersesWidgetState extends State<VersesWidget> {
                                 style: kHeading6.copyWith(
                                   fontSize: 13.0,
                                   color: widget.prefSetProvider.isDarkTheme
-                                      ? Colors.white70
+                                      ? kGreyLight
                                       : kDarkPurple.withValues(alpha: 0.8),
                                 ),
                               ),

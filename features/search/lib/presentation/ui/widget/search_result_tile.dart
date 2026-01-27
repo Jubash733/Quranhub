@@ -60,7 +60,7 @@ class SearchResultTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: kSubtitle.copyWith(
                   color: isDarkTheme
-                      ? Colors.white70
+                      ? kGreyLight
                       : kGrey.withValues(alpha: 0.8),
                 ),
               ),

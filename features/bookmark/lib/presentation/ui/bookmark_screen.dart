@@ -58,7 +58,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                               isRtl ? Icons.arrow_forward : Icons.arrow_back,
                               size: 24.0,
                               color: prefSetProvider.isDarkTheme
-                                  ? Colors.white70
+                                  ? kGreyLight
                                   : kGrey,
                             ),
                           );

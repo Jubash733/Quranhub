@@ -63,7 +63,7 @@ class SurahWidget extends StatelessWidget {
     final secondaryName =
         isArabic ? surah.name.transliteration.en : surah.name.short;
     final secondaryColor = prefSetProvider.isDarkTheme
-        ? Colors.white70
+        ? kGreyLight
         : kDarkPurple.withValues(alpha: 0.7);
     final chevronIcon = isArabic
         ? Icons.chevron_left_rounded
@@ -185,7 +185,7 @@ class SurahWidget extends StatelessWidget {
                 Icon(
                   chevronIcon,
                   color: prefSetProvider.isDarkTheme
-                      ? Colors.white70
+                      ? kGreyLight
                       : kPurplePrimary,
                 ),
               ],

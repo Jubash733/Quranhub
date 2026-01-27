@@ -24,7 +24,7 @@ class StateMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     final titleColor = isDarkTheme ? Colors.white : kDarkPurple;
     final messageColor = isDarkTheme
-        ? Colors.white70
+        ? kGreyLight
         : kDarkPurple.withValues(alpha: 0.7);
     return Center(
       child: Padding(

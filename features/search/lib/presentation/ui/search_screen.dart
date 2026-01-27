@@ -85,7 +85,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 context.l10n.searchPreparingMessage,
                                 style: kSubtitle.copyWith(
                                   color: prefSetProvider.isDarkTheme
-                                      ? Colors.white70
+                                      ? kGreyLight
                                       : kDarkPurple.withValues(alpha: 0.7),
                                 ),
                                 textAlign: TextAlign.center,

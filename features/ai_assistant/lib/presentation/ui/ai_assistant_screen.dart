@@ -77,7 +77,7 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> {
                         child: Text(
                           context.l10n.aiDisclaimer,
                           style: kSubtitle.copyWith(
-                            color: isDarkTheme ? Colors.white70 : kDarkPurple,
+                            color: isDarkTheme ? kGreyLight : kDarkPurple,
                           ),
                         ),
                       ),
