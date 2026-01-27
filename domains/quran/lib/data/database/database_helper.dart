@@ -31,6 +31,7 @@ class DatabaseHelper {
   static const String _tblQuranTranslation = 'quranTranslation';
   static const String _tblQuranFts = 'quranFts';
   static const String _tblMeta = 'quranMeta';
+  static const String _metaFtsAvailable = 'fts_available';
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
@@ -120,17 +121,37 @@ class DatabaseHelper {
         PRIMARY KEY (surah, ayah, languageCode)
       );
     ''');
-    await db.execute('''
-      CREATE VIRTUAL TABLE IF NOT EXISTS $_tblQuranFts
-      USING fts5(
-        arabicNorm,
-        translationArNorm,
-        translationEnNorm,
-        surah UNINDEXED,
-        ayah UNINDEXED,
-        tokenize = 'unicode61 remove_diacritics 2'
-      );
-    ''');
+    var ftsAvailable = true;
+    try {
+      await db.execute('''
+        CREATE VIRTUAL TABLE IF NOT EXISTS $_tblQuranFts
+        USING fts5(
+          arabicNorm,
+          translationArNorm,
+          translationEnNorm,
+          surah UNINDEXED,
+          ayah UNINDEXED,
+          tokenize = 'unicode61 remove_diacritics 2'
+        );
+      ''');
+    } catch (_) {
+      ftsAvailable = false;
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS $_tblQuranFts (
+          surah INTEGER NOT NULL,
+          ayah INTEGER NOT NULL,
+          arabicNorm TEXT,
+          translationArNorm TEXT,
+          translationEnNorm TEXT,
+          PRIMARY KEY (surah, ayah)
+        );
+      ''');
+    }
+    await _setMeta(
+      db,
+      _metaFtsAvailable,
+      ftsAvailable ? '1' : '0',
+    );
   }
 
   bool get _isLocalDbSupported {
@@ -211,6 +232,7 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> searchAyah(
     String ftsQuery, {
+    required List<String> tokens,
     int limit = 50,
     String languageCode = 'ar',
     String? edition,
@@ -218,6 +240,33 @@ class DatabaseHelper {
     final db = await database;
     if (db == null) {
       return [];
+    }
+    final ftsAvailable = await _isFtsAvailable(db);
+    if (!ftsAvailable) {
+      if (tokens.isEmpty) {
+        return [];
+      }
+      final clauses = <String>[];
+      final args = <Object?>[languageCode, edition, edition];
+      for (final token in tokens) {
+        clauses.add('(q.textNorm LIKE ? OR t.textNorm LIKE ?)');
+        args.add('%$token%');
+        args.add('%$token%');
+      }
+      final where = clauses.join(' AND ');
+      return db.rawQuery('''
+        SELECT q.surah, q.ayah, q.text,
+               s.nameAr AS surahNameAr, s.nameEn AS surahNameEn,
+               t.text AS translation
+        FROM $_tblQuranAyah q
+        JOIN $_tblQuranSurah s
+          ON s.surah = q.surah
+        LEFT JOIN $_tblQuranTranslation t
+          ON t.surah = q.surah AND t.ayah = q.ayah AND t.languageCode = ?
+          AND (? IS NULL OR t.edition = ?)
+        WHERE $where
+        LIMIT $limit;
+      ''', args);
     }
     return db.rawQuery('''
       SELECT q.surah, q.ayah, q.text,
@@ -270,15 +319,16 @@ class DatabaseHelper {
       );
       final batch = db.batch();
       for (final row in rows) {
+        final payload = {
+          'arabicNorm': row['textNorm'],
+          'translationArNorm': '',
+          'translationEnNorm': '',
+          'surah': row['surah'],
+          'ayah': row['ayah'],
+        };
         batch.insert(
           _tblQuranFts,
-          {
-            'arabicNorm': row['textNorm'],
-            'translationArNorm': '',
-            'translationEnNorm': '',
-            'surah': row['surah'],
-            'ayah': row['ayah'],
-          },
+          payload,
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
       }
@@ -351,6 +401,14 @@ class DatabaseHelper {
     final column =
         languageCode == 'ar' ? 'translationArNorm' : 'translationEnNorm';
     await db.execute("UPDATE $_tblQuranFts SET $column = ''");
+  }
+
+  Future<bool> _isFtsAvailable(Database db) async {
+    final row = await _getMeta(db, _metaFtsAvailable);
+    if (row == null) {
+      return true;
+    }
+    return row == '1';
   }
 
   Future<String?> _getMeta(Database db, String key) async {

@@ -47,6 +47,7 @@ class QuranSearchDataSourceImpl implements QuranSearchDataSource {
     final edition = await _resolveEdition(languageCode);
     final rows = await databaseHelper.searchAyah(
       ftsQuery,
+      tokens: tokens,
       languageCode: languageCode,
       edition: edition,
     );
