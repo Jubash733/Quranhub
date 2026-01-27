@@ -10,6 +10,12 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     primary: kPurplePrimary,
     onPrimary: Colors.white,
   ),
+  pageTransitionsTheme: const PageTransitionsTheme(
+    builders: <TargetPlatform, PageTransitionsBuilder>{
+      TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+    },
+  ),
   appBarTheme: const AppBarTheme(elevation: 0),
   scaffoldBackgroundColor: Colors.white,
   textTheme: kTextTheme.apply(
@@ -26,6 +32,12 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     onPrimary: Colors.white,
     surface: kDarkTheme,
     onSurface: Colors.white,
+  ),
+  pageTransitionsTheme: const PageTransitionsTheme(
+    builders: <TargetPlatform, PageTransitionsBuilder>{
+      TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+    },
   ),
   appBarTheme: const AppBarTheme(elevation: 0),
   scaffoldBackgroundColor: kDarkTheme,

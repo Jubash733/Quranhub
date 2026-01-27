@@ -296,9 +296,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     BlocBuilder<HomeBloc, HomeState>(
                       builder: (context, state) {
                         final status = state.statusSurah.status;
-
+                        Widget child;
                         if (status.isLoading) {
-                          return ListView.builder(
+                          child = ListView.builder(
+                            key: const ValueKey('home-loading'),
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: 6,
@@ -309,14 +310,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           );
                         } else if (status.isNoData) {
-                          return StateMessage(
+                          child = StateMessage(
+                            key: const ValueKey('home-empty'),
                             title: context.l10n.noData,
                             message: context.l10n.searchHint,
                             icon: Icons.menu_book_outlined,
                             isDarkTheme: prefSetProvider.isDarkTheme,
                           );
                         } else if (status.isError) {
-                          return StateMessage(
+                          child = StateMessage(
+                            key: const ValueKey('home-error'),
                             title: context.l10n.unexpectedError,
                             message: state.statusSurah.message.isNotEmpty
                                 ? state.statusSurah.message
@@ -329,15 +332,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         } else if (status.isHasData) {
                           final surah = state.statusSurah.data ?? [];
-                          return ShowUpAnimation(
+                          child = ShowUpAnimation(
+                            key: const ValueKey('home-data'),
                             child: ListSurahWidget(
                               surah: surah,
                               prefSetProvider: prefSetProvider,
                             ),
                           );
                         } else {
-                          return Center(child: Text(context.l10n.unexpectedError));
+                          child = Center(
+                            key: const ValueKey('home-fallback'),
+                            child: Text(context.l10n.unexpectedError),
+                          );
                         }
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          child: child,
+                        );
                       },
                     ),
                   ],

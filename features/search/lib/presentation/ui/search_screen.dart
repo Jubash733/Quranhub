@@ -71,8 +71,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 Expanded(
                   child: BlocBuilder<SearchCubit, SearchState>(
                     builder: (context, state) {
+                      Widget child;
                       if (state.isIndexing) {
-                        return Center(
+                        child = Center(
+                          key: const ValueKey('search-indexing'),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -105,70 +107,79 @@ class _SearchScreenState extends State<SearchScreen> {
                             ],
                           ),
                         );
-                      }
-                      final status = state.status.status;
-
-                      if (status.isLoading) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: prefSetProvider.isDarkTheme
-                                ? Colors.white
-                                : kPurplePrimary,
-                          ),
-                        );
-                      }
-
-                      if (status.isError) {
-                        return StateMessage(
-                          title: context.l10n.unexpectedError,
-                          message: state.status.message.isNotEmpty
-                              ? state.status.message
-                              : context.l10n.unexpectedError,
-                          icon: Icons.search_off_rounded,
-                          isDarkTheme: prefSetProvider.isDarkTheme,
-                        );
-                      }
-
-                      if (status.isHasData) {
-                        final results = state.status.data ?? [];
-                        if (results.isEmpty) {
-                          return StateMessage(
-                            title: context.l10n.noResults,
-                            message: context.l10n.searchHint,
+                      } else {
+                        final status = state.status.status;
+                        if (status.isLoading) {
+                          child = Center(
+                            key: const ValueKey('search-loading'),
+                            child: CircularProgressIndicator(
+                              color: prefSetProvider.isDarkTheme
+                                  ? Colors.white
+                                  : kPurplePrimary,
+                            ),
+                          );
+                        } else if (status.isError) {
+                          child = StateMessage(
+                            key: const ValueKey('search-error'),
+                            title: context.l10n.unexpectedError,
+                            message: state.status.message.isNotEmpty
+                                ? state.status.message
+                                : context.l10n.unexpectedError,
                             icon: Icons.search_off_rounded,
                             isDarkTheme: prefSetProvider.isDarkTheme,
                           );
-                        }
-                        return ListView.separated(
-                          itemCount: results.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: 12),
-                          itemBuilder: (context, index) {
-                            final result = results[index];
-                            return SearchResultTile(
-                              result: result,
-                              onTap: () => Navigator.pushNamed(
-                                context,
-                                NamedRoutes.detailScreen,
-                                arguments: DetailScreenArgs(
-                                  surahNumber: result.ref.surah,
-                                  highlightAyah: result.ref.ayah,
-                                ),
-                              ),
-                              arabicFontFamily:
-                                  prefSetProvider.arabicFontFamily,
-                              arabicFontScale: prefSetProvider.arabicFontScale,
-                              showTranslation: prefSetProvider.showTranslation,
-                              query: state.query,
+                        } else if (status.isHasData) {
+                          final results = state.status.data ?? [];
+                          if (results.isEmpty) {
+                            child = StateMessage(
+                              key: const ValueKey('search-empty'),
+                              title: context.l10n.noResults,
+                              message: context.l10n.searchHint,
+                              icon: Icons.search_off_rounded,
+                              isDarkTheme: prefSetProvider.isDarkTheme,
                             );
-                          },
-                        );
+                          } else {
+                            child = ListView.separated(
+                              key: const ValueKey('search-results'),
+                              itemCount: results.length,
+                              separatorBuilder: (_, __) =>
+                                  const SizedBox(height: 12),
+                              itemBuilder: (context, index) {
+                                final result = results[index];
+                                return SearchResultTile(
+                                  result: result,
+                                  onTap: () => Navigator.pushNamed(
+                                    context,
+                                    NamedRoutes.detailScreen,
+                                    arguments: DetailScreenArgs(
+                                      surahNumber: result.ref.surah,
+                                      highlightAyah: result.ref.ayah,
+                                    ),
+                                  ),
+                                  arabicFontFamily:
+                                      prefSetProvider.arabicFontFamily,
+                                  arabicFontScale:
+                                      prefSetProvider.arabicFontScale,
+                                  showTranslation:
+                                      prefSetProvider.showTranslation,
+                                  query: state.query,
+                                );
+                              },
+                            );
+                          }
+                        } else {
+                          child = StateMessage(
+                            key: const ValueKey('search-initial'),
+                            title: context.l10n.searchResults,
+                            message: context.l10n.searchHint,
+                            icon: Icons.search_rounded,
+                            isDarkTheme: prefSetProvider.isDarkTheme,
+                          );
+                        }
                       }
-
-                      return StateMessage(
-                        title: context.l10n.searchResults,
-                        message: context.l10n.searchHint,
-                        icon: Icons.search_rounded,
-                        isDarkTheme: prefSetProvider.isDarkTheme,
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
+                        child: child,
                       );
                     },
                   ),
