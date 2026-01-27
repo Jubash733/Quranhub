@@ -23,13 +23,20 @@ void main() {
     });
 
     final dataSource = QuranAssetDataSourceImpl();
-    const ref = AyahRef(surah: 1, ayah: 1);
-    final ayah = await dataSource.getAyah(ref);
-    expect(ayah, isNotNull);
-    expect(ayah!.textArabic.isNotEmpty, true);
+    const refs = [
+      AyahRef(surah: 1, ayah: 1),
+      AyahRef(surah: 2, ayah: 255),
+      AyahRef(surah: 3, ayah: 1),
+    ];
 
-    final translation = await dataSource.getTranslation(ref, 'ar');
-    expect(translation, isNotNull);
-    expect(translation!.isNotEmpty, true);
+    for (final ref in refs) {
+      final ayah = await dataSource.getAyah(ref);
+      expect(ayah, isNotNull);
+      expect(ayah!.textArabic.isNotEmpty, true);
+
+      final translation = await dataSource.getTranslation(ref, 'en');
+      expect(translation, isNotNull);
+      expect(translation!.isNotEmpty, true);
+    }
   });
 }

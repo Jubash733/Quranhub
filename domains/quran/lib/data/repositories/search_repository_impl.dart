@@ -1,16 +1,23 @@
-import 'package:common/utils/error/failure_response.dart';
+﻿import 'package:common/utils/error/failure_response.dart';
 import 'package:dependencies/dartz/dartz.dart';
 import 'package:quran/data/data_sources/quran_asset_data_source.dart';
+import 'package:quran/data/data_sources/quran_search_data_source.dart';
 import 'package:quran/data/models/local_ayah_data.dart';
+import 'package:quran/data/models/search_row.dart';
+import 'package:quran/data/utils/quran_text_normalizer.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:quran/domain/entities/search_result_entity.dart';
 import 'package:quran/domain/repositories/search_repository.dart';
 
 class SearchRepositoryImpl extends SearchRepository {
   final QuranAssetDataSource assetDataSource;
+  final QuranSearchDataSource? searchDataSource;
   List<_IndexedAyah>? _index;
 
-  SearchRepositoryImpl({required this.assetDataSource});
+  SearchRepositoryImpl({
+    required this.assetDataSource,
+    this.searchDataSource,
+  });
 
   @override
   Future<Either<FailureResponse, List<SearchResultEntity>>> search(
@@ -22,10 +29,22 @@ class SearchRepositoryImpl extends SearchRepository {
       if (trimmed.isEmpty) {
         return const Right([]);
       }
-      _index ??= await _buildIndex();
       final normalizedQuery = _normalize(trimmed);
       final isArabicQuery = _containsArabic(trimmed);
 
+      if (isArabicQuery && searchDataSource != null) {
+        final rows = await searchDataSource!.search(
+          trimmed,
+          languageCode: languageCode,
+        );
+        if (rows.isNotEmpty) {
+          return Right(
+            rows.map((row) => _mapDbToResult(row, languageCode)).toList(),
+          );
+        }
+      }
+
+      _index ??= await _buildIndex();
       final results = <SearchResultEntity>[];
       for (final entry in _index!) {
         final haystack = isArabicQuery
@@ -50,10 +69,8 @@ class SearchRepositoryImpl extends SearchRepository {
         .map((item) => _IndexedAyah(
               data: item,
               normalizedArabic: _normalize(item.textArabic),
-              normalizedTranslationAr:
-                  _normalize(item.translationFor('ar') ?? ''),
-              normalizedTranslationEn:
-                  _normalize(item.translationFor('en') ?? ''),
+              normalizedTranslationAr: _normalize(item.translationFor('ar') ?? ''),
+              normalizedTranslationEn: _normalize(item.translationFor('en') ?? ''),
             ))
         .toList();
   }
@@ -71,24 +88,22 @@ class SearchRepositoryImpl extends SearchRepository {
     );
   }
 
+  SearchResultEntity _mapDbToResult(SearchRow row, String languageCode) {
+    final surahName = languageCode == 'ar' ? row.surahNameAr : row.surahNameEn;
+    return SearchResultEntity(
+      ref: AyahRef(surah: row.surah, ayah: row.ayah),
+      surahName: surahName,
+      text: row.text,
+      translation: row.translation ?? '',
+    );
+  }
+
   bool _containsArabic(String text) {
-    return RegExp(r'[\\u0600-\\u06FF]').hasMatch(text);
+    return RegExp(r'[\u0600-\u06FF]').hasMatch(text);
   }
 
   String _normalize(String text) {
-    var normalized = text.toLowerCase().trim();
-    normalized = normalized.replaceAll(
-        RegExp(r'[\\u0610-\\u061A\\u064B-\\u065F\\u06D6-\\u06ED]'), '');
-    normalized = normalized
-        .replaceAll('\u0623', '\u0627')
-        .replaceAll('\u0625', '\u0627')
-        .replaceAll('\u0622', '\u0627')
-        .replaceAll('\u0649', '\u064a')
-        .replaceAll('\u0624', '\u0648')
-        .replaceAll('\u0626', '\u064a')
-        .replaceAll('\u0629', '\u0647');
-    normalized = normalized.replaceAll(RegExp(r'\\s+'), ' ');
-    return normalized;
+    return QuranTextNormalizer.normalizeArabic(text);
   }
 }
 

@@ -1,0 +1,800 @@
+[
+  {
+    "surah": 1,
+    "name_ar": "الفاتحة",
+    "name_en": "Al-Fatiha",
+    "ayah_count": 7,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 2,
+    "name_ar": "البقرة",
+    "name_en": "Al-Baqara",
+    "ayah_count": 286,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 3,
+    "name_ar": "آل عمران",
+    "name_en": "Aal-Imran",
+    "ayah_count": 200,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 4,
+    "name_ar": "النساء",
+    "name_en": "An-Nisaa'",
+    "ayah_count": 176,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 5,
+    "name_ar": "المائدة",
+    "name_en": "Al-Ma'ida",
+    "ayah_count": 120,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 6,
+    "name_ar": "الأنعام",
+    "name_en": "Al-An'am",
+    "ayah_count": 165,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 7,
+    "name_ar": "الأعراف",
+    "name_en": "Al-A'raf",
+    "ayah_count": 206,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 8,
+    "name_ar": "الأنفال",
+    "name_en": "Al-Anfal",
+    "ayah_count": 75,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 9,
+    "name_ar": "التوبة",
+    "name_en": "Al-Tawba",
+    "ayah_count": 129,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 10,
+    "name_ar": "يونس",
+    "name_en": "Yunus",
+    "ayah_count": 109,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 11,
+    "name_ar": "هود",
+    "name_en": "Hud",
+    "ayah_count": 123,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 12,
+    "name_ar": "يوسف",
+    "name_en": "Yusuf",
+    "ayah_count": 111,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 13,
+    "name_ar": "الرعد",
+    "name_en": "Ar-Ra'd",
+    "ayah_count": 43,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 14,
+    "name_ar": "إبراهيم",
+    "name_en": "Ibrahim",
+    "ayah_count": 52,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 15,
+    "name_ar": "الحجر",
+    "name_en": "Al-Hijr",
+    "ayah_count": 99,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 16,
+    "name_ar": "النحل",
+    "name_en": "An-Nahl",
+    "ayah_count": 128,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 17,
+    "name_ar": "الإسراء",
+    "name_en": "Al-Israa",
+    "ayah_count": 111,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 18,
+    "name_ar": "الكهف",
+    "name_en": "Al-Kahf",
+    "ayah_count": 110,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 19,
+    "name_ar": "مريم",
+    "name_en": "Maryam",
+    "ayah_count": 98,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 20,
+    "name_ar": "طه",
+    "name_en": "Ta-Ha",
+    "ayah_count": 135,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 21,
+    "name_ar": "الأنبياء",
+    "name_en": "Al-Anbiya",
+    "ayah_count": 112,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 22,
+    "name_ar": "الحج",
+    "name_en": "Al-Hajj",
+    "ayah_count": 78,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 23,
+    "name_ar": "المؤمنون",
+    "name_en": "Al-Muminun",
+    "ayah_count": 118,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 24,
+    "name_ar": "النور",
+    "name_en": "An-Nur",
+    "ayah_count": 64,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 25,
+    "name_ar": "الفرقان",
+    "name_en": "Al-Furqan",
+    "ayah_count": 77,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 26,
+    "name_ar": "الشعراء",
+    "name_en": "Ash-Shuara",
+    "ayah_count": 227,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 27,
+    "name_ar": "النمل",
+    "name_en": "An-Naml",
+    "ayah_count": 93,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 28,
+    "name_ar": "القصص",
+    "name_en": "Al-Qasas",
+    "ayah_count": 88,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 29,
+    "name_ar": "العنكبوت",
+    "name_en": "Al-Ankabut",
+    "ayah_count": 69,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 30,
+    "name_ar": "الروم",
+    "name_en": "Ar-Rum",
+    "ayah_count": 60,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 31,
+    "name_ar": "لقمان",
+    "name_en": "Luqman",
+    "ayah_count": 34,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 32,
+    "name_ar": "السجدة",
+    "name_en": "As-Sajdah",
+    "ayah_count": 30,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 33,
+    "name_ar": "الأحزاب",
+    "name_en": "Al-Ahzab",
+    "ayah_count": 73,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 34,
+    "name_ar": "سبأ",
+    "name_en": "Saba",
+    "ayah_count": 54,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 35,
+    "name_ar": "فاطر",
+    "name_en": "Fatir",
+    "ayah_count": 45,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 36,
+    "name_ar": "يس",
+    "name_en": "Yasin",
+    "ayah_count": 83,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 37,
+    "name_ar": "الصافات",
+    "name_en": "As-Saffat",
+    "ayah_count": 182,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 38,
+    "name_ar": "ص",
+    "name_en": "Sad",
+    "ayah_count": 88,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 39,
+    "name_ar": "الزمر",
+    "name_en": "Az-Zumar",
+    "ayah_count": 75,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 40,
+    "name_ar": "غافر",
+    "name_en": "Ghafir",
+    "ayah_count": 85,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 41,
+    "name_ar": "فصلت",
+    "name_en": "Fussilat",
+    "ayah_count": 54,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 42,
+    "name_ar": "الشورى",
+    "name_en": "Ash-Shura",
+    "ayah_count": 53,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 43,
+    "name_ar": "الزخرف",
+    "name_en": "Az-Zukhruf",
+    "ayah_count": 89,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 44,
+    "name_ar": "الدخان",
+    "name_en": "Ad-Dukhan",
+    "ayah_count": 59,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 45,
+    "name_ar": "الجاثية",
+    "name_en": "Al-Jathiya",
+    "ayah_count": 37,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 46,
+    "name_ar": "الأحقاف",
+    "name_en": "Al-Ahqaf",
+    "ayah_count": 35,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 47,
+    "name_ar": "محمد",
+    "name_en": "Muhammad",
+    "ayah_count": 38,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 48,
+    "name_ar": "الفتح",
+    "name_en": "Al-Fath",
+    "ayah_count": 29,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 49,
+    "name_ar": "الحجرات",
+    "name_en": "Al-Hujurat",
+    "ayah_count": 18,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 50,
+    "name_ar": "ق",
+    "name_en": "Qaf",
+    "ayah_count": 45,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 51,
+    "name_ar": "الذاريات",
+    "name_en": "Az-Zariyat",
+    "ayah_count": 60,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 52,
+    "name_ar": "الطور",
+    "name_en": "At-Tur",
+    "ayah_count": 49,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 53,
+    "name_ar": "النجم",
+    "name_en": "An-Najm",
+    "ayah_count": 62,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 54,
+    "name_ar": "القمر",
+    "name_en": "Al-Qamar",
+    "ayah_count": 55,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 55,
+    "name_ar": "الرحمن",
+    "name_en": "Ar-Rahman",
+    "ayah_count": 78,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 56,
+    "name_ar": "الواقعة",
+    "name_en": "Al-Waqia",
+    "ayah_count": 96,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 57,
+    "name_ar": "الحديد",
+    "name_en": "Al-Hadid",
+    "ayah_count": 29,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 58,
+    "name_ar": "المجادلة",
+    "name_en": "Al-Mujadilah",
+    "ayah_count": 22,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 59,
+    "name_ar": "الحشر",
+    "name_en": "Al-Hashr",
+    "ayah_count": 24,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 60,
+    "name_ar": "الممتحنة",
+    "name_en": "Al-Mumtahinah",
+    "ayah_count": 13,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 61,
+    "name_ar": "الصف",
+    "name_en": "As-Saff",
+    "ayah_count": 14,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 62,
+    "name_ar": "الجمعة",
+    "name_en": "Al-Jumu'ah",
+    "ayah_count": 11,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 63,
+    "name_ar": "المنافقون",
+    "name_en": "Al-Munafiqun",
+    "ayah_count": 11,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 64,
+    "name_ar": "التغابن",
+    "name_en": "At-Taghabun",
+    "ayah_count": 18,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 65,
+    "name_ar": "الطلاق",
+    "name_en": "At-Talaq",
+    "ayah_count": 12,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 66,
+    "name_ar": "التحريم",
+    "name_en": "At-Tahrim",
+    "ayah_count": 12,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 67,
+    "name_ar": "الملك",
+    "name_en": "Al-Mulk",
+    "ayah_count": 30,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 68,
+    "name_ar": "القلم",
+    "name_en": "Al-Qalam",
+    "ayah_count": 52,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 69,
+    "name_ar": "الحاقة",
+    "name_en": "Al-Haqqah",
+    "ayah_count": 52,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 70,
+    "name_ar": "المعارج",
+    "name_en": "Al-Ma'arij",
+    "ayah_count": 44,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 71,
+    "name_ar": "نوح",
+    "name_en": "Nuh",
+    "ayah_count": 28,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 72,
+    "name_ar": "الجن",
+    "name_en": "Al-Jinn",
+    "ayah_count": 28,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 73,
+    "name_ar": "المزمل",
+    "name_en": "Al-Muzzammil",
+    "ayah_count": 20,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 74,
+    "name_ar": "المدثر",
+    "name_en": "Al-Muddaththir",
+    "ayah_count": 56,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 75,
+    "name_ar": "القيامة",
+    "name_en": "Al-Qiyamah",
+    "ayah_count": 40,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 76,
+    "name_ar": "الإنسان",
+    "name_en": "Al-Insan",
+    "ayah_count": 31,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 77,
+    "name_ar": "المرسلات",
+    "name_en": "Al-Mursalat",
+    "ayah_count": 50,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 78,
+    "name_ar": "النبأ",
+    "name_en": "An-Naba",
+    "ayah_count": 40,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 79,
+    "name_ar": "النازعات",
+    "name_en": "An-Naziat",
+    "ayah_count": 46,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 80,
+    "name_ar": "عبس",
+    "name_en": "Abasa",
+    "ayah_count": 42,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 81,
+    "name_ar": "التكوير",
+    "name_en": "At-Takwir",
+    "ayah_count": 29,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 82,
+    "name_ar": "الإنفطار",
+    "name_en": "Al-Infitar",
+    "ayah_count": 19,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 83,
+    "name_ar": "المطففين",
+    "name_en": "Al-Mutaffifin",
+    "ayah_count": 36,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 84,
+    "name_ar": "الإنشقاق",
+    "name_en": "Al-Inshiqaq",
+    "ayah_count": 25,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 85,
+    "name_ar": "البروج",
+    "name_en": "Al-Buruj",
+    "ayah_count": 22,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 86,
+    "name_ar": "الطارق",
+    "name_en": "At-Tariq",
+    "ayah_count": 17,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 87,
+    "name_ar": "الأعلى",
+    "name_en": "Al-Ala",
+    "ayah_count": 19,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 88,
+    "name_ar": "الغاشية",
+    "name_en": "Al-Ghashiyah",
+    "ayah_count": 26,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 89,
+    "name_ar": "الفجر",
+    "name_en": "Al-Fajr",
+    "ayah_count": 30,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 90,
+    "name_ar": "البلد",
+    "name_en": "Al-Balad",
+    "ayah_count": 20,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 91,
+    "name_ar": "الشمس",
+    "name_en": "Ash-Shams",
+    "ayah_count": 15,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 92,
+    "name_ar": "الليل",
+    "name_en": "Al-Lail",
+    "ayah_count": 21,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 93,
+    "name_ar": "الضحى",
+    "name_en": "Ad-Duha",
+    "ayah_count": 11,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 94,
+    "name_ar": "الشرح",
+    "name_en": "Ash-Sharh",
+    "ayah_count": 8,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 95,
+    "name_ar": "التين",
+    "name_en": "At-Tin",
+    "ayah_count": 8,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 96,
+    "name_ar": "العلق",
+    "name_en": "Al-Alaq",
+    "ayah_count": 19,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 97,
+    "name_ar": "القدر",
+    "name_en": "Al-Qadr",
+    "ayah_count": 5,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 98,
+    "name_ar": "البينة",
+    "name_en": "Al-Bayinah",
+    "ayah_count": 8,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 99,
+    "name_ar": "الزلزلة",
+    "name_en": "Az-Zalzalah",
+    "ayah_count": 8,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 100,
+    "name_ar": "العاديات",
+    "name_en": "Al-Adiyat",
+    "ayah_count": 11,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 101,
+    "name_ar": "القارعة",
+    "name_en": "Al-Qariah",
+    "ayah_count": 11,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 102,
+    "name_ar": "التكاثر",
+    "name_en": "Al-Takathur",
+    "ayah_count": 8,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 103,
+    "name_ar": "العصر",
+    "name_en": "Al-Asr",
+    "ayah_count": 3,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 104,
+    "name_ar": "الهمزة",
+    "name_en": "Al-Humazah",
+    "ayah_count": 9,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 105,
+    "name_ar": "الفيل",
+    "name_en": "Al-Fil",
+    "ayah_count": 5,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 106,
+    "name_ar": "قريش",
+    "name_en": "Quraish",
+    "ayah_count": 4,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 107,
+    "name_ar": "الماعون",
+    "name_en": "Al-Ma'un",
+    "ayah_count": 7,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 108,
+    "name_ar": "الكوثر",
+    "name_en": "Al-Kauthar",
+    "ayah_count": 3,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 109,
+    "name_ar": "الكافرون",
+    "name_en": "Al-Kafirun",
+    "ayah_count": 6,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 110,
+    "name_ar": "النصر",
+    "name_en": "An-Nasr",
+    "ayah_count": 3,
+    "revelation": "Madaniyah"
+  },
+  {
+    "surah": 111,
+    "name_ar": "المسد",
+    "name_en": "Al-Masad",
+    "ayah_count": 5,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 112,
+    "name_ar": "الإخلاص",
+    "name_en": "Al-Ikhlas",
+    "ayah_count": 4,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 113,
+    "name_ar": "الفلق",
+    "name_en": "Al-Falaq",
+    "ayah_count": 5,
+    "revelation": "Makkiyah"
+  },
+  {
+    "surah": 114,
+    "name_ar": "الناس",
+    "name_en": "An-Nas",
+    "ayah_count": 6,
+    "revelation": "Makkiyah"
+  }
+]

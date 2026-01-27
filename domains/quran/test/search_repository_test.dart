@@ -50,11 +50,11 @@ void main() {
         LocalAyahData(
           surah: 1,
           ayah: 2,
-          surahNameAr: '???????',
+          surahNameAr: 'الفاتحة',
           surahNameEn: 'Al-Fatihah',
-          textArabic: '????? ??? ?? ????????',
+          textArabic: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ',
           translation: {
-            'ar': '????? ??? ?? ????????',
+            'ar': 'الحمد لله رب العالمين',
             'en': 'All praise'
           },
           tafsir: const {},
@@ -62,7 +62,7 @@ void main() {
       ]),
     );
 
-    final result = await repository.search('?????', languageCode: 'ar');
+    final result = await repository.search('الحمد', languageCode: 'ar');
     result.fold(
       (failure) => fail('Expected Right, got Left: ${failure.message}'),
       (data) => expect(data.length, 1),

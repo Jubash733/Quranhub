@@ -2,6 +2,7 @@ import 'package:dependencies/get_it/get_it.dart';
 import 'package:quran/data/data_sources/quran_local_data_source.dart';
 import 'package:quran/data/data_sources/quran_remote_data_source.dart';
 import 'package:quran/data/data_sources/quran_asset_data_source.dart';
+import 'package:quran/data/data_sources/quran_search_data_source.dart';
 import 'package:quran/data/data_sources/ai_assistant_remote_data_source.dart';
 import 'package:quran/data/data_sources/ai_assistant_local_data_source.dart';
 import 'package:quran/data/data_sources/tafsir_local_data_source.dart';
@@ -54,6 +55,10 @@ class RegisterQuranModule {
     sl.registerLazySingleton<QuranAssetDataSource>(
         () => QuranAssetDataSourceImpl());
 
+    /// Search Data Source
+    sl.registerLazySingleton<QuranSearchDataSource>(
+        () => QuranSearchDataSourceImpl(databaseHelper: sl()));
+
     /// Translation Local Data Source
     sl.registerLazySingleton<TranslationLocalDataSource>(
         () => TranslationLocalDataSource(assetDataSource: sl()));
@@ -86,7 +91,10 @@ class RegisterQuranModule {
     sl.registerLazySingleton<TafsirRepository>(
         () => TafsirRepositoryImpl(localDataSource: sl()));
     sl.registerLazySingleton<SearchRepository>(
-        () => SearchRepositoryImpl(assetDataSource: sl()));
+        () => SearchRepositoryImpl(
+              assetDataSource: sl(),
+              searchDataSource: sl(),
+            ));
     sl.registerLazySingleton<AiAssistantRepository>(
         () => AiAssistantRepositoryImpl(
               localDataSource: sl(),

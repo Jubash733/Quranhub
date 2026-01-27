@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:home/presentation/bloc/home_bloc.dart';
 import 'package:home/presentation/ui/home_screen.dart';
+import 'package:quran/data/database/database_helper.dart';
 import 'package:quran_app/di/injections.dart';
 import 'package:resources/constant/named_routes.dart';
 import 'package:resources/constant/route_args.dart';
@@ -35,6 +36,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppConfig.load();
   Injections().init();
+  await sl<DatabaseHelper>().ensureQuranCoreData();
 
   runApp(const MyApp());
 }
