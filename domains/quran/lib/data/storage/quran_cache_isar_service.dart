@@ -1,5 +1,6 @@
 import 'package:dependencies/isar/isar.dart';
 import 'package:dependencies/path_provider/path_provider.dart';
+import 'package:quran/data/models/ai_tadabbur_cache_model.dart';
 import 'package:quran/data/models/app_settings_model.dart';
 import 'package:quran/data/models/tafsir_cache_model.dart';
 
@@ -18,7 +19,11 @@ class QuranCacheIsarService {
     }
     final dir = await getApplicationDocumentsDirectory();
     _isar = await Isar.open(
-      [TafsirCacheModelSchema, AppSettingsModelSchema],
+      [
+        TafsirCacheModelSchema,
+        AppSettingsModelSchema,
+        AiTadabburCacheModelSchema,
+      ],
       directory: dir.path,
       name: 'quran_cache',
     );

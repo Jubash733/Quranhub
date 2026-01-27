@@ -102,7 +102,7 @@ class RegisterQuranModule {
     sl.registerLazySingleton<AiAssistantRemoteDataSource>(
         () => AiAssistantRemoteDataSourceImpl(dio: sl()));
     sl.registerLazySingleton<AiAssistantLocalDataSource>(
-        () => AiAssistantLocalDataSource());
+        () => AiAssistantLocalDataSource(isarService: sl()));
 
     /// Repository
     sl.registerLazySingleton<QuranRepository>(() => QuranRepositoryImpl(

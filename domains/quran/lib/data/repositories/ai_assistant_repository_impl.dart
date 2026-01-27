@@ -32,7 +32,14 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
   }) async {
     try {
       final promptVersion = AppConfig.promptVersion;
-      final cached = await localDataSource.getCached(ref, languageCode, promptVersion);
+      const promptType = 'tadabbur';
+      const resolvedLanguage = 'ar';
+      final cached = await localDataSource.getCached(
+        ref,
+        resolvedLanguage,
+        promptVersion,
+        promptType,
+      );
       if (cached != null) {
         return Right(cached);
       }
@@ -43,14 +50,14 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
             message: 'Ayah not found for surah ${ref.surah}, ayah ${ref.ayah}'));
       }
 
-      final translation = await _safeTranslation(ref, languageCode);
-      final tafsir = await _safeTafsir(ref, languageCode);
+      final translation = await _safeTranslation(ref, resolvedLanguage);
+      final tafsir = await _safeTafsir(ref, resolvedLanguage);
 
       final prompt = _buildPrompt(
         verseText: verse.textArabic,
         translation: translation,
         tafsir: tafsir,
-        languageCode: languageCode,
+        languageCode: resolvedLanguage,
         promptVersion: promptVersion,
       );
 
@@ -62,15 +69,16 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
           verseText: verse.textArabic,
           translation: translation,
           tafsir: tafsir,
-          languageCode: languageCode,
+          languageCode: resolvedLanguage,
         );
       }
 
       final entity = AiTadabburEntity(
         ref: ref,
         response: response,
-        languageCode: languageCode,
+        languageCode: resolvedLanguage,
         createdAt: DateTime.now(),
+        promptType: promptType,
         promptVersion: promptVersion,
       );
       await localDataSource.cache(entity);
@@ -90,8 +98,30 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
   }) {
     final isArabic = languageCode == 'ar';
     final intro = isArabic
-        ? '??? ????? ???? ?????? ??????. ???? ????? ????? ????? ??????.'
+        ? 'أنت مساعد للتدبر في القرآن. اكتب بالعربية الفصحى وبأسلوب واضح ومختصر.'
         : 'You are a Quran reflection assistant. Write in clear English.';
+    if (isArabic) {
+      return '''
+$intro
+إصدار الموجه: $promptVersion
+
+نص الآية:
+$verseText
+
+الترجمة:
+$translation
+
+التفسير (إن توفر):
+$tafsir
+
+رجاءً أجب بهذه الأقسام:
+1) خلاصة المعنى (سطران كحد أقصى)
+2) الكلمات المفتاحية (مفصولة بفواصل)
+3) آيات ذات صلة (إن وجدت مع سورة:آية)
+4) تذكير عملي (3 نقاط)
+5) تنبيه: "مخرجات مساعدة وليست فتوى"
+''';
+    }
     return '''
 $intro
 Prompt version: $promptVersion
@@ -124,21 +154,21 @@ Please respond with these sections:
     final isArabic = languageCode == 'ar';
     if (isArabic) {
       return '''
-???? ??????:
+خلاصة المعنى:
 $translation
 
-??????? ????????:
+الكلمات المفتاحية:
 - ...
 
-???? ??? ???:
+آيات ذات صلة:
 - ...
 
-??????? ?????:
-- ???? ????? ????? ?????.
-- ???? ?????? ????? ???? ????.
-- ???? ????? ???????.
+تذكير عملي:
+- راجع الآية بتدبر اليوم.
+- اربط المعنى بخطوة عملية صغيرة.
+- اختم بدعاء هداية مختصر.
 
-?????: "?????? ?????? ????? ????".
+تنبيه: "مخرجات مساعدة وليست فتوى".
 ''';
     }
     return '''

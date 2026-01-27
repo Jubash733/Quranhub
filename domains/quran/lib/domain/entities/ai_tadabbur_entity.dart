@@ -7,6 +7,7 @@ class AiTadabburEntity extends Equatable {
     required this.response,
     required this.languageCode,
     required this.createdAt,
+    required this.promptType,
     required this.promptVersion,
   });
 
@@ -14,9 +15,10 @@ class AiTadabburEntity extends Equatable {
   final String response;
   final String languageCode;
   final DateTime createdAt;
+  final String promptType;
   final String promptVersion;
 
   @override
   List<Object?> get props =>
-      [ref, response, languageCode, createdAt, promptVersion];
+      [ref, response, languageCode, createdAt, promptType, promptVersion];
 }
