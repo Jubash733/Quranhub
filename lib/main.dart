@@ -31,6 +31,7 @@ import 'package:resources/localization/app_localizations.dart';
 import 'package:search/presentation/cubit/search_cubit.dart';
 import 'package:search/presentation/ui/search_screen.dart';
 import 'package:settings/presentation/ui/settings_screen.dart';
+import 'package:settings/presentation/ui/audio_storage_screen.dart';
 import 'package:splash/presentation/ui/onboard_screen.dart';
 import 'package:splash/presentation/ui/splash_screen.dart';
 import 'package:dependencies/hooks_riverpod/hooks_riverpod.dart'
@@ -187,6 +188,8 @@ class MyApp extends StatelessWidget {
                     child: const AiAssistantScreen(),
                   ),
               NamedRoutes.settingsScreen: (_) => const SettingsScreen(),
+              NamedRoutes.audioStorageScreen: (_) =>
+                  const AudioStorageScreen(),
               NamedRoutes.libraryScreen: (_) => const LibraryScreen(),
               NamedRoutes.libraryManageScreen: (_) =>
                   const LibraryManageScreen(),

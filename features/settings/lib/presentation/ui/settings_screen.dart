@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:dependencies/hooks_riverpod/hooks_riverpod.dart'
     as riverpod;
 import 'package:resources/extensions/context_extensions.dart';
+import 'package:resources/constant/named_routes.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 import 'package:settings/presentation/controller/app_settings_provider.dart';
@@ -252,6 +253,44 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       );
                     },
+                  ),
+                  const SizedBox(height: 24.0),
+                  _sectionTitle(
+                    context,
+                    context.l10n.manageStorage,
+                    prefSetProvider,
+                  ),
+                  const SizedBox(height: 10.0),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    onTap: () => Navigator.pushNamed(
+                      context,
+                      NamedRoutes.audioStorageScreen,
+                    ),
+                    title: Text(
+                      context.l10n.audioStorage,
+                      style: kSubtitle.copyWith(
+                        fontSize: 14.0,
+                        color: prefSetProvider.isDarkTheme
+                            ? Colors.white
+                            : kDarkPurple,
+                      ),
+                    ),
+                    subtitle: Text(
+                      context.l10n.storageLimit,
+                      style: kSubtitle.copyWith(
+                        fontSize: 12.0,
+                        color: prefSetProvider.isDarkTheme
+                            ? kGreyLight
+                            : kGrey,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right_rounded,
+                      color: prefSetProvider.isDarkTheme
+                          ? kGreyLight
+                          : kGrey,
+                    ),
                   ),
                   const SizedBox(height: 24.0),
                   _sectionTitle(

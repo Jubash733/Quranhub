@@ -101,6 +101,14 @@ class AppLocalizations {
       'libraryTabIrab': 'I‘rab',
       'libraryTabTopics': 'Topics',
       'libraryTabQiraat': 'Qiraat',
+      'manageStorage': 'Storage',
+      'audioStorage': 'Audio storage',
+      'cacheSize': 'Cached audio size',
+      'storageLimit': 'Cache limit: 500 MB',
+      'clearAudioCache': 'Clear audio cache',
+      'clearByReciter': 'Clear by reciter',
+      'clearBySurah': 'Clear by surah',
+      'cacheCleared': 'Cache cleared',
     },
     'ar': {
       'appTitle': 'تطبيق القرآن',
@@ -186,6 +194,14 @@ class AppLocalizations {
       'libraryTabIrab': 'إعراب',
       'libraryTabTopics': 'موضوعات',
       'libraryTabQiraat': 'قراءات',
+      'manageStorage': 'التخزين',
+      'audioStorage': 'تخزين الصوت',
+      'cacheSize': 'حجم كاش الصوت',
+      'storageLimit': 'الحد الأقصى للكاش: ٥٠٠ م.ب',
+      'clearAudioCache': 'مسح كاش الصوت',
+      'clearByReciter': 'حذف حسب القارئ',
+      'clearBySurah': 'حذف حسب السورة',
+      'cacheCleared': 'تم مسح الكاش',
     },
 
 
@@ -277,6 +293,14 @@ class AppLocalizations {
   String get libraryTabIrab => _t('libraryTabIrab');
   String get libraryTabTopics => _t('libraryTabTopics');
   String get libraryTabQiraat => _t('libraryTabQiraat');
+  String get manageStorage => _t('manageStorage');
+  String get audioStorage => _t('audioStorage');
+  String get cacheSize => _t('cacheSize');
+  String get storageLimit => _t('storageLimit');
+  String get clearAudioCache => _t('clearAudioCache');
+  String get clearByReciter => _t('clearByReciter');
+  String get clearBySurah => _t('clearBySurah');
+  String get cacheCleared => _t('cacheCleared');
 
   String formatSurahAyah(String surahName, int ayahNumber) {
     if (isArabic) {

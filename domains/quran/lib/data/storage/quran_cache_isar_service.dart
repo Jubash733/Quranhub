@@ -2,6 +2,7 @@ import 'package:dependencies/isar/isar.dart';
 import 'package:dependencies/path_provider/path_provider.dart';
 import 'package:quran/data/models/ai_tadabbur_cache_model.dart';
 import 'package:quran/data/models/app_settings_model.dart';
+import 'package:quran/data/models/audio_cache_model.dart';
 import 'package:quran/data/models/tafsir_cache_model.dart';
 
 class QuranCacheIsarService {
@@ -23,6 +24,7 @@ class QuranCacheIsarService {
         TafsirCacheModelSchema,
         AppSettingsModelSchema,
         AiTadabburCacheModelSchema,
+        AudioCacheModelSchema,
       ],
       directory: dir.path,
       name: 'quran_cache',

@@ -6,6 +6,8 @@ import 'package:quran/data/data_sources/quran_search_data_source.dart';
 import 'package:quran/data/data_sources/ai_assistant_remote_data_source.dart';
 import 'package:quran/data/data_sources/ai_assistant_local_data_source.dart';
 import 'package:quran/data/data_sources/app_settings_local_data_source.dart';
+import 'package:quran/data/data_sources/audio_cache_data_source.dart';
+import 'package:quran/data/data_sources/audio_remote_data_source.dart';
 import 'package:quran/data/data_sources/tafsir_cache_data_source.dart';
 import 'package:quran/data/data_sources/tafsir_remote_data_source.dart';
 import 'package:quran/data/data_sources/translation_cache_data_source.dart';
@@ -16,16 +18,19 @@ import 'package:quran/data/repositories/app_settings_repository_impl.dart';
 import 'package:quran/data/repositories/quran_repository_impl.dart';
 import 'package:quran/data/repositories/search_repository_impl.dart';
 import 'package:quran/data/repositories/ai_assistant_repository_impl.dart';
+import 'package:quran/data/repositories/audio_repository_impl.dart';
 import 'package:quran/data/repositories/tafsir_repository_impl.dart';
 import 'package:quran/data/repositories/translation_repository_impl.dart';
 import 'package:quran/domain/repositories/quran_repository.dart';
 import 'package:quran/domain/repositories/search_repository.dart';
 import 'package:quran/domain/repositories/ai_assistant_repository.dart';
+import 'package:quran/domain/repositories/audio_repository.dart';
 import 'package:quran/domain/repositories/tafsir_repository.dart';
 import 'package:quran/domain/repositories/translation_repository.dart';
 import 'package:quran/domain/repositories/app_settings_repository.dart';
 import 'package:quran/domain/usecases/get_ayah_translation_usecase.dart';
 import 'package:quran/domain/usecases/get_ayah_tafsir_usecase.dart';
+import 'package:quran/domain/usecases/get_ayah_audio_usecase.dart';
 import 'package:quran/domain/usecases/search_verses_usecase.dart';
 import 'package:quran/domain/usecases/build_search_index_usecase.dart';
 import 'package:quran/domain/usecases/is_search_index_ready_usecase.dart';
@@ -34,6 +39,10 @@ import 'package:quran/domain/usecases/watch_app_settings_usecase.dart';
 import 'package:quran/domain/usecases/update_audio_settings_usecase.dart';
 import 'package:quran/domain/usecases/update_translation_settings_usecase.dart';
 import 'package:quran/domain/usecases/update_tafsir_settings_usecase.dart';
+import 'package:quran/domain/usecases/get_audio_cache_size_usecase.dart';
+import 'package:quran/domain/usecases/clear_audio_cache_usecase.dart';
+import 'package:quran/domain/usecases/clear_audio_cache_by_reciter_usecase.dart';
+import 'package:quran/domain/usecases/clear_audio_cache_by_surah_usecase.dart';
 import 'package:quran/domain/usecases/get_ai_tadabbur_usecase.dart';
 import 'package:quran/domain/usecases/get_bookmark_verses_usecase.dart';
 import 'package:quran/domain/usecases/get_detail_surah_usecase.dart';
@@ -90,6 +99,10 @@ class RegisterQuranModule {
     sl.registerLazySingleton<AppSettingsLocalDataSource>(
         () => AppSettingsLocalDataSource(isarService: sl()));
 
+    /// Audio Cache Data Source
+    sl.registerLazySingleton<AudioCacheDataSource>(
+        () => AudioCacheDataSource(isarService: sl(), dio: sl()));
+
     /// Translation Data Source
     sl.registerLazySingleton<TranslationRemoteDataSource>(
         () => TranslationRemoteDataSourceImpl(dio: sl()));
@@ -97,6 +110,10 @@ class RegisterQuranModule {
     /// Tafsir Data Source
     sl.registerLazySingleton<TafsirRemoteDataSource>(
         () => TafsirRemoteDataSourceImpl(dio: sl()));
+
+    /// Audio Data Source
+    sl.registerLazySingleton<AudioRemoteDataSource>(
+        () => AudioRemoteDataSourceImpl(dio: sl()));
 
     /// AI Data Source
     sl.registerLazySingleton<AiAssistantRemoteDataSource>(
@@ -128,6 +145,12 @@ class RegisterQuranModule {
               translationCacheDataSource: sl(),
               tafsirCacheDataSource: sl(),
             ));
+    sl.registerLazySingleton<AudioRepository>(
+        () => AudioRepositoryImpl(
+              remoteDataSource: sl(),
+              cacheDataSource: sl(),
+              settingsRepository: sl(),
+            ));
     sl.registerLazySingleton<SearchRepository>(
         () => SearchRepositoryImpl(
               assetDataSource: sl(),
@@ -155,6 +178,8 @@ class RegisterQuranModule {
         () => GetAyahTranslationUsecase(repository: sl()));
     sl.registerLazySingleton<GetAyahTafsirUsecase>(
         () => GetAyahTafsirUsecase(repository: sl()));
+    sl.registerLazySingleton<GetAyahAudioUsecase>(
+        () => GetAyahAudioUsecase(repository: sl()));
     sl.registerLazySingleton<SearchVersesUsecase>(
         () => SearchVersesUsecase(repository: sl()));
     sl.registerLazySingleton<BuildSearchIndexUsecase>(
@@ -171,6 +196,14 @@ class RegisterQuranModule {
         () => UpdateTafsirSettingsUsecase(repository: sl()));
     sl.registerLazySingleton<UpdateAudioSettingsUsecase>(
         () => UpdateAudioSettingsUsecase(repository: sl()));
+    sl.registerLazySingleton<GetAudioCacheSizeUsecase>(
+        () => GetAudioCacheSizeUsecase(repository: sl()));
+    sl.registerLazySingleton<ClearAudioCacheUsecase>(
+        () => ClearAudioCacheUsecase(repository: sl()));
+    sl.registerLazySingleton<ClearAudioCacheByReciterUsecase>(
+        () => ClearAudioCacheByReciterUsecase(repository: sl()));
+    sl.registerLazySingleton<ClearAudioCacheBySurahUsecase>(
+        () => ClearAudioCacheBySurahUsecase(repository: sl()));
     sl.registerLazySingleton<GetAiTadabburUsecase>(
         () => GetAiTadabburUsecase(repository: sl()));
     sl.registerLazySingleton<SaveLastReadUsecase>(
