@@ -59,6 +59,8 @@ dev_dependencies:
 
 dependency_overrides:
   win32: ^5.13.0
+  isar_flutter_libs:
+    path: third_party/isar_flutter_libs
 
 flutter:
   uses-material-design: true
