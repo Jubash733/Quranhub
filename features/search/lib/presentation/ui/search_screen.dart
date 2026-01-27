@@ -158,6 +158,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   prefSetProvider.arabicFontFamily,
                               arabicFontScale: prefSetProvider.arabicFontScale,
                               showTranslation: prefSetProvider.showTranslation,
+                              query: state.query,
                             );
                           },
                         );

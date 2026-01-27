@@ -10,6 +10,7 @@ class SearchResultTile extends StatelessWidget {
   final ArabicFontFamily arabicFontFamily;
   final double arabicFontScale;
   final bool showTranslation;
+  final String query;
 
   const SearchResultTile({
     super.key,
@@ -18,6 +19,7 @@ class SearchResultTile extends StatelessWidget {
     required this.arabicFontFamily,
     required this.arabicFontScale,
     required this.showTranslation,
+    required this.query,
   });
 
   @override
@@ -41,28 +43,32 @@ class SearchResultTile extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.centerRight,
-              child: Text(
-                result.text,
+              child: _highlightedText(
+                text: result.text,
+                query: query,
                 textAlign: TextAlign.right,
-                style: arabicBodyStyle(
+                baseStyle: arabicBodyStyle(
                   arabicFontFamily,
                   scale: arabicFontScale,
                 ).copyWith(
                   color: isDarkTheme ? Colors.white : kDarkPurple,
                 ),
+                highlightColor: kLinearPurple1.withValues(alpha: 0.35),
               ),
             ),
             const SizedBox(height: 6.0),
             if (showTranslation && result.translation.trim().isNotEmpty) ...[
-              Text(
-                result.translation,
+              _highlightedText(
+                text: result.translation,
+                query: query,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: kSubtitle.copyWith(
+                baseStyle: kSubtitle.copyWith(
                   color: isDarkTheme
                       ? kGreyLight
                       : kGrey.withValues(alpha: 0.8),
                 ),
+                highlightColor: kLinearPurple1.withValues(alpha: 0.3),
               ),
               const SizedBox(height: 8.0),
             ],
@@ -76,6 +82,63 @@ class SearchResultTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _highlightedText({
+    required String text,
+    required String query,
+    required TextStyle baseStyle,
+    required Color highlightColor,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+  }) {
+    final tokens = query
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((token) => token.isNotEmpty)
+        .toList();
+    if (tokens.isEmpty) {
+      return Text(
+        text,
+        textAlign: textAlign,
+        maxLines: maxLines,
+        overflow: overflow,
+        style: baseStyle,
+      );
+    }
+    final pattern = tokens.map(RegExp.escape).join('|');
+    final regex = RegExp(pattern, caseSensitive: false);
+    final spans = <TextSpan>[];
+    var start = 0;
+    for (final match in regex.allMatches(text)) {
+      if (match.start > start) {
+        spans.add(TextSpan(
+          text: text.substring(start, match.start),
+          style: baseStyle,
+        ));
+      }
+      spans.add(TextSpan(
+        text: text.substring(match.start, match.end),
+        style: baseStyle.copyWith(
+          backgroundColor: highlightColor,
+          fontWeight: FontWeight.w700,
+        ),
+      ));
+      start = match.end;
+    }
+    if (start < text.length) {
+      spans.add(TextSpan(
+        text: text.substring(start),
+        style: baseStyle,
+      ));
+    }
+    return Text.rich(
+      TextSpan(children: spans),
+      textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: overflow ?? TextOverflow.clip,
     );
   }
 }
