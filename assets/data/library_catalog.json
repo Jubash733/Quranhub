@@ -3,23 +3,23 @@
     "itemId": "translation_en_pickthall",
     "title": "ترجمة القرآن - Pickthall",
     "author": "Marmaduke Pickthall",
-    "description": "ترجمة إنجليزية معتمدة (مضمنة داخل التطبيق).",
+    "description": "ترجمة إنجليزية متاحة عبر الإنترنت فقط حاليًا.",
     "category": "translation",
     "sizeBytes": 0,
     "source": "Tanzil.net",
     "downloadUrl": null,
-    "isBundled": true
+    "isBundled": false
   },
   {
     "itemId": "translation_ar_muyassar",
     "title": "التفسير الميسر (كنص ترجمة)",
     "author": "مجمع الملك فهد",
-    "description": "نص عربي ميسر (مضمن داخل التطبيق).",
+    "description": "نص عربي ميسر متاح عبر الإنترنت فقط حاليًا.",
     "category": "translation",
     "sizeBytes": 0,
     "source": "Tanzil.net",
     "downloadUrl": null,
-    "isBundled": true
+    "isBundled": false
   },
   {
     "itemId": "tafsir_placeholder",

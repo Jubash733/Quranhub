@@ -12,12 +12,27 @@ import 'package:quran/domain/repositories/search_repository.dart';
 class SearchRepositoryImpl extends SearchRepository {
   final QuranAssetDataSource assetDataSource;
   final QuranSearchDataSource? searchDataSource;
-  List<_IndexedAyah>? _index;
 
   SearchRepositoryImpl({
     required this.assetDataSource,
     this.searchDataSource,
   });
+
+  @override
+  Future<bool> isIndexReady() async {
+    if (searchDataSource == null || !searchDataSource!.isSupported) {
+      return true;
+    }
+    return searchDataSource!.isIndexReady();
+  }
+
+  @override
+  Stream<double> buildIndex() {
+    if (searchDataSource == null || !searchDataSource!.isSupported) {
+      return Stream<double>.value(1);
+    }
+    return searchDataSource!.buildIndex();
+  }
 
   @override
   Future<Either<FailureResponse, List<SearchResultEntity>>> search(
@@ -29,10 +44,7 @@ class SearchRepositoryImpl extends SearchRepository {
       if (trimmed.isEmpty) {
         return const Right([]);
       }
-      final normalizedQuery = _normalize(trimmed);
-      final isArabicQuery = _containsArabic(trimmed);
-
-      if (isArabicQuery && searchDataSource != null) {
+      if (searchDataSource != null && searchDataSource!.isSupported) {
         final rows = await searchDataSource!.search(
           trimmed,
           languageCode: languageCode,
@@ -44,14 +56,15 @@ class SearchRepositoryImpl extends SearchRepository {
         }
       }
 
-      _index ??= await _buildIndex();
+      final normalizedQuery = _normalize(trimmed);
+      final isArabicQuery = _containsArabic(trimmed);
+      final data = await assetDataSource.getAllAyah();
       final results = <SearchResultEntity>[];
-      for (final entry in _index!) {
-        final haystack = isArabicQuery
-            ? entry.normalizedArabic
-            : entry.translationFor(languageCode);
+      for (final entry in data) {
+        final haystack =
+            isArabicQuery ? _normalize(entry.textArabic) : '';
         if (haystack.contains(normalizedQuery)) {
-          results.add(_mapToResult(entry.data, languageCode));
+          results.add(_mapToResult(entry, languageCode));
         }
         if (results.length >= 50) {
           break;
@@ -63,28 +76,14 @@ class SearchRepositoryImpl extends SearchRepository {
     }
   }
 
-  Future<List<_IndexedAyah>> _buildIndex() async {
-    final data = await assetDataSource.getAllAyah();
-    return data
-        .map((item) => _IndexedAyah(
-              data: item,
-              normalizedArabic: _normalize(item.textArabic),
-              normalizedTranslationAr: _normalize(item.translationFor('ar') ?? ''),
-              normalizedTranslationEn: _normalize(item.translationFor('en') ?? ''),
-            ))
-        .toList();
-  }
-
   SearchResultEntity _mapToResult(LocalAyahData data, String languageCode) {
     final surahName =
         languageCode == 'ar' ? data.surahNameAr : data.surahNameEn;
-    final translation =
-        data.translationFor(languageCode) ?? data.translationFor('ar') ?? '';
     return SearchResultEntity(
       ref: AyahRef(surah: data.surah, ayah: data.ayah),
       surahName: surahName,
       text: data.textArabic,
-      translation: translation,
+      translation: '',
     );
   }
 
@@ -103,27 +102,6 @@ class SearchRepositoryImpl extends SearchRepository {
   }
 
   String _normalize(String text) {
-    return QuranTextNormalizer.normalizeArabic(text);
-  }
-}
-
-class _IndexedAyah {
-  _IndexedAyah({
-    required this.data,
-    required this.normalizedArabic,
-    required this.normalizedTranslationAr,
-    required this.normalizedTranslationEn,
-  });
-
-  final LocalAyahData data;
-  final String normalizedArabic;
-  final String normalizedTranslationAr;
-  final String normalizedTranslationEn;
-
-  String translationFor(String languageCode) {
-    if (languageCode == 'ar') {
-      return normalizedTranslationAr;
-    }
-    return normalizedTranslationEn;
+    return QuranTextNormalizer.normalizeForSearch(text);
   }
 }

@@ -175,6 +175,8 @@ class MyApp extends StatelessWidget {
               NamedRoutes.searchScreen: (context) => BlocProvider(
                     create: (_) => SearchCubit(
                       searchVersesUsecase: sl(),
+                      buildSearchIndexUsecase: sl(),
+                      isSearchIndexReadyUsecase: sl(),
                     ),
                     child: const SearchScreen(),
                   ),

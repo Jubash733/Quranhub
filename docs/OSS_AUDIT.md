@@ -14,11 +14,10 @@ This audit covers:
   - Notes: Must not modify text; must attribute Tanzil.net and include license notice.
   - Source: https://tanzil.net/docs/text_license
 
-### Translations
-- **Tanzil Translations (Pickthall / Muyassar)** — Non‑commercial only
-  - Usage: Offline translation packs.
-  - Notes: Non‑commercial only; requires explicit permission for commercial use.
-  - Source: https://tanzil.net/trans
+### Translations & Tafsir
+- **alquran.cloud API** — Online-only translations/tafsir with local caching.
+  - Usage: Online fallback for translations/tafsir (no offline packs bundled).
+  - Source: https://alquran.cloud/api
 
 ### Surah Metadata
 - **quranjson** — MIT
@@ -26,7 +25,7 @@ This audit covers:
   - Source: https://github.com/semarketir/quranjson
 
 ### Online Fallback APIs
-- **alquran.cloud API** — API access for translations/audio fallback
+- **alquran.cloud API** — API access for translations/tafsir/audio fallback
   - Usage: Remote fallback (online only).
   - Source: https://alquran.cloud/api
 

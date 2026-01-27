@@ -12,6 +12,7 @@ TRANSLATIONS = {
     'en': 'https://tanzil.net/trans/en.pickthall',
     'ar': 'https://tanzil.net/trans/ar.muyassar',
 }
+INCLUDE_TRANSLATIONS = False
 
 SURAH_META_URL = 'https://raw.githubusercontent.com/semarketir/quranjson/master/source/surah.json'
 
@@ -96,14 +97,15 @@ def main() -> None:
         encoding='utf-8',
     )
 
-    for lang, url in TRANSLATIONS.items():
-        translations = _build_translation(url)
-        target = ASSETS_DIR / 'translations' / f'{lang}.json'
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(
-            json.dumps(translations, ensure_ascii=False, indent=2),
-            encoding='utf-8',
-        )
+    if INCLUDE_TRANSLATIONS:
+        for lang, url in TRANSLATIONS.items():
+            translations = _build_translation(url)
+            target = ASSETS_DIR / 'translations' / f'{lang}.json'
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(
+                json.dumps(translations, ensure_ascii=False, indent=2),
+                encoding='utf-8',
+            )
 
     print('Assets generated:', ASSETS_DIR)
 

@@ -71,6 +71,41 @@ class _SearchScreenState extends State<SearchScreen> {
                 Expanded(
                   child: BlocBuilder<SearchCubit, SearchState>(
                     builder: (context, state) {
+                      if (state.isIndexing) {
+                        return Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                context.l10n.searchPreparingTitle,
+                                style: kHeading6.copyWith(fontSize: 18),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                context.l10n.searchPreparingMessage,
+                                style: kSubtitle.copyWith(
+                                  color: prefSetProvider.isDarkTheme
+                                      ? Colors.white70
+                                      : kDarkPurple.withValues(alpha: 0.7),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 16),
+                              SizedBox(
+                                width: 220,
+                                child: LinearProgressIndicator(
+                                  value: state.indexProgress > 0
+                                      ? state.indexProgress
+                                      : null,
+                                  color: prefSetProvider.isDarkTheme
+                                      ? Colors.white
+                                      : kPurplePrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                       final status = state.status.status;
 
                       if (status.isLoading) {

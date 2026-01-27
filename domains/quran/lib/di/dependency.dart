@@ -5,10 +5,12 @@ import 'package:quran/data/data_sources/quran_asset_data_source.dart';
 import 'package:quran/data/data_sources/quran_search_data_source.dart';
 import 'package:quran/data/data_sources/ai_assistant_remote_data_source.dart';
 import 'package:quran/data/data_sources/ai_assistant_local_data_source.dart';
-import 'package:quran/data/data_sources/tafsir_local_data_source.dart';
-import 'package:quran/data/data_sources/translation_local_data_source.dart';
+import 'package:quran/data/data_sources/tafsir_cache_data_source.dart';
+import 'package:quran/data/data_sources/tafsir_remote_data_source.dart';
+import 'package:quran/data/data_sources/translation_cache_data_source.dart';
 import 'package:quran/data/data_sources/translation_remote_data_source.dart';
 import 'package:quran/data/database/database_helper.dart';
+import 'package:quran/data/storage/quran_cache_isar_service.dart';
 import 'package:quran/data/repositories/quran_repository_impl.dart';
 import 'package:quran/data/repositories/search_repository_impl.dart';
 import 'package:quran/data/repositories/ai_assistant_repository_impl.dart';
@@ -22,6 +24,8 @@ import 'package:quran/domain/repositories/translation_repository.dart';
 import 'package:quran/domain/usecases/get_ayah_translation_usecase.dart';
 import 'package:quran/domain/usecases/get_ayah_tafsir_usecase.dart';
 import 'package:quran/domain/usecases/search_verses_usecase.dart';
+import 'package:quran/domain/usecases/build_search_index_usecase.dart';
+import 'package:quran/domain/usecases/is_search_index_ready_usecase.dart';
 import 'package:quran/domain/usecases/get_ai_tadabbur_usecase.dart';
 import 'package:quran/domain/usecases/get_bookmark_verses_usecase.dart';
 import 'package:quran/domain/usecases/get_detail_surah_usecase.dart';
@@ -59,17 +63,25 @@ class RegisterQuranModule {
     sl.registerLazySingleton<QuranSearchDataSource>(
         () => QuranSearchDataSourceImpl(databaseHelper: sl()));
 
-    /// Translation Local Data Source
-    sl.registerLazySingleton<TranslationLocalDataSource>(
-        () => TranslationLocalDataSource(assetDataSource: sl()));
+    /// Cache Storage
+    sl.registerLazySingleton<QuranCacheIsarService>(
+        () => QuranCacheIsarService());
 
-    /// Tafsir Local Data Source
-    sl.registerLazySingleton<TafsirLocalDataSource>(
-        () => TafsirLocalDataSource(assetDataSource: sl()));
+    /// Translation Cache Data Source
+    sl.registerLazySingleton<TranslationCacheDataSource>(
+        () => TranslationCacheDataSource(databaseHelper: sl()));
+
+    /// Tafsir Cache Data Source
+    sl.registerLazySingleton<TafsirCacheDataSource>(
+        () => TafsirCacheDataSource(isarService: sl()));
 
     /// Translation Data Source
     sl.registerLazySingleton<TranslationRemoteDataSource>(
         () => TranslationRemoteDataSourceImpl(dio: sl()));
+
+    /// Tafsir Data Source
+    sl.registerLazySingleton<TafsirRemoteDataSource>(
+        () => TafsirRemoteDataSourceImpl(dio: sl()));
 
     /// AI Data Source
     sl.registerLazySingleton<AiAssistantRemoteDataSource>(
@@ -86,10 +98,13 @@ class RegisterQuranModule {
     sl.registerLazySingleton<TranslationRepository>(
         () => TranslationRepositoryImpl(
               remoteDataSource: sl(),
-              localDataSource: sl(),
+              cacheDataSource: sl(),
             ));
     sl.registerLazySingleton<TafsirRepository>(
-        () => TafsirRepositoryImpl(localDataSource: sl()));
+        () => TafsirRepositoryImpl(
+              cacheDataSource: sl(),
+              remoteDataSource: sl(),
+            ));
     sl.registerLazySingleton<SearchRepository>(
         () => SearchRepositoryImpl(
               assetDataSource: sl(),
@@ -100,8 +115,8 @@ class RegisterQuranModule {
               localDataSource: sl(),
               remoteDataSource: sl(),
               assetDataSource: sl(),
-              translationLocalDataSource: sl(),
-              tafsirLocalDataSource: sl(),
+              translationRepository: sl(),
+              tafsirRepository: sl(),
             ));
     /// Use Case
     sl.registerLazySingleton<GetSurahUsecase>(
@@ -119,6 +134,10 @@ class RegisterQuranModule {
         () => GetAyahTafsirUsecase(repository: sl()));
     sl.registerLazySingleton<SearchVersesUsecase>(
         () => SearchVersesUsecase(repository: sl()));
+    sl.registerLazySingleton<BuildSearchIndexUsecase>(
+        () => BuildSearchIndexUsecase(repository: sl()));
+    sl.registerLazySingleton<IsSearchIndexReadyUsecase>(
+        () => IsSearchIndexReadyUsecase(repository: sl()));
     sl.registerLazySingleton<GetAiTadabburUsecase>(
         () => GetAiTadabburUsecase(repository: sl()));
     sl.registerLazySingleton<SaveLastReadUsecase>(

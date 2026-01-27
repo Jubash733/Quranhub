@@ -7,4 +7,7 @@ abstract class SearchRepository {
     String query, {
     String languageCode,
   });
+
+  Future<bool> isIndexReady();
+  Stream<double> buildIndex();
 }

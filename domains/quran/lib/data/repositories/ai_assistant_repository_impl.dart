@@ -4,25 +4,25 @@ import 'package:dependencies/dartz/dartz.dart';
 import 'package:quran/data/data_sources/ai_assistant_local_data_source.dart';
 import 'package:quran/data/data_sources/ai_assistant_remote_data_source.dart';
 import 'package:quran/data/data_sources/quran_asset_data_source.dart';
-import 'package:quran/data/data_sources/tafsir_local_data_source.dart';
-import 'package:quran/data/data_sources/translation_local_data_source.dart';
 import 'package:quran/domain/entities/ai_tadabbur_entity.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:quran/domain/repositories/ai_assistant_repository.dart';
+import 'package:quran/domain/repositories/tafsir_repository.dart';
+import 'package:quran/domain/repositories/translation_repository.dart';
 
 class AiAssistantRepositoryImpl extends AiAssistantRepository {
   final AiAssistantLocalDataSource localDataSource;
   final AiAssistantRemoteDataSource remoteDataSource;
   final QuranAssetDataSource assetDataSource;
-  final TranslationLocalDataSource translationLocalDataSource;
-  final TafsirLocalDataSource tafsirLocalDataSource;
+  final TranslationRepository translationRepository;
+  final TafsirRepository tafsirRepository;
 
   AiAssistantRepositoryImpl({
     required this.localDataSource,
     required this.remoteDataSource,
     required this.assetDataSource,
-    required this.translationLocalDataSource,
-    required this.tafsirLocalDataSource,
+    required this.translationRepository,
+    required this.tafsirRepository,
   });
 
   @override
@@ -43,11 +43,8 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
             message: 'Ayah not found for surah ${ref.surah}, ayah ${ref.ayah}'));
       }
 
-      final translation =
-          await translationLocalDataSource.getAyahTranslation(ref, languageCode) ??
-              '';
-      final tafsir =
-          await tafsirLocalDataSource.getAyahTafsir(ref, languageCode) ?? '';
+      final translation = await _safeTranslation(ref, languageCode);
+      final tafsir = await _safeTafsir(ref, languageCode);
 
       final prompt = _buildPrompt(
         verseText: verse.textArabic,
@@ -161,5 +158,23 @@ Actionable reminders:
 
 Disclaimer: "AI output is assistant only, not fatwa".
 ''';
+  }
+
+  Future<String> _safeTranslation(
+    AyahRef ref,
+    String languageCode,
+  ) async {
+    final result =
+        await translationRepository.getAyahTranslation(ref, languageCode: languageCode);
+    return result.fold((_) => '', (data) => data.text);
+  }
+
+  Future<String> _safeTafsir(
+    AyahRef ref,
+    String languageCode,
+  ) async {
+    final result =
+        await tafsirRepository.getAyahTafsir(ref, languageCode: languageCode);
+    return result.fold((_) => '', (data) => data.text);
   }
 }

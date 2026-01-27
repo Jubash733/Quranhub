@@ -10,7 +10,7 @@ import 'package:quran/domain/entities/ayah_ref.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('offline lookup by AyahRef returns text + translation', () async {
+  test('offline lookup by AyahRef returns text only', () async {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMessageHandler('flutter/assets', (message) async {
       final key = utf8.decode(message!.buffer.asUint8List());
@@ -35,8 +35,7 @@ void main() {
       expect(ayah!.textArabic.isNotEmpty, true);
 
       final translation = await dataSource.getTranslation(ref, 'en');
-      expect(translation, isNotNull);
-      expect(translation!.isNotEmpty, true);
+      expect(translation == null || translation.isEmpty, true);
     }
   });
 }

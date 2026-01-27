@@ -31,3 +31,7 @@ This project uses the following third‑party libraries and tools. Licenses are 
 ## Notes
 - Additional transitive dependencies are governed by their respective licenses.
 - This list will be updated as new dependencies are added.
+
+## Datasets & APIs
+- Tanzil Quran Text (Uthmani) — CC BY 3.0 (attribution required, no text modification).
+- alquran.cloud API — Terms per provider (used for online translations/tafsir/audio; no offline packs bundled).

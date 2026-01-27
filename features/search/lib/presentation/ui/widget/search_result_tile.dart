@@ -53,7 +53,7 @@ class SearchResultTile extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 6.0),
-            if (showTranslation) ...[
+            if (showTranslation && result.translation.trim().isNotEmpty) ...[
               Text(
                 result.translation,
                 maxLines: 2,

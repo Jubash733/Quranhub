@@ -26,14 +26,12 @@ class FakeQuranAssetDataSource implements QuranAssetDataSource {
 
   @override
   Future<String?> getTranslation(AyahRef ref, String languageCode) async {
-    final entry = await getAyah(ref);
-    return entry?.translation[languageCode];
+    return null;
   }
 
   @override
   Future<String?> getTafsir(AyahRef ref, String languageCode) async {
-    final entry = await getAyah(ref);
-    return entry?.tafsir[languageCode];
+    return null;
   }
 
   @override
@@ -50,19 +48,16 @@ void main() {
         LocalAyahData(
           surah: 1,
           ayah: 2,
-          surahNameAr: 'الفاتحة',
+          surahNameAr: '???????',
           surahNameEn: 'Al-Fatihah',
-          textArabic: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ',
-          translation: {
-            'ar': 'الحمد لله رب العالمين',
-            'en': 'All praise'
-          },
+          textArabic: '????? ??? ?? ????????',
+          translation: const {},
           tafsir: const {},
         ),
       ]),
     );
 
-    final result = await repository.search('الحمد', languageCode: 'ar');
+    final result = await repository.search('?????', languageCode: 'ar');
     result.fold(
       (failure) => fail('Expected Right, got Left: ${failure.message}'),
       (data) => expect(data.length, 1),

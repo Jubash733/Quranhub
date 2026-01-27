@@ -7,12 +7,10 @@ This project aggregates datasets and APIs with their respective licenses. All da
   - Must retain copyright notice, provide attribution to Tanzil.net, and do not modify the text.
   - Source: https://tanzil.net/docs/text_license
 
-## Translations (Offline Packs)
-- **Tanzil Translations** — Non‑commercial use only (explicitly stated by Tanzil).
-  - Source: https://tanzil.net/trans
-  - Current packs used:
-    - English: Pickthall (en.pickthall)
-    - Arabic: al‑Muyassar (ar.muyassar)
+## Translations & Tafsir (Online Only)
+- **alquran.cloud API** — used for online translations/tafsir/audio with local caching.
+  - No offline translation/tafsir packs are bundled due to licensing constraints.
+  - Source: https://alquran.cloud/api
 
 ## Surah Metadata
 - **quranjson** — MIT
@@ -23,7 +21,7 @@ This project aggregates datasets and APIs with their respective licenses. All da
   - Source: https://github.com/cpfair/quran-tajweed
 
 ## APIs (Online Fallback)
-- **alquran.cloud API** — used for optional online translation/audio fallbacks.
+- **alquran.cloud API** — used for translations/tafsir/audio fallbacks.
   - Source: https://alquran.cloud/api
 
 ---

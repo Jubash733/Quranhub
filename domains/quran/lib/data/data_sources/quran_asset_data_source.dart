@@ -18,8 +18,6 @@ abstract class QuranAssetDataSource {
 class QuranAssetDataSourceImpl implements QuranAssetDataSource {
   List<LocalAyahData>? _cache;
   Map<String, LocalAyahData>? _cacheMap;
-  final Map<String, Map<String, String>> _translationCache = {};
-  final Map<String, Map<String, String>> _tafsirCache = {};
   bool _loadedText = false;
 
   @override
@@ -28,58 +26,24 @@ class QuranAssetDataSourceImpl implements QuranAssetDataSource {
       return _cache!;
     }
     await _loadText();
-    await _loadTranslation('ar');
-    await _loadTranslation('en');
-    await _loadTafsir('ar');
-
-    final data = _cacheMap!.values.map((item) {
-      final key = item.key();
-      final translation = <String, String>{};
-      for (final entry in _translationCache.entries) {
-        translation[entry.key] = entry.value[key] ?? '';
-      }
-      final tafsir = <String, String>{};
-      for (final entry in _tafsirCache.entries) {
-        tafsir[entry.key] = entry.value[key] ?? '';
-      }
-      return item.copyWith(
-        translation: translation,
-        tafsir: tafsir,
-      );
-    }).toList();
-
-    _cache = data;
-    return data;
+    _cache = _cacheMap!.values.toList();
+    return _cache!;
   }
 
   @override
   Future<LocalAyahData?> getAyah(AyahRef ref) async {
     await _loadText();
-    final base = _cacheMap?[ref.key];
-    if (base == null) {
-      return null;
-    }
-    final translation = <String, String>{};
-    final tafsir = <String, String>{};
-    for (final entry in _translationCache.entries) {
-      translation[entry.key] = entry.value[ref.key] ?? '';
-    }
-    for (final entry in _tafsirCache.entries) {
-      tafsir[entry.key] = entry.value[ref.key] ?? '';
-    }
-    return base.copyWith(translation: translation, tafsir: tafsir);
+    return _cacheMap?[ref.key];
   }
 
   @override
   Future<String?> getTranslation(AyahRef ref, String languageCode) async {
-    await _loadTranslation(languageCode);
-    return _translationCache[languageCode]?[ref.key];
+    return null;
   }
 
   @override
   Future<String?> getTafsir(AyahRef ref, String languageCode) async {
-    await _loadTafsir(languageCode);
-    return _tafsirCache[languageCode]?[ref.key];
+    return null;
   }
 
   @override
@@ -128,8 +92,6 @@ class QuranAssetDataSourceImpl implements QuranAssetDataSource {
   @override
   Future<DetailSurahDTO?> getDetailSurah(int id) async {
     await _loadText();
-    await _loadTranslation('en');
-    await _loadTranslation('ar');
     final verses = _cacheMap!.values
         .where((item) => item.surah == id)
         .toList()
@@ -188,8 +150,8 @@ class QuranAssetDataSourceImpl implements QuranAssetDataSource {
           transliteration: TransliterationDTO(en: ''),
         ),
         translation: TranslationDTO(
-          en: _translationCache['en']?[item.key()] ?? '',
-          id: _translationCache['ar']?[item.key()] ?? '',
+          en: '',
+          id: '',
         ),
         audio: AudioDTO(
           primary: '',
@@ -224,50 +186,6 @@ class QuranAssetDataSourceImpl implements QuranAssetDataSource {
         .toList();
     _cacheMap = {for (final item in data) item.key(): item};
     _loadedText = true;
-  }
-
-  Future<void> _loadTranslation(String languageCode) async {
-    if (_translationCache.containsKey(languageCode)) {
-      return;
-    }
-    try {
-      final raw = await rootBundle
-          .loadString('assets/data/translations/$languageCode.json');
-      final payload = jsonDecode(raw) as List<dynamic>;
-      final map = <String, String>{};
-      for (final item in payload) {
-        final ref = AyahRef(
-          surah: item['surah'] as int,
-          ayah: item['ayah'] as int,
-        );
-        map[ref.key] = item['text'] as String? ?? '';
-      }
-      _translationCache[languageCode] = map;
-    } catch (_) {
-      _translationCache[languageCode] = {};
-    }
-  }
-
-  Future<void> _loadTafsir(String languageCode) async {
-    if (_tafsirCache.containsKey(languageCode)) {
-      return;
-    }
-    try {
-      final raw =
-          await rootBundle.loadString('assets/data/tafsir/$languageCode.json');
-      final payload = jsonDecode(raw) as List<dynamic>;
-      final map = <String, String>{};
-      for (final item in payload) {
-        final ref = AyahRef(
-          surah: item['surah'] as int,
-          ayah: item['ayah'] as int,
-        );
-        map[ref.key] = item['text'] as String? ?? '';
-      }
-      _tafsirCache[languageCode] = map;
-    } catch (_) {
-      _tafsirCache[languageCode] = {};
-    }
   }
 }
 

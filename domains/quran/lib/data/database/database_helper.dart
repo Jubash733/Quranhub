@@ -17,7 +17,7 @@ class DatabaseHelper {
 
   static Database? _database;
 
-  static const int _dbVersion = 2;
+  static const int _dbVersion = 3;
 
   Future<Database?> get database async {
     _database ??= await _initDb();
@@ -30,6 +30,7 @@ class DatabaseHelper {
   static const String _tblQuranAyah = 'quranAyah';
   static const String _tblQuranTranslation = 'quranTranslation';
   static const String _tblQuranFts = 'quranFts';
+  static const String _tblMeta = 'quranMeta';
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
@@ -74,9 +75,21 @@ class DatabaseHelper {
     if (oldVersion < 2) {
       await _createCoreTables(db);
     }
+    if (oldVersion < 3) {
+      await db.execute('DROP TABLE IF EXISTS $_tblQuranTranslation');
+      await db.execute('DROP TABLE IF EXISTS $_tblQuranFts');
+      await db.execute('DROP TABLE IF EXISTS $_tblMeta');
+      await _createCoreTables(db);
+    }
   }
 
   Future<void> _createCoreTables(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS $_tblMeta (
+        key TEXT PRIMARY KEY,
+        value TEXT
+      );
+    ''');
     await db.execute('''
       CREATE TABLE IF NOT EXISTS $_tblQuranSurah (
         surah INTEGER PRIMARY KEY,
@@ -100,15 +113,19 @@ class DatabaseHelper {
         surah INTEGER NOT NULL,
         ayah INTEGER NOT NULL,
         languageCode TEXT NOT NULL,
+        edition TEXT NOT NULL,
         text TEXT NOT NULL,
         textNorm TEXT NOT NULL,
+        updatedAt INTEGER NOT NULL,
         PRIMARY KEY (surah, ayah, languageCode)
       );
     ''');
     await db.execute('''
       CREATE VIRTUAL TABLE IF NOT EXISTS $_tblQuranFts
       USING fts5(
-        textNorm,
+        arabicNorm,
+        translationArNorm,
+        translationEnNorm,
         surah UNINDEXED,
         ayah UNINDEXED,
         tokenize = 'unicode61 remove_diacritics 2'
@@ -158,6 +175,7 @@ class DatabaseHelper {
     await db.delete(_tblQuranSurah);
     await db.delete(_tblQuranTranslation);
     await db.execute('DELETE FROM $_tblQuranFts');
+    await _setMeta(db, 'fts_version', '0');
 
     final surahBatch = db.batch();
     for (final item in surahPayload) {
@@ -187,55 +205,15 @@ class DatabaseHelper {
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      ayahBatch.insert(
-        _tblQuranFts,
-        {
-          'textNorm': normalized,
-          'surah': surah,
-          'ayah': ayah,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
     }
     await ayahBatch.commit(noResult: true);
-
-    await _seedTranslations(db, 'en');
-    await _seedTranslations(db, 'ar');
-  }
-
-  Future<void> _seedTranslations(Database db, String languageCode) async {
-    try {
-      final raw = await rootBundle
-          .loadString('assets/data/translations/$languageCode.json');
-      final payload = jsonDecode(raw) as List<dynamic>;
-      final batch = db.batch();
-      for (final item in payload) {
-        final surah = item['surah'] as int;
-        final ayah = item['ayah'] as int;
-        final text = item['text'] as String;
-        final normalized = QuranTextNormalizer.normalizeArabic(text);
-        batch.insert(
-          _tblQuranTranslation,
-          {
-            'surah': surah,
-            'ayah': ayah,
-            'languageCode': languageCode,
-            'text': text,
-            'textNorm': normalized,
-          },
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
-      }
-      await batch.commit(noResult: true);
-    } catch (_) {
-      // Ignore missing translation assets.
-    }
   }
 
   Future<List<Map<String, dynamic>>> searchAyah(
     String ftsQuery, {
     int limit = 50,
     String languageCode = 'ar',
+    String? edition,
   }) async {
     final db = await database;
     if (db == null) {
@@ -252,9 +230,146 @@ class DatabaseHelper {
         ON s.surah = q.surah
       LEFT JOIN $_tblQuranTranslation t
         ON t.surah = q.surah AND t.ayah = q.ayah AND t.languageCode = ?
-      WHERE f.textNorm MATCH ?
+        AND (? IS NULL OR t.edition = ?)
+      WHERE f MATCH ?
       LIMIT $limit;
-    ''', [languageCode, ftsQuery]);
+    ''', [languageCode, edition, edition, ftsQuery]);
+  }
+
+  Future<bool> isSearchIndexReady() async {
+    final db = await database;
+    if (db == null) return false;
+    final row = await _getMeta(db, 'fts_version');
+    return row == _dbVersion.toString();
+  }
+
+  Stream<double> buildSearchIndex() async* {
+    final db = await database;
+    if (db == null) {
+      yield 1;
+      return;
+    }
+    await db.execute('DELETE FROM $_tblQuranFts');
+    final total = Sqflite.firstIntValue(
+          await db.rawQuery('SELECT COUNT(*) FROM $_tblQuranAyah'),
+        ) ??
+        0;
+    if (total == 0) {
+      await _setMeta(db, 'fts_version', _dbVersion.toString());
+      yield 1;
+      return;
+    }
+    const batchSize = 250;
+    var offset = 0;
+    while (offset < total) {
+      final rows = await db.query(
+        _tblQuranAyah,
+        columns: ['surah', 'ayah', 'textNorm'],
+        limit: batchSize,
+        offset: offset,
+      );
+      final batch = db.batch();
+      for (final row in rows) {
+        batch.insert(
+          _tblQuranFts,
+          {
+            'arabicNorm': row['textNorm'],
+            'translationArNorm': '',
+            'translationEnNorm': '',
+            'surah': row['surah'],
+            'ayah': row['ayah'],
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+      await batch.commit(noResult: true);
+      offset += rows.length;
+      yield offset / total;
+    }
+    await _setMeta(db, 'fts_version', _dbVersion.toString());
+    yield 1;
+  }
+
+  Future<Map<String, dynamic>?> getCachedTranslation({
+    required int surah,
+    required int ayah,
+    required String languageCode,
+    required String edition,
+  }) async {
+    final db = await database;
+    if (db == null) return null;
+    final rows = await db.query(
+      _tblQuranTranslation,
+      where: 'surah = ? AND ayah = ? AND languageCode = ? AND edition = ?',
+      whereArgs: [surah, ayah, languageCode, edition],
+      limit: 1,
+    );
+    return rows.isNotEmpty ? rows.first : null;
+  }
+
+  Future<void> upsertTranslationCache({
+    required int surah,
+    required int ayah,
+    required String languageCode,
+    required String edition,
+    required String text,
+  }) async {
+    final db = await database;
+    if (db == null) return;
+    final normalized = QuranTextNormalizer.normalizeForSearch(text);
+    await db.insert(
+      _tblQuranTranslation,
+      {
+        'surah': surah,
+        'ayah': ayah,
+        'languageCode': languageCode,
+        'edition': edition,
+        'text': text,
+        'textNorm': normalized,
+        'updatedAt': DateTime.now().millisecondsSinceEpoch,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    final column =
+        languageCode == 'ar' ? 'translationArNorm' : 'translationEnNorm';
+    await db.update(
+      _tblQuranFts,
+      {column: normalized},
+      where: 'surah = ? AND ayah = ?',
+      whereArgs: [surah, ayah],
+    );
+  }
+
+  Future<void> clearTranslations(String languageCode) async {
+    final db = await database;
+    if (db == null) return;
+    await db.delete(
+      _tblQuranTranslation,
+      where: 'languageCode = ?',
+      whereArgs: [languageCode],
+    );
+    final column =
+        languageCode == 'ar' ? 'translationArNorm' : 'translationEnNorm';
+    await db.execute("UPDATE $_tblQuranFts SET $column = ''");
+  }
+
+  Future<String?> _getMeta(Database db, String key) async {
+    final rows = await db.query(
+      _tblMeta,
+      columns: ['value'],
+      where: 'key = ?',
+      whereArgs: [key],
+      limit: 1,
+    );
+    return rows.isNotEmpty ? rows.first['value'] as String? : null;
+  }
+
+  Future<void> _setMeta(Database db, String key, String value) async {
+    await db.insert(
+      _tblMeta,
+      {'key': key, 'value': value},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   // LAST READ QURAN

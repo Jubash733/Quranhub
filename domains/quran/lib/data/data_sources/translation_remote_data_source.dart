@@ -9,7 +9,7 @@ import 'package:resources/constant/api_constant.dart';
 abstract class TranslationRemoteDataSource {
   Future<AyahTranslationDTO> getAyahTranslation(
     AyahRef ref, {
-    String languageCode,
+    required String edition,
   });
 }
 
@@ -21,10 +21,9 @@ class TranslationRemoteDataSourceImpl extends TranslationRemoteDataSource {
   @override
   Future<AyahTranslationDTO> getAyahTranslation(
     AyahRef ref, {
-    String languageCode = 'ar',
+    required String edition,
   }) async {
     try {
-      final edition = _mapEdition(languageCode);
       final response = await dio.get(
         '${ApiConstant.alquranBaseUrl}/ayah/${ref.surah}:${ref.ayah}/$edition',
       );
@@ -42,17 +41,6 @@ class TranslationRemoteDataSourceImpl extends TranslationRemoteDataSource {
       );
     } catch (e) {
       rethrow;
-    }
-  }
-
-  String _mapEdition(String languageCode) {
-    switch (languageCode) {
-      case 'ar':
-        return ApiConstant.alquranTranslationAr;
-      case 'en':
-        return ApiConstant.alquranTranslationEn;
-      default:
-        return ApiConstant.alquranTranslationEn;
     }
   }
 }

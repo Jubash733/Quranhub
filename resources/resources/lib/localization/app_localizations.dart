@@ -46,6 +46,8 @@ class AppLocalizations {
       'searchHint': 'Search the Quran...',
       'searchResults': 'Search Results',
       'noResults': 'No results found',
+      'searchPreparingTitle': 'Preparing search',
+      'searchPreparingMessage': 'Building the search index. This runs once.',
       'aiAssistant': 'AI Tadabbur',
       'aiDisclaimer': 'AI output is assistant only, not a fatwa.',
       'aiGenerate': 'Generate',
@@ -87,6 +89,7 @@ class AppLocalizations {
       'cancel': 'Cancel',
       'timeRemaining': 'Time remaining',
       'speed': 'Speed',
+      'onlineOnly': 'Available online only',
       'unavailable': 'Unavailable',
       'libraryTabTafsir': 'Tafsir',
       'libraryTabTranslations': 'Translations',
@@ -124,6 +127,8 @@ class AppLocalizations {
       'searchHint': 'ابحث في القرآن...',
       'searchResults': 'نتائج البحث',
       'noResults': 'لا توجد نتائج',
+      'searchPreparingTitle': 'جاري إعداد البحث',
+      'searchPreparingMessage': 'يتم الآن بناء فهرس البحث لمرة واحدة.',
       'aiAssistant': 'مساعد التدبّر',
       'aiDisclaimer': 'مخرجات مساعدة وليست فتوى.',
       'aiGenerate': 'إنشاء',
@@ -165,6 +170,7 @@ class AppLocalizations {
       'cancel': 'إلغاء',
       'timeRemaining': 'الوقت المتبقي',
       'speed': 'السرعة',
+      'onlineOnly': 'متاح عبر الإنترنت فقط',
       'unavailable': 'غير متاح',
       'libraryTabTafsir': 'تفاسير',
       'libraryTabTranslations': 'تراجم',
@@ -208,6 +214,8 @@ class AppLocalizations {
   String get searchHint => _t('searchHint');
   String get searchResults => _t('searchResults');
   String get noResults => _t('noResults');
+  String get searchPreparingTitle => _t('searchPreparingTitle');
+  String get searchPreparingMessage => _t('searchPreparingMessage');
   String get aiAssistant => _t('aiAssistant');
   String get aiDisclaimer => _t('aiDisclaimer');
   String get aiGenerate => _t('aiGenerate');
@@ -249,6 +257,7 @@ class AppLocalizations {
   String get cancel => _t('cancel');
   String get timeRemaining => _t('timeRemaining');
   String get speed => _t('speed');
+  String get onlineOnly => _t('onlineOnly');
   String get unavailable => _t('unavailable');
   String get libraryTabTafsir => _t('libraryTabTafsir');
   String get libraryTabTranslations => _t('libraryTabTranslations');

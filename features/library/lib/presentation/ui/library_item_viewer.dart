@@ -1,4 +1,3 @@
-﻿import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -38,40 +37,14 @@ class LibraryItemViewer extends StatelessWidget {
   }
 
   Future<String> _loadContent(BuildContext context) async {
-    if (item.itemId == 'translation_en_pickthall') {
-      return _loadTranslationPreview(
-        context,
-        'assets/data/translations/en.json',
-      );
-    }
-    if (item.itemId == 'translation_ar_muyassar') {
-      return _loadTranslationPreview(
-        context,
-        'assets/data/translations/ar.json',
-      );
-    }
+    final onlineOnlyMessage = context.l10n.onlineOnly;
     if (item.localPath != null) {
       final file = File(item.localPath!);
       if (await file.exists()) {
         return file.readAsString();
       }
     }
-    return '—';
-  }
-
-  Future<String> _loadTranslationPreview(
-    BuildContext context,
-    String assetPath,
-  ) async {
-    final raw = await DefaultAssetBundle.of(context).loadString(assetPath);
-    final payload = jsonDecode(raw) as List<dynamic>;
-    final preview = payload.take(5).map((item) {
-      final surah = item['surah'];
-      final ayah = item['ayah'];
-      final text = item['text'];
-      return '$surah:$ayah — $text';
-    }).join('\n\n');
-    return preview;
+    return onlineOnlyMessage;
   }
 }
 
