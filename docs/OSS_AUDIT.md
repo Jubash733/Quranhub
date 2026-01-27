@@ -42,4 +42,7 @@ This audit covers:
 - Topic/subject datasets and bounding boxes: require explicit license.
 
 ## Package License Review
-See THIRD_PARTY_NOTICES.md for package list and licenses.
+See THIRD_PARTY_NOTICES.md for package list and licenses. Recent additions
+include hooks_riverpod (MIT), flutter_hooks (MIT), freezed_annotation (MIT),
+isar/isar_flutter_libs (Apache‑2.0), flutter_cache_manager (MIT), and
+background_downloader (BSD‑3‑Clause).

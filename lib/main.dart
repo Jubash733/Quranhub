@@ -1,4 +1,4 @@
-import 'package:ai_assistant/presentation/cubit/ai_assistant_cubit.dart';
+﻿import 'package:ai_assistant/presentation/cubit/ai_assistant_cubit.dart';
 import 'package:ai_assistant/presentation/ui/ai_assistant_screen.dart';
 import 'package:bookmark/presentation/bloc/bloc.dart';
 import 'package:bookmark/presentation/ui/bookmark_screen.dart';
@@ -21,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:home/presentation/bloc/home_bloc.dart';
 import 'package:home/presentation/ui/home_screen.dart';
+import 'package:library_feature/presentation/ui/library_manage_screen.dart';
+import 'package:library_feature/presentation/ui/library_screen.dart';
 import 'package:quran/data/database/database_helper.dart';
 import 'package:quran_app/di/injections.dart';
 import 'package:resources/constant/named_routes.dart';
@@ -31,6 +33,8 @@ import 'package:search/presentation/ui/search_screen.dart';
 import 'package:settings/presentation/ui/settings_screen.dart';
 import 'package:splash/presentation/ui/onboard_screen.dart';
 import 'package:splash/presentation/ui/splash_screen.dart';
+import 'package:dependencies/hooks_riverpod/hooks_riverpod.dart'
+    as riverpod;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +42,7 @@ void main() async {
   Injections().init();
   await sl<DatabaseHelper>().ensureQuranCoreData();
 
-  runApp(const MyApp());
+  runApp(const riverpod.ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -181,6 +185,9 @@ class MyApp extends StatelessWidget {
                     child: const AiAssistantScreen(),
                   ),
               NamedRoutes.settingsScreen: (_) => const SettingsScreen(),
+              NamedRoutes.libraryScreen: (_) => const LibraryScreen(),
+              NamedRoutes.libraryManageScreen: (_) =>
+                  const LibraryManageScreen(),
             },
           );
         },
@@ -188,3 +195,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

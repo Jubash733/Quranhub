@@ -19,6 +19,14 @@ This project uses the following third‑party libraries and tools. Licenses are 
 - path_provider — BSD‑3‑Clause
 - provider — BSD‑3‑Clause
 - share_plus — BSD‑3‑Clause
+- hooks_riverpod — MIT
+- flutter_hooks — MIT
+- freezed_annotation — MIT
+- isar — Apache‑2.0
+- isar_flutter_libs — Apache‑2.0
+- path — BSD‑3‑Clause
+- flutter_cache_manager — MIT
+- background_downloader — BSD‑3‑Clause
 
 ## Notes
 - Additional transitive dependencies are governed by their respective licenses.

@@ -9,4 +9,6 @@ class NamedRoutes {
   static const searchScreen = 'searchScreen';
   static const aiAssistantScreen = 'aiAssistantScreen';
   static const settingsScreen = 'settingsScreen';
+  static const libraryScreen = 'libraryScreen';
+  static const libraryManageScreen = 'libraryManageScreen';
 }

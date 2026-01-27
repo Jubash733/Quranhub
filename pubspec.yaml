@@ -30,10 +30,14 @@ dependencies:
     path: features/ai_assistant
   settings:
     path: features/settings
+  library_feature:
+    path: features/library
 
   # Domains
   quran:
     path: domains/quran
+  library_domain:
+    path: domains/library
 
   # Resources
   resources:

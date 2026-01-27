@@ -73,6 +73,27 @@ class AppLocalizations {
       'language': 'Language',
       'arabicLanguage': 'Arabic',
       'englishLanguage': 'English',
+      'library': 'Library',
+      'libraryManage': 'Manage Library',
+      'librarySearchHint': 'Search books...',
+      'libraryEmpty': 'No items in this category yet.',
+      'usedSpace': 'Used space',
+      'clearAll': 'Clear all',
+      'download': 'Download',
+      'open': 'Open',
+      'delete': 'Delete',
+      'pause': 'Pause',
+      'resume': 'Resume',
+      'cancel': 'Cancel',
+      'timeRemaining': 'Time remaining',
+      'speed': 'Speed',
+      'unavailable': 'Unavailable',
+      'libraryTabTafsir': 'Tafsir',
+      'libraryTabTranslations': 'Translations',
+      'libraryTabAsbab': 'Asbab',
+      'libraryTabIrab': 'I‘rab',
+      'libraryTabTopics': 'Topics',
+      'libraryTabQiraat': 'Qiraat',
     },
     'ar': {
       'appTitle': 'تطبيق القرآن',
@@ -130,6 +151,27 @@ class AppLocalizations {
       'language': 'اللغة',
       'arabicLanguage': 'العربية',
       'englishLanguage': 'الإنجليزية',
+      'library': 'المكتبة',
+      'libraryManage': 'إدارة المكتبة',
+      'librarySearchHint': 'ابحث في الكتب...',
+      'libraryEmpty': 'لا توجد عناصر في هذا القسم بعد.',
+      'usedSpace': 'المساحة المستخدمة',
+      'clearAll': 'حذف الكل',
+      'download': 'تنزيل',
+      'open': 'فتح',
+      'delete': 'حذف',
+      'pause': 'إيقاف مؤقت',
+      'resume': 'استئناف',
+      'cancel': 'إلغاء',
+      'timeRemaining': 'الوقت المتبقي',
+      'speed': 'السرعة',
+      'unavailable': 'غير متاح',
+      'libraryTabTafsir': 'تفاسير',
+      'libraryTabTranslations': 'تراجم',
+      'libraryTabAsbab': 'أسباب النزول',
+      'libraryTabIrab': 'إعراب',
+      'libraryTabTopics': 'موضوعات',
+      'libraryTabQiraat': 'قراءات',
     },
 
 
@@ -193,6 +235,27 @@ class AppLocalizations {
   String get language => _t('language');
   String get arabicLanguage => _t('arabicLanguage');
   String get englishLanguage => _t('englishLanguage');
+  String get library => _t('library');
+  String get libraryManage => _t('libraryManage');
+  String get librarySearchHint => _t('librarySearchHint');
+  String get libraryEmpty => _t('libraryEmpty');
+  String get usedSpace => _t('usedSpace');
+  String get clearAll => _t('clearAll');
+  String get download => _t('download');
+  String get open => _t('open');
+  String get delete => _t('delete');
+  String get pause => _t('pause');
+  String get resume => _t('resume');
+  String get cancel => _t('cancel');
+  String get timeRemaining => _t('timeRemaining');
+  String get speed => _t('speed');
+  String get unavailable => _t('unavailable');
+  String get libraryTabTafsir => _t('libraryTabTafsir');
+  String get libraryTabTranslations => _t('libraryTabTranslations');
+  String get libraryTabAsbab => _t('libraryTabAsbab');
+  String get libraryTabIrab => _t('libraryTabIrab');
+  String get libraryTabTopics => _t('libraryTabTopics');
+  String get libraryTabQiraat => _t('libraryTabQiraat');
 
   String formatSurahAyah(String surahName, int ayahNumber) {
     if (isArabic) {

@@ -102,9 +102,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : kPurplePrimary,
                             ),
                           );
+                          final libraryIcon = InkWell(
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              NamedRoutes.libraryScreen,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Icon(
+                              Icons.library_books_outlined,
+                              size: 22.0,
+                              color: prefSetProvider.isDarkTheme
+                                  ? Colors.white
+                                  : kPurplePrimary,
+                            ),
+                          );
                           final actionChildren = isRtl
-                              ? [settingsIcon, savedIcon]
-                              : [savedIcon, settingsIcon];
+                              ? [settingsIcon, libraryIcon, savedIcon]
+                              : [savedIcon, libraryIcon, settingsIcon];
 
                           return Row(
                             crossAxisAlignment: CrossAxisAlignment.center,

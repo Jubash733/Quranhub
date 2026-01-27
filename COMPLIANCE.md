@@ -10,6 +10,7 @@
 - Quran text is sourced from Tanzil (CC BY 3.0, no modification, attribution required).
 - Translations are sourced from Tanzil (non‑commercial only).
 - Surah metadata from quranjson (MIT).
+- New libraries added for the Library feature (Riverpod, Isar, background_downloader) are permissively licensed (MIT/BSD/Apache‑2.0).
 - Any new dataset must be added to NOTICE.md and docs/OSS_AUDIT.md before shipping.
 
 ## Attribution Requirements
