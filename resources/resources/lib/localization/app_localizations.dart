@@ -109,6 +109,9 @@ class AppLocalizations {
       'clearByReciter': 'Clear by reciter',
       'clearBySurah': 'Clear by surah',
       'cacheCleared': 'Cache cleared',
+      'play': 'Play',
+      'playSurah': 'Play surah from start',
+      'audioPlaying': 'Now playing',
     },
     'ar': {
       'appTitle': 'تطبيق القرآن',
@@ -202,6 +205,9 @@ class AppLocalizations {
       'clearByReciter': 'حذف حسب القارئ',
       'clearBySurah': 'حذف حسب السورة',
       'cacheCleared': 'تم مسح الكاش',
+      'play': 'تشغيل',
+      'playSurah': 'تشغيل السورة من البداية',
+      'audioPlaying': 'يتم التشغيل',
     },
 
 
@@ -301,6 +307,9 @@ class AppLocalizations {
   String get clearByReciter => _t('clearByReciter');
   String get clearBySurah => _t('clearBySurah');
   String get cacheCleared => _t('cacheCleared');
+  String get play => _t('play');
+  String get playSurah => _t('playSurah');
+  String get audioPlaying => _t('audioPlaying');
 
   String formatSurahAyah(String surahName, int ayahNumber) {
     if (isArabic) {

@@ -28,6 +28,7 @@ class VersesWidget extends StatefulWidget {
   final int surahNumber;
   final bool highlight;
   final AudioPlayer player = AudioPlayer();
+  final VoidCallback? onPlayRequest;
 
   VersesWidget({
     super.key,
@@ -36,6 +37,7 @@ class VersesWidget extends StatefulWidget {
     required this.surah,
     required this.surahNumber,
     this.highlight = false,
+    this.onPlayRequest,
   });
 
   @override
@@ -658,6 +660,7 @@ class _VersesWidgetState extends State<VersesWidget> {
                     } else if (playing != true) {
                       return InkWell(
                         onTap: () async {
+                          widget.onPlayRequest?.call();
                           await _playAudio();
                         },
                         borderRadius: BorderRadius.circular(10.0),

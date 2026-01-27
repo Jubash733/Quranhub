@@ -8,3 +8,4 @@ Date: 2026-01-27
 - Build the SQLite FTS search index on demand (first search) and show a dedicated “preparing search” UI, so upgrades can rebuild indexes explicitly.
 - Cache AI tadabbur responses in Isar with a 30-day TTL keyed by (promptType, promptVersion, language, ayahRef); allow an in-memory cache override for tests to avoid native Isar binaries.
 - Cache ayah audio using Dio downloads + Isar metadata in app support storage; enforce 500MB LRU eviction and expose reciter/surah cleanup in Settings. Audio_service background playback is deferred to avoid breaking existing player behavior.
+- Surah playback uses a dedicated AudioPlayer in the detail screen that streams ayah audio sequentially via GetAyahAudioUsecase; starting verse playback stops surah playback to avoid overlapping audio.
