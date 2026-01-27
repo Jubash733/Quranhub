@@ -70,6 +70,10 @@ class AppLocalizations {
       'appearance': 'Appearance',
       'darkMode': 'Dark mode',
       'contentDisabled': 'Translation and tafsir are disabled in settings.',
+      'onlineContentSettings': 'Online content',
+      'translationEdition': 'Translation edition',
+      'tafsirEdition': 'Tafsir edition',
+      'audioReciter': 'Reciter',
       'lastReadEmptyTitle': 'No last read yet',
       'lastReadEmptyMessage': 'Start reading to see your progress here.',
       'language': 'Language',
@@ -151,6 +155,10 @@ class AppLocalizations {
       'appearance': 'المظهر',
       'darkMode': 'الوضع الداكن',
       'contentDisabled': 'الترجمة والتفسير معطّلان في الإعدادات.',
+      'onlineContentSettings': 'المحتوى عبر الانترنت',
+      'translationEdition': 'نسخة الترجمة',
+      'tafsirEdition': 'نسخة التفسير',
+      'audioReciter': 'القارئ',
       'lastReadEmptyTitle': 'لا توجد قراءة سابقة',
       'lastReadEmptyMessage': 'ابدأ القراءة لتظهر هنا.',
       'language': 'اللغة',
@@ -238,6 +246,10 @@ class AppLocalizations {
   String get appearance => _t('appearance');
   String get darkMode => _t('darkMode');
   String get contentDisabled => _t('contentDisabled');
+  String get onlineContentSettings => _t('onlineContentSettings');
+  String get translationEdition => _t('translationEdition');
+  String get tafsirEdition => _t('tafsirEdition');
+  String get audioReciter => _t('audioReciter');
   String get lastReadEmptyTitle => _t('lastReadEmptyTitle');
   String get lastReadEmptyMessage => _t('lastReadEmptyMessage');
   String get language => _t('language');

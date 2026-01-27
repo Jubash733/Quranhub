@@ -7,16 +7,19 @@ import 'package:quran/data/models/translation_cache_entry.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:quran/domain/entities/ayah_translation_entity.dart';
 import 'package:quran/domain/repositories/translation_repository.dart';
+import 'package:quran/domain/repositories/app_settings_repository.dart';
 import 'package:resources/constant/api_constant.dart';
 
 class TranslationRepositoryImpl extends TranslationRepository {
   final TranslationRemoteDataSource remoteDataSource;
   final TranslationCacheDataSource cacheDataSource;
+  final AppSettingsRepository settingsRepository;
   static const _cacheTtl = Duration(days: 7);
 
   TranslationRepositoryImpl({
     required this.remoteDataSource,
     required this.cacheDataSource,
+    required this.settingsRepository,
   });
 
   @override
@@ -26,7 +29,7 @@ class TranslationRepositoryImpl extends TranslationRepository {
   }) async {
     TranslationCacheEntry? cached;
     try {
-      final edition = _resolveEdition(languageCode);
+      final edition = await _resolveEdition(languageCode);
       cached = await cacheDataSource.getCachedTranslation(
         ref,
         languageCode: languageCode,
@@ -90,7 +93,11 @@ class TranslationRepositoryImpl extends TranslationRepository {
     return 'en';
   }
 
-  String _resolveEdition(String languageCode) {
+  Future<String> _resolveEdition(String languageCode) async {
+    final settings = await settingsRepository.getSettings();
+    if (settings.translationLanguage == languageCode) {
+      return settings.translationEdition;
+    }
     if (languageCode == 'ar') {
       return ApiConstant.alquranTranslationAr;
     }

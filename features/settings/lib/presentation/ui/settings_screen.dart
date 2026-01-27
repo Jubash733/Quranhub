@@ -2,9 +2,12 @@ import 'package:common/utils/provider/preference_settings_provider.dart';
 import 'package:dependencies/provider/provider.dart';
 import 'package:dependencies/show_up_animation/show_up_animation.dart';
 import 'package:flutter/material.dart';
+import 'package:dependencies/hooks_riverpod/hooks_riverpod.dart'
+    as riverpod;
 import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
+import 'package:settings/presentation/controller/app_settings_provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -162,6 +165,97 @@ class SettingsScreen extends StatelessWidget {
                   const SizedBox(height: 12.0),
                   _sectionTitle(
                     context,
+                    context.l10n.onlineContentSettings,
+                    prefSetProvider,
+                  ),
+                  const SizedBox(height: 10.0),
+                  riverpod.Consumer(
+                    builder: (context, ref, _) {
+                      final state =
+                          ref.watch(appSettingsControllerProvider);
+                      return state.when(
+                        data: (settings) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _settingsDropdown(
+                                context,
+                                label: context.l10n.translationEdition,
+                                value: settings.translationEdition,
+                                items: _translationOptions,
+                                onChanged: (option) {
+                                  if (option == null) return;
+                                  ref
+                                      .read(appSettingsControllerProvider
+                                          .notifier)
+                                      .updateTranslation(
+                                        option.value,
+                                        option.languageCode,
+                                      );
+                                },
+                              ),
+                              const SizedBox(height: 12.0),
+                              _settingsDropdown(
+                                context,
+                                label: context.l10n.tafsirEdition,
+                                value: settings.tafsirEdition,
+                                items: _tafsirOptions,
+                                onChanged: (option) {
+                                  if (option == null) return;
+                                  ref
+                                      .read(appSettingsControllerProvider
+                                          .notifier)
+                                      .updateTafsir(
+                                        option.value,
+                                        option.languageCode,
+                                      );
+                                },
+                              ),
+                              const SizedBox(height: 12.0),
+                              _settingsDropdown(
+                                context,
+                                label: context.l10n.audioReciter,
+                                value: settings.audioEdition,
+                                items: _reciterOptions,
+                                onChanged: (option) {
+                                  if (option == null) return;
+                                  ref
+                                      .read(appSettingsControllerProvider
+                                          .notifier)
+                                      .updateAudio(option.value);
+                                },
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                context.l10n.onlineOnly,
+                                style: kSubtitle.copyWith(
+                                  fontSize: 12.0,
+                                  color: prefSetProvider.isDarkTheme
+                                      ? Colors.white70
+                                      : kGrey,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                        loading: () => const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                        error: (error, _) => Text(
+                          context.l10n.unexpectedError,
+                          style: kSubtitle.copyWith(
+                            color: prefSetProvider.isDarkTheme
+                                ? Colors.white70
+                                : kGrey,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24.0),
+                  _sectionTitle(
+                    context,
                     context.l10n.appearance,
                     prefSetProvider,
                   ),
@@ -202,4 +296,79 @@ class SettingsScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _settingsDropdown(
+    BuildContext context, {
+    required String label,
+    required String value,
+    required List<_SettingsOption> items,
+    required ValueChanged<_SettingsOption?> onChanged,
+  }) {
+    return DropdownButtonFormField<_SettingsOption>(
+      key: ValueKey(value),
+      initialValue: items.firstWhere(
+        (item) => item.value == value,
+        orElse: () => items.first,
+      ),
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+      ),
+      items: items
+          .map(
+            (option) => DropdownMenuItem<_SettingsOption>(
+              value: option,
+              child: Text(option.label),
+            ),
+          )
+          .toList(),
+      onChanged: onChanged,
+    );
+  }
 }
+
+class _SettingsOption {
+  const _SettingsOption({
+    required this.value,
+    required this.label,
+    this.languageCode = 'ar',
+  });
+
+  final String value;
+  final String label;
+  final String languageCode;
+}
+
+const List<_SettingsOption> _translationOptions = [
+  _SettingsOption(
+    value: 'en.sahih',
+    label: 'Sahih International (EN)',
+    languageCode: 'en',
+  ),
+  _SettingsOption(
+    value: 'ar.muyassar',
+    label: 'التفسير الميسر (AR)',
+    languageCode: 'ar',
+  ),
+];
+
+const List<_SettingsOption> _tafsirOptions = [
+  _SettingsOption(
+    value: 'ar.muyassar',
+    label: 'التفسير الميسر (AR)',
+    languageCode: 'ar',
+  ),
+];
+
+const List<_SettingsOption> _reciterOptions = [
+  _SettingsOption(
+    value: 'ar.alafasy',
+    label: 'مشاري العفاسي',
+  ),
+  _SettingsOption(
+    value: 'ar.abdurrahmaansudais',
+    label: 'السديس',
+  ),
+];

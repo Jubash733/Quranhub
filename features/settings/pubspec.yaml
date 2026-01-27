@@ -15,6 +15,10 @@ dependencies:
   resources:
     path: ../../resources/resources
 
+  # Domains
+  quran:
+    path: ../../domains/quran
+
   # Shared libraries
   common:
     path: ../../shared_libraries/common

@@ -6,7 +6,9 @@ import 'package:quran/data/models/ayah_translation_dto.dart';
 import 'package:quran/data/models/surah_dto.dart';
 import 'package:quran/data/models/translation_cache_entry.dart';
 import 'package:quran/data/repositories/translation_repository_impl.dart';
+import 'package:quran/domain/entities/app_settings_entity.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
+import 'package:quran/domain/repositories/app_settings_repository.dart';
 
 class FakeTranslationRemoteDataSource implements TranslationRemoteDataSource {
   FakeTranslationRemoteDataSource(this.data);
@@ -64,6 +66,66 @@ class FakeTranslationCacheDataSource implements TranslationCacheDataSource {
   DatabaseHelper get databaseHelper => throw UnimplementedError();
 }
 
+class FakeAppSettingsRepository implements AppSettingsRepository {
+  FakeAppSettingsRepository();
+
+  AppSettingsEntity _settings = AppSettingsEntity(
+    translationEdition: 'en.sahih',
+    translationLanguage: 'en',
+    tafsirEdition: 'ar.muyassar',
+    tafsirLanguage: 'ar',
+    audioEdition: 'ar.alafasy',
+    updatedAt: DateTime(2025, 1, 1),
+  );
+
+  @override
+  Future<AppSettingsEntity> getSettings() async => _settings;
+
+  @override
+  Stream<AppSettingsEntity> watchSettings() async* {
+    yield _settings;
+  }
+
+  @override
+  Future<void> updateAudioEdition(String edition) async {
+    _settings = AppSettingsEntity(
+      translationEdition: _settings.translationEdition,
+      translationLanguage: _settings.translationLanguage,
+      tafsirEdition: _settings.tafsirEdition,
+      tafsirLanguage: _settings.tafsirLanguage,
+      audioEdition: edition,
+      updatedAt: DateTime.now(),
+    );
+  }
+
+  @override
+  Future<void> updateTafsirEdition(String edition, String languageCode) async {
+    _settings = AppSettingsEntity(
+      translationEdition: _settings.translationEdition,
+      translationLanguage: _settings.translationLanguage,
+      tafsirEdition: edition,
+      tafsirLanguage: languageCode,
+      audioEdition: _settings.audioEdition,
+      updatedAt: DateTime.now(),
+    );
+  }
+
+  @override
+  Future<void> updateTranslationEdition(
+    String edition,
+    String languageCode,
+  ) async {
+    _settings = AppSettingsEntity(
+      translationEdition: edition,
+      translationLanguage: languageCode,
+      tafsirEdition: _settings.tafsirEdition,
+      tafsirLanguage: _settings.tafsirLanguage,
+      audioEdition: _settings.audioEdition,
+      updatedAt: DateTime.now(),
+    );
+  }
+}
+
 void main() {
   test('returns translation from remote when cache empty', () async {
     const ref = AyahRef(surah: 1, ayah: 2);
@@ -80,6 +142,7 @@ void main() {
     final repository = TranslationRepositoryImpl(
       remoteDataSource: dataSource,
       cacheDataSource: FakeTranslationCacheDataSource(),
+      settingsRepository: FakeAppSettingsRepository(),
     );
 
     final result = await repository.getAyahTranslation(ref, languageCode: 'ar');
@@ -99,6 +162,7 @@ void main() {
     final repository = TranslationRepositoryImpl(
       remoteDataSource: FakeTranslationRemoteDataSource({}),
       cacheDataSource: FakeTranslationCacheDataSource(),
+      settingsRepository: FakeAppSettingsRepository(),
     );
 
     final result = await repository.getAyahTranslation(ref, languageCode: 'ar');
@@ -121,6 +185,7 @@ void main() {
     final repository = TranslationRepositoryImpl(
       remoteDataSource: dataSource,
       cacheDataSource: FakeTranslationCacheDataSource(),
+      settingsRepository: FakeAppSettingsRepository(),
     );
 
     final result = await repository.getAyahTranslation(ref, languageCode: 'en');

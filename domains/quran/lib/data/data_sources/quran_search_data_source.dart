@@ -2,6 +2,7 @@
 import 'package:quran/data/models/search_row.dart';
 import 'package:quran/data/utils/quran_text_normalizer.dart';
 import 'package:resources/constant/api_constant.dart';
+import 'package:quran/domain/repositories/app_settings_repository.dart';
 
 abstract class QuranSearchDataSource {
   bool get isSupported;
@@ -11,9 +12,13 @@ abstract class QuranSearchDataSource {
 }
 
 class QuranSearchDataSourceImpl implements QuranSearchDataSource {
-  QuranSearchDataSourceImpl({required this.databaseHelper});
+  QuranSearchDataSourceImpl({
+    required this.databaseHelper,
+    this.settingsRepository,
+  });
 
   final DatabaseHelper databaseHelper;
+  final AppSettingsRepository? settingsRepository;
 
   @override
   bool get isSupported => databaseHelper.isSupported;
@@ -39,13 +44,23 @@ class QuranSearchDataSourceImpl implements QuranSearchDataSource {
     if (ftsQuery.isEmpty) {
       return [];
     }
+    final edition = await _resolveEdition(languageCode);
     final rows = await databaseHelper.searchAyah(
       ftsQuery,
       languageCode: languageCode,
-      edition: languageCode == 'ar'
-          ? ApiConstant.alquranTranslationAr
-          : ApiConstant.alquranTranslationEn,
+      edition: edition,
     );
     return rows.map(SearchRow.fromMap).toList();
+  }
+
+  Future<String> _resolveEdition(String languageCode) async {
+    final settings = await settingsRepository?.getSettings();
+    if (settings != null && settings.translationLanguage == languageCode) {
+      return settings.translationEdition;
+    }
+    if (languageCode == 'ar') {
+      return ApiConstant.alquranTranslationAr;
+    }
+    return ApiConstant.alquranTranslationEn;
   }
 }
