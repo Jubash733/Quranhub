@@ -23,7 +23,6 @@ import 'package:home/presentation/bloc/home_bloc.dart';
 import 'package:home/presentation/ui/home_screen.dart';
 import 'package:library_feature/presentation/ui/library_manage_screen.dart';
 import 'package:library_feature/presentation/ui/library_screen.dart';
-import 'package:quran/data/database/database_helper.dart';
 import 'package:quran_app/di/injections.dart';
 import 'package:resources/constant/named_routes.dart';
 import 'package:resources/constant/route_args.dart';
@@ -37,13 +36,16 @@ import 'package:splash/presentation/ui/splash_screen.dart';
 import 'package:dependencies/hooks_riverpod/hooks_riverpod.dart'
     as riverpod;
 
+import 'dart:async';
+import 'package:quran/data/database/database_helper.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppConfig.load();
   Injections().init();
-  await sl<DatabaseHelper>().ensureQuranCoreData();
 
   runApp(const riverpod.ProviderScope(child: MyApp()));
+  unawaited(sl<DatabaseHelper>().ensureQuranCoreData());
 }
 
 class MyApp extends StatelessWidget {

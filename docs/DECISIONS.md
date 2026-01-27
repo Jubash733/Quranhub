@@ -12,3 +12,4 @@ Date: 2026-01-27
 - Apply subtle AnimatedSwitcher transitions for list/search state changes and FadeUpwards page transitions to unify motion without heavy animations.
 - Audio advanced controls are stored in SharedPreferences (speed/repeat/sleep timer) via PreferenceSettingsProvider and applied to ayah and surah playback without altering existing cache/LRU logic.
 - If SQLite FTS5 is unavailable at runtime, fall back to normalized LIKE search over cached text/translation and keep the same search UI/flow.
+- Move Quran core seeding to a post-runApp task to avoid blocking startup; this prevents black screens on slow devices while data loads in the background.
