@@ -1,4 +1,3 @@
-import 'package:common/utils/navigation/navigation.dart';
 import 'package:dependencies/show_up_animation/show_up_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:resources/constant/named_routes.dart';
@@ -6,20 +5,31 @@ import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
   final duration = const Duration(seconds: 3);
 
-  SplashScreen({super.key}) {
+  @override
+  void initState() {
+    super.initState();
     _handleOnInitialize();
   }
 
   void _handleOnInitialize() async {
-    Future.delayed(duration).then(
-      (_) => Navigator.pushNamedAndRemoveUntil(
-        Navigation.getContext(),
-        NamedRoutes.onBoardScreen,
-        (route) => false,
-      ),
+    await Future.delayed(duration);
+    if (!mounted) {
+      return;
+    }
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      NamedRoutes.onBoardScreen,
+      (route) => false,
     );
   }
 

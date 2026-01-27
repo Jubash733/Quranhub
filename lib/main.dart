@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
             ],
             initialRoute: NamedRoutes.splashScreen,
             routes: {
-              NamedRoutes.splashScreen: (_) => SplashScreen(),
+              NamedRoutes.splashScreen: (_) => const SplashScreen(),
               NamedRoutes.onBoardScreen: (_) => const OnBoardScreen(),
               NamedRoutes.homeScreen: (_) => MultiBlocProvider(
                     providers: [
