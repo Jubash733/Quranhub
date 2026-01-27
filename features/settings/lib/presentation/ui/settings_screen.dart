@@ -312,6 +312,80 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 24.0),
+                  _sectionTitle(
+                    context,
+                    context.l10n.audioSettings,
+                    prefSetProvider,
+                  ),
+                  const SizedBox(height: 10.0),
+                  _sectionTitle(
+                    context,
+                    context.l10n.playbackSpeed,
+                    prefSetProvider,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Wrap(
+                    spacing: 8.0,
+                    children: _speedOptions
+                        .map(
+                          (speed) => ChoiceChip(
+                            label: Text('${speed}x'),
+                            selected:
+                                prefSetProvider.audioSpeed == speed,
+                            onSelected: (_) =>
+                                prefSetProvider.setAudioSpeed(speed),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  const SizedBox(height: 16.0),
+                  _sectionTitle(
+                    context,
+                    context.l10n.repeatCount,
+                    prefSetProvider,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Wrap(
+                    spacing: 8.0,
+                    children: _repeatOptions
+                        .map(
+                          (count) => ChoiceChip(
+                            label: Text('$count'),
+                            selected:
+                                prefSetProvider.audioRepeatCount == count,
+                            onSelected: (_) =>
+                                prefSetProvider.setAudioRepeatCount(count),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  const SizedBox(height: 16.0),
+                  _sectionTitle(
+                    context,
+                    context.l10n.sleepTimer,
+                    prefSetProvider,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Wrap(
+                    spacing: 8.0,
+                    children: _sleepOptions
+                        .map(
+                          (minutes) => ChoiceChip(
+                            label: Text(
+                              minutes == 0
+                                  ? context.l10n.off
+                                  : '$minutes ${context.l10n.minutes}',
+                            ),
+                            selected:
+                                prefSetProvider.audioSleepMinutes ==
+                                    minutes,
+                            onSelected: (_) =>
+                                prefSetProvider.setAudioSleepMinutes(minutes),
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ],
               ),
             ),
@@ -411,3 +485,7 @@ const List<_SettingsOption> _reciterOptions = [
     label: 'السديس',
   ),
 ];
+
+const List<double> _speedOptions = [0.75, 1.0, 1.25, 1.5];
+const List<int> _repeatOptions = [1, 2, 3, 5, 10];
+const List<int> _sleepOptions = [0, 5, 10, 20, 30];

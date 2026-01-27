@@ -13,6 +13,9 @@ class PreferenceSettingsProvider extends ChangeNotifier {
     _getArabicFontFamily();
     _getTranslationPreference();
     _getTafsirPreference();
+    _getAudioSpeed();
+    _getAudioRepeatCount();
+    _getAudioSleepMinutes();
   }
 
   bool _isDarkTheme = false;
@@ -33,6 +36,15 @@ class PreferenceSettingsProvider extends ChangeNotifier {
 
   bool _showTafsir = true;
   bool get showTafsir => _showTafsir;
+
+  double _audioSpeed = 1.0;
+  double get audioSpeed => _audioSpeed;
+
+  int _audioRepeatCount = 1;
+  int get audioRepeatCount => _audioRepeatCount;
+
+  int _audioSleepMinutes = 0;
+  int get audioSleepMinutes => _audioSleepMinutes;
 
   void _getTheme() async {
     _isDarkTheme = await preferenceSettingsHelper.isDarkTheme;
@@ -67,6 +79,21 @@ class PreferenceSettingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _getAudioSpeed() async {
+    _audioSpeed = await preferenceSettingsHelper.storedAudioSpeed;
+    notifyListeners();
+  }
+
+  void _getAudioRepeatCount() async {
+    _audioRepeatCount = await preferenceSettingsHelper.storedAudioRepeatCount;
+    notifyListeners();
+  }
+
+  void _getAudioSleepMinutes() async {
+    _audioSleepMinutes = await preferenceSettingsHelper.storedAudioSleepMinutes;
+    notifyListeners();
+  }
+
   void enableDarkTheme(bool value) {
     preferenceSettingsHelper.setDarkTheme(value);
     _getTheme();
@@ -98,6 +125,24 @@ class PreferenceSettingsProvider extends ChangeNotifier {
   void setTafsirEnabled(bool value) {
     preferenceSettingsHelper.setTafsirEnabled(value);
     _showTafsir = value;
+    notifyListeners();
+  }
+
+  void setAudioSpeed(double value) {
+    preferenceSettingsHelper.setAudioSpeed(value);
+    _audioSpeed = value;
+    notifyListeners();
+  }
+
+  void setAudioRepeatCount(int value) {
+    preferenceSettingsHelper.setAudioRepeatCount(value);
+    _audioRepeatCount = value;
+    notifyListeners();
+  }
+
+  void setAudioSleepMinutes(int value) {
+    preferenceSettingsHelper.setAudioSleepMinutes(value);
+    _audioSleepMinutes = value;
     notifyListeners();
   }
 }

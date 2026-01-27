@@ -43,6 +43,9 @@ class _VersesWidgetState extends State<VersesWidget> {
   StreamSubscription<PlayerState>? _playerStateSubscription;
   final _sl = GetIt.instance;
   int? _surahNumber;
+  int _repeatCount = 1;
+  int _repeatRemaining = 1;
+  Timer? _sleepTimer;
 
   @override
   void initState() {
@@ -77,7 +80,14 @@ class _VersesWidgetState extends State<VersesWidget> {
         _persistPosition();
       }
       if (state.processingState == ProcessingState.completed) {
-        _persistPosition(reset: true);
+        if (_repeatRemaining > 1) {
+          _repeatRemaining -= 1;
+          widget.player.seek(Duration.zero);
+          widget.player.play();
+        } else {
+          _persistPosition(reset: true);
+          _repeatRemaining = _repeatCount;
+        }
       }
     });
   }
@@ -86,6 +96,7 @@ class _VersesWidgetState extends State<VersesWidget> {
   void dispose() {
     _positionSubscription?.cancel();
     _playerStateSubscription?.cancel();
+    _sleepTimer?.cancel();
     widget.player.dispose();
     super.dispose();
   }
@@ -109,6 +120,9 @@ class _VersesWidgetState extends State<VersesWidget> {
       return;
     }
     setState(() => _isAudioLoading = true);
+    _repeatCount = widget.prefSetProvider.audioRepeatCount;
+    _repeatRemaining = _repeatCount;
+    _scheduleSleepTimer();
     final ref = AyahRef(
       surah: surahNumber,
       ayah: widget.bookmark.inSurah,
@@ -137,6 +151,7 @@ class _VersesWidgetState extends State<VersesWidget> {
               ? AudioSource.uri(Uri.file(audio.localPath!))
               : AudioSource.uri(Uri.parse(audio.url));
           await widget.player.setAudioSource(source);
+          await widget.player.setSpeed(widget.prefSetProvider.audioSpeed);
           final savedPosition = await _loadSavedPosition(audio);
           if (savedPosition > Duration.zero) {
             await widget.player.seek(savedPosition);
@@ -177,6 +192,17 @@ class _VersesWidgetState extends State<VersesWidget> {
 
   String _positionKey(AyahAudioEntity audio) {
     return 'audio_pos:${audio.edition}:${audio.ref.surah}:${audio.ref.ayah}';
+  }
+
+  void _scheduleSleepTimer() {
+    _sleepTimer?.cancel();
+    final minutes = widget.prefSetProvider.audioSleepMinutes;
+    if (minutes <= 0) {
+      return;
+    }
+    _sleepTimer = Timer(Duration(minutes: minutes), () {
+      widget.player.stop();
+    });
   }
 
   Future<void> _resolveSurahNumber() async {

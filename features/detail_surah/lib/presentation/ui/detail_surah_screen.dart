@@ -42,6 +42,9 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
   bool _isSurahPlaying = false;
   bool _isSurahLoading = false;
   String? _surahError;
+  int _repeatCount = 1;
+  int _repeatRemaining = 1;
+  Timer? _sleepTimer;
 
   @override
   void initState() {
@@ -73,11 +76,15 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
   @override
   void dispose() {
     _surahPlayerSubscription?.cancel();
+    _sleepTimer?.cancel();
     _surahPlayer.dispose();
     super.dispose();
   }
 
-  Future<void> _startSurahPlayback(DetailSurahEntity surah) async {
+  Future<void> _startSurahPlayback(
+    DetailSurahEntity surah,
+    PreferenceSettingsProvider prefSetProvider,
+  ) async {
     if (_isSurahLoading) {
       return;
     }
@@ -85,6 +92,10 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
       _surahError = null;
       _isSurahLoading = true;
     });
+    _repeatCount = prefSetProvider.audioRepeatCount;
+    _repeatRemaining = _repeatCount;
+    await _surahPlayer.setSpeed(prefSetProvider.audioSpeed);
+    _scheduleSleepTimer(prefSetProvider.audioSleepMinutes);
     _surahQueue = surah.verses
         .map((verse) =>
             AyahRef(surah: surah.number, ayah: verse.number.inSurah))
@@ -93,20 +104,26 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
     await _playCurrentAyah();
   }
 
-  Future<void> _toggleSurahPlayback(DetailSurahEntity surah) async {
+  Future<void> _toggleSurahPlayback(
+    DetailSurahEntity surah,
+    PreferenceSettingsProvider prefSetProvider,
+  ) async {
     if (_isSurahPlaying) {
       await _surahPlayer.pause();
       return;
     }
     if (_surahQueue.isEmpty) {
-      await _startSurahPlayback(surah);
+      await _startSurahPlayback(surah, prefSetProvider);
       return;
     }
+    await _surahPlayer.setSpeed(prefSetProvider.audioSpeed);
+    _scheduleSleepTimer(prefSetProvider.audioSleepMinutes);
     await _surahPlayer.play();
   }
 
   Future<void> _stopSurahPlayback() async {
     await _surahPlayer.stop();
+    _sleepTimer?.cancel();
     setState(() {
       _isSurahPlaying = false;
       _isSurahLoading = false;
@@ -162,12 +179,29 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
   }
 
   Future<void> _playNextAyah() async {
+    if (_repeatRemaining > 1) {
+      _repeatRemaining -= 1;
+      await _surahPlayer.seek(Duration.zero);
+      await _surahPlayer.play();
+      return;
+    }
+    _repeatRemaining = _repeatCount;
     if (_currentSurahIndex + 1 >= _surahQueue.length) {
       await _stopSurahPlayback();
       return;
     }
     _currentSurahIndex += 1;
     await _playCurrentAyah();
+  }
+
+  void _scheduleSleepTimer(int minutes) {
+    _sleepTimer?.cancel();
+    if (minutes <= 0) {
+      return;
+    }
+    _sleepTimer = Timer(Duration(minutes: minutes), () {
+      _stopSurahPlayback();
+    });
   }
 
   @override
@@ -320,7 +354,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                                 const SizedBox(height: 12.0),
                                 _buildSurahAudioControls(
                                   surah,
-                                  prefSetProvider.isDarkTheme,
+                                  prefSetProvider,
                                 ),
                                 const SizedBox(height: 30.0),
                                 ShowUpAnimation(
@@ -367,7 +401,11 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                             _surahError != null)
                           _buildSurahAudioBar(
                             surah,
+                            prefSetProvider,
                             prefSetProvider.isDarkTheme,
+                            prefSetProvider.audioSpeed,
+                            prefSetProvider.audioRepeatCount,
+                            prefSetProvider.audioSleepMinutes,
                           ),
                       ],
                     );
@@ -385,8 +423,9 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
 
   Widget _buildSurahAudioControls(
     DetailSurahEntity surah,
-    bool isDarkTheme,
+    PreferenceSettingsProvider prefSetProvider,
   ) {
+    final isDarkTheme = prefSetProvider.isDarkTheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       decoration: BoxDecoration(
@@ -413,7 +452,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
           TextButton(
             onPressed: _isSurahLoading
                 ? null
-                : () => _toggleSurahPlayback(surah),
+                : () => _toggleSurahPlayback(surah, prefSetProvider),
             child: Text(
               _isSurahPlaying ? context.l10n.pause : context.l10n.play,
               style: kSubtitle.copyWith(
@@ -429,7 +468,11 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
 
   Widget _buildSurahAudioBar(
     DetailSurahEntity surah,
+    PreferenceSettingsProvider prefSetProvider,
     bool isDarkTheme,
+    double speed,
+    int repeatCount,
+    int sleepMinutes,
   ) {
     final currentAyah = _surahQueue.isNotEmpty &&
             _currentSurahIndex < _surahQueue.length
@@ -482,6 +525,14 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                     color: isDarkTheme ? kGreyLight : kGrey,
                   ),
                 ),
+                const SizedBox(height: 4.0),
+                Text(
+                  '${speed}x · ${context.l10n.repeatCount}: $repeatCount · ${context.l10n.sleepTimer}: ${sleepMinutes == 0 ? context.l10n.off : '$sleepMinutes ${context.l10n.minutes}'}',
+                  style: kSubtitle.copyWith(
+                    fontSize: 11.0,
+                    color: isDarkTheme ? kGreyLight : kGrey,
+                  ),
+                ),
                 if (_surahError != null && _surahError!.isNotEmpty) ...[
                   const SizedBox(height: 4.0),
                   Text(
@@ -499,7 +550,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
           IconButton(
             onPressed: _isSurahLoading
                 ? null
-                : () => _toggleSurahPlayback(surah),
+                : () => _toggleSurahPlayback(surah, prefSetProvider),
             icon: Icon(
               _isSurahPlaying ? Icons.pause : Icons.play_arrow,
               color: isDarkTheme ? Colors.white : kPurplePrimary,

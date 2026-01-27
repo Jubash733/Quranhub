@@ -112,6 +112,12 @@ class AppLocalizations {
       'play': 'Play',
       'playSurah': 'Play surah from start',
       'audioPlaying': 'Now playing',
+      'audioSettings': 'Audio settings',
+      'playbackSpeed': 'Playback speed',
+      'repeatCount': 'Repeat count',
+      'sleepTimer': 'Sleep timer',
+      'minutes': 'min',
+      'off': 'Off',
     },
     'ar': {
       'appTitle': 'تطبيق القرآن',
@@ -208,6 +214,12 @@ class AppLocalizations {
       'play': 'تشغيل',
       'playSurah': 'تشغيل السورة من البداية',
       'audioPlaying': 'يتم التشغيل',
+      'audioSettings': 'إعدادات الصوت',
+      'playbackSpeed': 'سرعة التشغيل',
+      'repeatCount': 'عدد التكرار',
+      'sleepTimer': 'مؤقت النوم',
+      'minutes': 'دق',
+      'off': 'إيقاف',
     },
 
 
@@ -310,6 +322,12 @@ class AppLocalizations {
   String get play => _t('play');
   String get playSurah => _t('playSurah');
   String get audioPlaying => _t('audioPlaying');
+  String get audioSettings => _t('audioSettings');
+  String get playbackSpeed => _t('playbackSpeed');
+  String get repeatCount => _t('repeatCount');
+  String get sleepTimer => _t('sleepTimer');
+  String get minutes => _t('minutes');
+  String get off => _t('off');
 
   String formatSurahAyah(String surahName, int ayahNumber) {
     if (isArabic) {

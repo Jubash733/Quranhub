@@ -11,6 +11,9 @@ class PreferenceSettingsHelper {
   static const arabicFontFamily = 'arabic_font_family';
   static const showTranslation = 'show_translation';
   static const showTafsir = 'show_tafsir';
+  static const audioSpeed = 'audio_speed';
+  static const audioRepeatCount = 'audio_repeat_count';
+  static const audioSleepMinutes = 'audio_sleep_minutes';
 
   Future<bool> get isDarkTheme async {
     final prefs = await sharedPreferences;
@@ -42,6 +45,21 @@ class PreferenceSettingsHelper {
     return prefs.getBool(showTafsir) ?? true;
   }
 
+  Future<double> get storedAudioSpeed async {
+    final prefs = await sharedPreferences;
+    return prefs.getDouble(audioSpeed) ?? 1.0;
+  }
+
+  Future<int> get storedAudioRepeatCount async {
+    final prefs = await sharedPreferences;
+    return prefs.getInt(audioRepeatCount) ?? 1;
+  }
+
+  Future<int> get storedAudioSleepMinutes async {
+    final prefs = await sharedPreferences;
+    return prefs.getInt(audioSleepMinutes) ?? 0;
+  }
+
   void setDarkTheme(bool value) async {
     final prefs = await sharedPreferences;
     prefs.setBool(darkTheme, value);
@@ -70,5 +88,20 @@ class PreferenceSettingsHelper {
   void setTafsirEnabled(bool value) async {
     final prefs = await sharedPreferences;
     prefs.setBool(showTafsir, value);
+  }
+
+  void setAudioSpeed(double value) async {
+    final prefs = await sharedPreferences;
+    prefs.setDouble(audioSpeed, value);
+  }
+
+  void setAudioRepeatCount(int value) async {
+    final prefs = await sharedPreferences;
+    prefs.setInt(audioRepeatCount, value);
+  }
+
+  void setAudioSleepMinutes(int value) async {
+    final prefs = await sharedPreferences;
+    prefs.setInt(audioSleepMinutes, value);
   }
 }

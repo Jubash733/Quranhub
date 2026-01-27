@@ -10,3 +10,4 @@ Date: 2026-01-27
 - Cache ayah audio using Dio downloads + Isar metadata in app support storage; enforce 500MB LRU eviction and expose reciter/surah cleanup in Settings. Audio_service background playback is deferred to avoid breaking existing player behavior.
 - Surah playback uses a dedicated AudioPlayer in the detail screen that streams ayah audio sequentially via GetAyahAudioUsecase; starting verse playback stops surah playback to avoid overlapping audio.
 - Apply subtle AnimatedSwitcher transitions for list/search state changes and FadeUpwards page transitions to unify motion without heavy animations.
+- Audio advanced controls are stored in SharedPreferences (speed/repeat/sleep timer) via PreferenceSettingsProvider and applied to ayah and surah playback without altering existing cache/LRU logic.
