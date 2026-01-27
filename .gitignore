@@ -37,6 +37,9 @@ migrate_working_dir/
 **/ios/Flutter/App.framework
 **/ios/Flutter/Flutter.podspec
 
+# Tooling temp
+tools/tmp/
+
 # Symbolication related
 app.*.symbols
 
