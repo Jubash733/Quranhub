@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dependencies/sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:common/utils/helper/asset_warning_helper.dart';
 import 'package:quran/data/models/bookmark_verses_dto.dart';
 import 'package:quran/data/models/last_read_surah_dto.dart';
 import 'package:quran/data/utils/quran_text_normalizer.dart';
@@ -186,11 +187,11 @@ class DatabaseHelper {
   }
 
   Future<void> _seedQuranCore(Database db) async {
-    final textRaw = await rootBundle.loadString('assets/data/quran_text.json');
-    final textPayload = jsonDecode(textRaw) as List<dynamic>;
-
-    final surahRaw = await rootBundle.loadString('assets/data/surah_meta.json');
-    final surahPayload = jsonDecode(surahRaw) as List<dynamic>;
+    final textPayload = await _loadJsonList('assets/data/quran_text.json');
+    final surahPayload = await _loadJsonList('assets/data/surah_meta.json');
+    if (textPayload == null || surahPayload == null) {
+      return;
+    }
 
     await db.delete(_tblQuranAyah);
     await db.delete(_tblQuranSurah);
@@ -228,6 +229,25 @@ class DatabaseHelper {
       );
     }
     await ayahBatch.commit(noResult: true);
+  }
+
+  Future<List<dynamic>?> _loadJsonList(String assetPath) async {
+    try {
+      final raw = await rootBundle.loadString(assetPath);
+      final payload = jsonDecode(raw);
+      if (payload is! List) {
+        AssetWarningHelper.reportInvalidAsset(assetPath);
+        return null;
+      }
+      return payload;
+    } catch (e) {
+      if (AssetWarningHelper.isMissingAssetError(e)) {
+        AssetWarningHelper.reportMissingAsset(assetPath);
+      } else {
+        AssetWarningHelper.reportInvalidAsset(assetPath);
+      }
+      return null;
+    }
   }
 
   Future<List<Map<String, dynamic>>> searchAyah(

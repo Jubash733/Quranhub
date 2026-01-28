@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:common/utils/helper/asset_warning_helper.dart';
 import 'package:quran/data/models/local_ayah_data.dart';
 import 'package:quran/data/models/surah_dto.dart';
 import 'package:quran/data/models/detail_surah_dto.dart';
@@ -179,13 +180,30 @@ class QuranAssetDataSourceImpl implements QuranAssetDataSource {
     if (_loadedText) {
       return;
     }
-    final raw = await rootBundle.loadString('assets/data/quran_text.json');
-    final payload = jsonDecode(raw) as List<dynamic>;
-    final data = payload
-        .map((item) => LocalAyahData.fromTextJson(item))
-        .toList();
-    _cacheMap = {for (final item in data) item.key(): item};
-    _loadedText = true;
+    const assetPath = 'assets/data/quran_text.json';
+    try {
+      final raw = await rootBundle.loadString(assetPath);
+      final payload = jsonDecode(raw);
+      if (payload is! List) {
+        AssetWarningHelper.reportInvalidAsset(assetPath);
+        _cacheMap = {};
+        _loadedText = true;
+        return;
+      }
+      final data = payload
+          .map((item) => LocalAyahData.fromTextJson(item))
+          .toList();
+      _cacheMap = {for (final item in data) item.key(): item};
+      _loadedText = true;
+    } catch (e) {
+      if (AssetWarningHelper.isMissingAssetError(e)) {
+        AssetWarningHelper.reportMissingAsset(assetPath);
+      } else {
+        AssetWarningHelper.reportInvalidAsset(assetPath);
+      }
+      _cacheMap = {};
+      _loadedText = true;
+    }
   }
 }
 
