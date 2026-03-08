@@ -12,7 +12,12 @@ class GetAiTadabburUsecase {
   Future<Either<FailureResponse, AiTadabburEntity>> call(
     AyahRef ref, {
     String languageCode = 'ar',
+    String? userPrompt,
   }) {
-    return repository.getTadabbur(ref, languageCode: languageCode);
+    return repository.getTadabbur(
+      ref,
+      languageCode: languageCode,
+      userPrompt: userPrompt,
+    );
   }
 }

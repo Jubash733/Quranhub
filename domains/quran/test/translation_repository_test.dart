@@ -1,30 +1,36 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:quran/data/data_sources/quran_pack_data_source.dart';
 import 'package:quran/data/data_sources/translation_cache_data_source.dart';
-import 'package:quran/data/data_sources/translation_remote_data_source.dart';
 import 'package:quran/data/database/database_helper.dart';
-import 'package:quran/data/models/ayah_translation_dto.dart';
-import 'package:quran/data/models/surah_dto.dart';
 import 'package:quran/data/models/translation_cache_entry.dart';
 import 'package:quran/data/repositories/translation_repository_impl.dart';
 import 'package:quran/domain/entities/app_settings_entity.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:quran/domain/repositories/app_settings_repository.dart';
 
-class FakeTranslationRemoteDataSource implements TranslationRemoteDataSource {
-  FakeTranslationRemoteDataSource(this.data);
+class FakePackDataSource implements QuranPackDataSource {
+  FakePackDataSource(this.translationPacks);
 
-  final Map<AyahRef, AyahTranslationDTO> data;
+  final Map<String, Map<String, String>> translationPacks;
 
   @override
-  Future<AyahTranslationDTO> getAyahTranslation(
-    AyahRef ref, {
-    required String edition,
-  }) async {
-    final result = data[ref];
-    if (result == null) {
-      throw Exception('Not found');
-    }
-    return result;
+  Future<List<PackManifestItem>> getManifest() async {
+    return [];
+  }
+
+  @override
+  Future<bool> isPackAvailable(String editionId) async {
+    return translationPacks.containsKey(editionId);
+  }
+
+  @override
+  Future<String?> getTranslation(AyahRef ref, String editionId) async {
+    return translationPacks[editionId]?['${ref.surah}:${ref.ayah}'];
+  }
+
+  @override
+  Future<String?> getTafsir(AyahRef ref, String editionId) async {
+    return null;
   }
 }
 
@@ -127,21 +133,14 @@ class FakeAppSettingsRepository implements AppSettingsRepository {
 }
 
 void main() {
-  test('returns translation from remote when cache empty', () async {
+  test('returns translation from offline pack when cache empty', () async {
     const ref = AyahRef(surah: 1, ayah: 2);
-    final dataSource = FakeTranslationRemoteDataSource({
-      ref: AyahTranslationDTO(
-        surahNumber: 1,
-        ayahNumber: 2,
-        translation: TranslationDTO(
-          en: 'All praise is due to Allah',
-          id: 'Segala puji',
-        ),
-      ),
+    final packDataSource = FakePackDataSource({
+      'en.sahih': {'1:2': 'All praise is due to Allah'},
     });
     final repository = TranslationRepositoryImpl(
-      remoteDataSource: dataSource,
       cacheDataSource: FakeTranslationCacheDataSource(),
+      packDataSource: packDataSource,
       settingsRepository: FakeAppSettingsRepository(),
     );
 
@@ -157,41 +156,18 @@ void main() {
     );
   });
 
-  test('returns failure when data source throws', () async {
+  test('returns failure when pack missing', () async {
     const ref = AyahRef(surah: 1, ayah: 999);
     final repository = TranslationRepositoryImpl(
-      remoteDataSource: FakeTranslationRemoteDataSource({}),
       cacheDataSource: FakeTranslationCacheDataSource(),
+      packDataSource: FakePackDataSource({}),
       settingsRepository: FakeAppSettingsRepository(),
     );
 
     final result = await repository.getAyahTranslation(ref, languageCode: 'ar');
 
     result.fold(
-      (failure) => expect(failure.message, contains('Exception')),
-      (_) => fail('Expected Left'),
-    );
-  });
-
-  test('returns failure when AyahRef mismatch occurs', () async {
-    const ref = AyahRef(surah: 1, ayah: 1);
-    final dataSource = FakeTranslationRemoteDataSource({
-      ref: AyahTranslationDTO(
-        surahNumber: 2,
-        ayahNumber: 1,
-        translation: TranslationDTO(en: 'en', id: 'id'),
-      ),
-    });
-    final repository = TranslationRepositoryImpl(
-      remoteDataSource: dataSource,
-      cacheDataSource: FakeTranslationCacheDataSource(),
-      settingsRepository: FakeAppSettingsRepository(),
-    );
-
-    final result = await repository.getAyahTranslation(ref, languageCode: 'en');
-
-    result.fold(
-      (failure) => expect(failure.message, contains('AyahRef mismatch')),
+      (failure) => expect(failure.message, 'PACK_UNAVAILABLE'),
       (_) => fail('Expected Left'),
     );
   });

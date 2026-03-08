@@ -1,11 +1,11 @@
 name: quran_app
 description: A new Flutter project.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -32,6 +32,8 @@ dependencies:
     path: features/settings
   library_feature:
     path: features/library
+  my_library:
+    path: features/my_library
 
   # Domains
   quran:
@@ -51,11 +53,37 @@ dependencies:
   dependencies:
     path: shared_libraries/dependencies
 
+  # Local package (GitHub repo)
+  quran_pkg:
+    path: quran_pkg/quran_pkg
+  dio: ^5.9.2
+  retrofit: ^4.9.2
+  json_annotation: ^4.11.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  just_audio: ^0.10.5
+  flutter_riverpod: ^2.6.1
+  flutter_downloader: ^1.12.0
+  path_provider: ^2.1.5
+  permission_handler: ^12.0.1
+  shared_preferences: ^2.5.4
+  intl: ^0.20.2
+  flutter_dotenv: ^6.0.0
+  firebase_core: ^4.5.0
+  firebase_crashlytics: ^5.0.8
+  flutter_local_notifications: ^21.0.0
+  workmanager: ^0.9.0+3
+  google_generative_ai: ^0.4.7
+  rxdart: ^0.28.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  build_runner: ^2.12.2
+  retrofit_generator: ^10.2.3
+  json_serializable: ^6.13.0
 
 dependency_overrides:
   win32: ^5.13.0
@@ -64,8 +92,10 @@ dependency_overrides:
 
 flutter:
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/data/
+    - assets/packs/
     - assets/

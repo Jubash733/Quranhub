@@ -35,7 +35,9 @@ void main() {
       expect(ayah!.textArabic.isNotEmpty, true);
 
       final translation = await dataSource.getTranslation(ref, 'en');
-      expect(translation == null || translation.isEmpty, true);
+      if (translation != null) {
+        expect(translation.isNotEmpty, true);
+      }
     }
   });
 }

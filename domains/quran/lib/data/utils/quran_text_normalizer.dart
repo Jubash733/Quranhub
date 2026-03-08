@@ -1,13 +1,4 @@
 class QuranTextNormalizer {
-  static final RegExp _diacritics =
-      RegExp(r'[\u0610-\u061A\u064B-\u065F\u06D6-\u06ED]');
-  static final RegExp _tatweel = RegExp(r'\u0640');
-  static final RegExp _whitespace = RegExp(r'\s+');
-  static final RegExp _nonArabicLettersDigits =
-      RegExp(r'[^\u0600-\u06FF0-9\s]');
-  static final RegExp _nonSearchChars =
-      RegExp(r'[^a-zA-Z\u0600-\u06FF0-9\s]');
-
   static bool containsArabic(String text) {
     return RegExp(r'[\u0600-\u06FF]').hasMatch(text);
   }
@@ -49,22 +40,47 @@ class QuranTextNormalizer {
   }
 
   static String _normalize(String text, {required bool allowLatin}) {
-    var normalized = text.toLowerCase();
-    normalized = normalized.replaceAll(_diacritics, '');
-    normalized = normalized.replaceAll(_tatweel, '');
-    normalized = normalized
-        .replaceAll('\u0623', '\u0627')
-        .replaceAll('\u0625', '\u0627')
-        .replaceAll('\u0622', '\u0627')
-        .replaceAll('\u0649', '\u064a')
-        .replaceAll('\u0624', '\u0648')
-        .replaceAll('\u0626', '\u064a')
-        .replaceAll('\u0629', '\u0647');
-    normalized = normalized.replaceAll(
-      allowLatin ? _nonSearchChars : _nonArabicLettersDigits,
-      ' ',
-    );
-    normalized = normalized.replaceAll(_whitespace, ' ').trim();
-    return normalized;
+    String normalized = text;
+
+    // Remove Diacritics (Tashkeel)
+    // Fatha, Damma, Kasra, Sukun, Shadda, Tanween, etc.
+    normalized = normalized.replaceAll(RegExp(r'[\u064B-\u065F\u0670]'), '');
+
+    // Remove Tatweel (Kashida)
+    normalized = normalized.replaceAll('\u0640', '');
+
+    // Normalize Aleph
+    // (أ - إ - آ) -> (ا)
+    normalized =
+        normalized.replaceAll(RegExp(r'[\u0622\u0623\u0625\u0671]'), '\u0627');
+
+    // Normalize Ya/Aleph Maqsura
+    // (ى) -> (ي)
+    normalized = normalized.replaceAll('\u0649', '\u064A');
+
+    // Normalize Ta Marbuta
+    // (ة) -> (ه)
+    normalized = normalized.replaceAll('\u0629', '\u0647');
+
+    // Normalize Waw with Hamza
+    // (ؤ) -> (و)
+    normalized = normalized.replaceAll('\u0624', '\u0648');
+
+    // Normalize Ya with Hamza
+    // (13) -> (ي)
+    normalized = normalized.replaceAll('\u0626', '\u064A');
+
+    if (allowLatin) {
+      normalized = normalized.toLowerCase();
+      // Allow Arabic letters, English letters, and numbers
+      normalized =
+          normalized.replaceAll(RegExp(r'[^a-zA-Z\u0600-\u06FF0-9\s]'), ' ');
+    } else {
+      // Allow only Arabic letters and numbers
+      normalized = normalized.replaceAll(RegExp(r'[^\u0600-\u06FF0-9\s]'), ' ');
+    }
+
+    // Collapse multiple spaces into one
+    return normalized.replaceAll(RegExp(r'\s+'), ' ').trim();
   }
 }

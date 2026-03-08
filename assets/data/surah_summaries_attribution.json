@@ -1,0 +1,691 @@
+{
+  "source": "ar.wikipedia.org",
+  "license": "CC BY-SA 4.0",
+  "generatedAtUtc": "2026-01-28T18:37:41.203303+00:00",
+  "items": {
+    "1": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0627\u062a\u062d\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9",
+      "pageId": 9737,
+      "revId": 73093430
+    },
+    "2": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u0642\u0631\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A8%D9%82%D8%B1%D8%A9",
+      "pageId": 9743,
+      "revId": 73223698
+    },
+    "3": {
+      "title": "\u0633\u0648\u0631\u0629 \u0622\u0644 \u0639\u0645\u0631\u0627\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A2%D9%84_%D8%B9%D9%85%D8%B1%D8%A7%D9%86",
+      "pageId": 12051,
+      "revId": 71520304
+    },
+    "4": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0633\u0627\u0621",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%86%D8%B3%D8%A7%D8%A1",
+      "pageId": 12052,
+      "revId": 67689389
+    },
+    "5": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0627\u0626\u062f\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%A7%D8%A6%D8%AF%D8%A9",
+      "pageId": 12053,
+      "revId": 72614468
+    },
+    "6": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0623\u0646\u0639\u0627\u0645",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A3%D9%86%D8%B9%D8%A7%D9%85",
+      "pageId": 12062,
+      "revId": 69013488
+    },
+    "7": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0623\u0639\u0631\u0627\u0641",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A3%D8%B9%D8%B1%D8%A7%D9%81",
+      "pageId": 12054,
+      "revId": 71227974
+    },
+    "8": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0623\u0646\u0641\u0627\u0644",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A3%D9%86%D9%81%D8%A7%D9%84",
+      "pageId": 12055,
+      "revId": 71153865
+    },
+    "9": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062a\u0648\u0628\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AA%D9%88%D8%A8%D8%A9",
+      "pageId": 12059,
+      "revId": 72430685
+    },
+    "10": {
+      "title": "\u0633\u0648\u0631\u0629 \u064a\u0648\u0646\u0633",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%8A%D9%88%D9%86%D8%B3",
+      "pageId": 12058,
+      "revId": 71022786
+    },
+    "11": {
+      "title": "\u0633\u0648\u0631\u0629 \u0647\u0648\u062f",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%87%D9%88%D8%AF",
+      "pageId": 12057,
+      "revId": 72430719
+    },
+    "12": {
+      "title": "\u0633\u0648\u0631\u0629 \u064a\u0648\u0633\u0641",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%8A%D9%88%D8%B3%D9%81",
+      "pageId": 12060,
+      "revId": 72050337
+    },
+    "13": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0631\u0639\u062f",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B1%D8%B9%D8%AF",
+      "pageId": 12061,
+      "revId": 69912029
+    },
+    "14": {
+      "title": "\u0633\u0648\u0631\u0629 \u0625\u0628\u0631\u0627\u0647\u064a\u0645",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A5%D8%A8%D8%B1%D8%A7%D9%87%D9%8A%D9%85",
+      "pageId": 18839,
+      "revId": 71896743
+    },
+    "15": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062d\u062c\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AD%D8%AC%D8%B1",
+      "pageId": 20172,
+      "revId": 73160236
+    },
+    "16": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u062d\u0644",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%86%D8%AD%D9%84",
+      "pageId": 20174,
+      "revId": 71459668
+    },
+    "17": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0625\u0633\u0631\u0627\u0621",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A5%D8%B3%D8%B1%D8%A7%D8%A1",
+      "pageId": 20173,
+      "revId": 72430684
+    },
+    "18": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0643\u0647\u0641",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%83%D9%87%D9%81",
+      "pageId": 20177,
+      "revId": 72430698
+    },
+    "19": {
+      "title": "\u0633\u0648\u0631\u0629 \u0645\u0631\u064a\u0645",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%85%D8%B1%D9%8A%D9%85",
+      "pageId": 20175,
+      "revId": 71896965
+    },
+    "20": {
+      "title": "\u0633\u0648\u0631\u0629 \u0637\u0647",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%B7%D9%87",
+      "pageId": 20176,
+      "revId": 72430716
+    },
+    "21": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0623\u0646\u0628\u064a\u0627\u0621",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A3%D9%86%D8%A8%D9%8A%D8%A7%D8%A1",
+      "pageId": 39183,
+      "revId": 72430683
+    },
+    "22": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062d\u062c",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AD%D8%AC",
+      "pageId": 39184,
+      "revId": 72430686
+    },
+    "23": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0624\u0645\u0646\u0648\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%A4%D9%85%D9%86%D9%88%D9%86",
+      "pageId": 1246330,
+      "revId": 71900339
+    },
+    "24": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0648\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%86%D9%88%D8%B1",
+      "pageId": 39185,
+      "revId": 72430711
+    },
+    "25": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0631\u0642\u0627\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%81%D8%B1%D9%82%D8%A7%D9%86",
+      "pageId": 20181,
+      "revId": 71154082
+    },
+    "26": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0634\u0639\u0631\u0627\u0621",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B4%D8%B9%D8%B1%D8%A7%D8%A1",
+      "pageId": 20180,
+      "revId": 71374791
+    },
+    "27": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0645\u0644",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%86%D9%85%D9%84",
+      "pageId": 20179,
+      "revId": 70452559
+    },
+    "28": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0642\u0635\u0635",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%82%D8%B5%D8%B5",
+      "pageId": 44828,
+      "revId": 67983396
+    },
+    "29": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0639\u0646\u0643\u0628\u0648\u062a",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B9%D9%86%D9%83%D8%A8%D9%88%D8%AA",
+      "pageId": 44825,
+      "revId": 72430693
+    },
+    "30": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0631\u0648\u0645",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B1%D9%88%D9%85",
+      "pageId": 44824,
+      "revId": 71333812
+    },
+    "31": {
+      "title": "\u0633\u0648\u0631\u0629 \u0644\u0642\u0645\u0627\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%84%D9%82%D9%85%D8%A7%D9%86",
+      "pageId": 44823,
+      "revId": 72729400
+    },
+    "32": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0633\u062c\u062f\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B3%D8%AC%D8%AF%D8%A9",
+      "pageId": 44822,
+      "revId": 71374707
+    },
+    "33": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0623\u062d\u0632\u0627\u0628",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A3%D8%AD%D8%B2%D8%A7%D8%A8",
+      "pageId": 44821,
+      "revId": 72952122
+    },
+    "34": {
+      "title": "\u0633\u0648\u0631\u0629 \u0633\u0628\u0623",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%B3%D8%A8%D8%A3",
+      "pageId": 44820,
+      "revId": 67689402
+    },
+    "35": {
+      "title": "\u0633\u0648\u0631\u0629 \u0641\u0627\u0637\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%81%D8%A7%D8%B7%D8%B1",
+      "pageId": 44819,
+      "revId": 70601312
+    },
+    "36": {
+      "title": "\u0633\u0648\u0631\u0629 \u064a\u0633",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%8A%D8%B3",
+      "pageId": 44818,
+      "revId": 73175900
+    },
+    "37": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0635\u0627\u0641\u0627\u062a",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B5%D8%A7%D9%81%D8%A7%D8%AA",
+      "pageId": 44817,
+      "revId": 69013502
+    },
+    "38": {
+      "title": "\u0633\u0648\u0631\u0629 \u0635",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%B5",
+      "pageId": 44815,
+      "revId": 72430713
+    },
+    "39": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0632\u0645\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B2%D9%85%D8%B1",
+      "pageId": 44651,
+      "revId": 70567940
+    },
+    "40": {
+      "title": "\u0633\u0648\u0631\u0629 \u063a\u0627\u0641\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%BA%D8%A7%D9%81%D8%B1",
+      "pageId": 44649,
+      "revId": 71044994
+    },
+    "41": {
+      "title": "\u0633\u0648\u0631\u0629 \u0641\u0635\u0644\u062a",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%81%D8%B5%D9%84%D8%AA",
+      "pageId": 44648,
+      "revId": 72430717
+    },
+    "42": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0634\u0648\u0631\u0649",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B4%D9%88%D8%B1%D9%89",
+      "pageId": 37699,
+      "revId": 71915836
+    },
+    "43": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0632\u062e\u0631\u0641",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B2%D8%AE%D8%B1%D9%81",
+      "pageId": 44234,
+      "revId": 71915860
+    },
+    "44": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062f\u062e\u0627\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AF%D8%AE%D8%A7%D9%86",
+      "pageId": 44233,
+      "revId": 72828119
+    },
+    "45": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062c\u0627\u062b\u064a\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AC%D8%A7%D8%AB%D9%8A%D8%A9",
+      "pageId": 44232,
+      "revId": 71924811
+    },
+    "46": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0623\u062d\u0642\u0627\u0641",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A3%D8%AD%D9%82%D8%A7%D9%81",
+      "pageId": 44231,
+      "revId": 71153860
+    },
+    "47": {
+      "title": "\u0633\u0648\u0631\u0629 \u0645\u062d\u0645\u062f",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%85%D8%AD%D9%85%D8%AF",
+      "pageId": 44229,
+      "revId": 69013553
+    },
+    "48": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u062a\u062d",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%81%D8%AA%D8%AD",
+      "pageId": 44228,
+      "revId": 72243062
+    },
+    "49": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062d\u062c\u0631\u0627\u062a",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AD%D8%AC%D8%B1%D8%A7%D8%AA",
+      "pageId": 44227,
+      "revId": 72523129
+    },
+    "50": {
+      "title": "\u0633\u0648\u0631\u0629 \u0642",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%82",
+      "pageId": 20178,
+      "revId": 72536978
+    },
+    "51": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0630\u0627\u0631\u064a\u0627\u062a",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B0%D8%A7%D8%B1%D9%8A%D8%A7%D8%AA",
+      "pageId": 44226,
+      "revId": 72782409
+    },
+    "52": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0637\u0648\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B7%D9%88%D8%B1",
+      "pageId": 44225,
+      "revId": 72536981
+    },
+    "53": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u062c\u0645",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%86%D8%AC%D9%85",
+      "pageId": 44224,
+      "revId": 72536984
+    },
+    "54": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0642\u0645\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%82%D9%85%D8%B1",
+      "pageId": 44223,
+      "revId": 72536985
+    },
+    "55": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0631\u062d\u0645\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B1%D8%AD%D9%85%D9%86",
+      "pageId": 44222,
+      "revId": 72536987
+    },
+    "56": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0648\u0627\u0642\u0639\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%88%D8%A7%D9%82%D8%B9%D8%A9",
+      "pageId": 44221,
+      "revId": 73168977
+    },
+    "57": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062d\u062f\u064a\u062f",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D8%AF",
+      "pageId": 39422,
+      "revId": 72536995
+    },
+    "58": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u062c\u0627\u062f\u0644\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%AC%D8%A7%D8%AF%D9%84%D8%A9",
+      "pageId": 19205,
+      "revId": 72537011
+    },
+    "59": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062d\u0634\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AD%D8%B4%D8%B1",
+      "pageId": 44646,
+      "revId": 72537015
+    },
+    "60": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0645\u062a\u062d\u0646\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D9%85%D8%AA%D8%AD%D9%86%D8%A9",
+      "pageId": 44645,
+      "revId": 72537017
+    },
+    "61": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0635\u0641",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B5%D9%81",
+      "pageId": 44644,
+      "revId": 72537020
+    },
+    "62": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062c\u0645\u0639\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AC%D9%85%D8%B9%D8%A9",
+      "pageId": 44643,
+      "revId": 72537022
+    },
+    "63": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0646\u0627\u0641\u0642\u0648\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D9%86%D8%A7%D9%81%D9%82%D9%88%D9%86",
+      "pageId": 44642,
+      "revId": 72537029
+    },
+    "64": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062a\u063a\u0627\u0628\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AA%D8%BA%D8%A7%D8%A8%D9%86",
+      "pageId": 44641,
+      "revId": 72537032
+    },
+    "65": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0637\u0644\u0627\u0642",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B7%D9%84%D8%A7%D9%82",
+      "pageId": 44640,
+      "revId": 72537040
+    },
+    "66": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062a\u062d\u0631\u064a\u0645",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AA%D8%AD%D8%B1%D9%8A%D9%85",
+      "pageId": 44639,
+      "revId": 73160234
+    },
+    "67": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0644\u0643",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D9%84%D9%83",
+      "pageId": 44637,
+      "revId": 73179905
+    },
+    "68": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0642\u0644\u0645",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%82%D9%84%D9%85",
+      "pageId": 44636,
+      "revId": 72537043
+    },
+    "69": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062d\u0627\u0642\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AD%D8%A7%D9%82%D8%A9",
+      "pageId": 44635,
+      "revId": 72537045
+    },
+    "70": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0639\u0627\u0631\u062c",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%B9%D8%A7%D8%B1%D8%AC",
+      "pageId": 44634,
+      "revId": 72537047
+    },
+    "71": {
+      "title": "\u0633\u0648\u0631\u0629 \u0646\u0648\u062d",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%86%D9%88%D8%AD",
+      "pageId": 23283,
+      "revId": 72537048
+    },
+    "72": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062c\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AC%D9%86",
+      "pageId": 44633,
+      "revId": 72537049
+    },
+    "73": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0632\u0645\u0644",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%B2%D9%85%D9%84",
+      "pageId": 44632,
+      "revId": 72537050
+    },
+    "74": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u062f\u062b\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%AF%D8%AB%D8%B1",
+      "pageId": 44631,
+      "revId": 72537053
+    },
+    "75": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0642\u064a\u0627\u0645\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%82%D9%8A%D8%A7%D9%85%D8%A9",
+      "pageId": 44628,
+      "revId": 73152487
+    },
+    "76": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0625\u0646\u0633\u0627\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A5%D9%86%D8%B3%D8%A7%D9%86",
+      "pageId": 44627,
+      "revId": 72537058
+    },
+    "77": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0631\u0633\u0644\u0627\u062a",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%B1%D8%B3%D9%84%D8%A7%D8%AA",
+      "pageId": 44220,
+      "revId": 72825622
+    },
+    "78": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0628\u0623",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%86%D8%A8%D8%A3",
+      "pageId": 44219,
+      "revId": 72537061
+    },
+    "79": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0627\u0632\u0639\u0627\u062a",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%86%D8%A7%D8%B2%D8%B9%D8%A7%D8%AA",
+      "pageId": 24217,
+      "revId": 72537062
+    },
+    "80": {
+      "title": "\u0633\u0648\u0631\u0629 \u0639\u0628\u0633",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%B9%D8%A8%D8%B3",
+      "pageId": 44218,
+      "revId": 72537063
+    },
+    "81": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062a\u0643\u0648\u064a\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AA%D9%83%D9%88%D9%8A%D8%B1",
+      "pageId": 43992,
+      "revId": 72537064
+    },
+    "82": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0627\u0646\u0641\u0637\u0627\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A7%D9%86%D9%81%D8%B7%D8%A7%D8%B1",
+      "pageId": 44466,
+      "revId": 72537065
+    },
+    "83": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0637\u0641\u0641\u064a\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%B7%D9%81%D9%81%D9%8A%D9%86",
+      "pageId": 44465,
+      "revId": 72537070
+    },
+    "84": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0627\u0646\u0634\u0642\u0627\u0642",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A7%D9%86%D8%B4%D9%82%D8%A7%D9%82",
+      "pageId": 44464,
+      "revId": 72537073
+    },
+    "85": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u0631\u0648\u062c",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A8%D8%B1%D9%88%D8%AC",
+      "pageId": 44463,
+      "revId": 72537074
+    },
+    "86": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0637\u0627\u0631\u0642",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B7%D8%A7%D8%B1%D9%82",
+      "pageId": 44462,
+      "revId": 72537077
+    },
+    "87": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0623\u0639\u0644\u0649",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A3%D8%B9%D9%84%D9%89",
+      "pageId": 44461,
+      "revId": 72430682
+    },
+    "88": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u063a\u0627\u0634\u064a\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%BA%D8%A7%D8%B4%D9%8A%D8%A9",
+      "pageId": 44460,
+      "revId": 72537081
+    },
+    "89": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u062c\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%81%D8%AC%D8%B1",
+      "pageId": 44459,
+      "revId": 72537083
+    },
+    "90": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u0644\u062f",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A8%D9%84%D8%AF",
+      "pageId": 44458,
+      "revId": 73029380
+    },
+    "91": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0634\u0645\u0633",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B4%D9%85%D8%B3",
+      "pageId": 44456,
+      "revId": 72537087
+    },
+    "92": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0644\u064a\u0644",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%84%D9%8A%D9%84",
+      "pageId": 44454,
+      "revId": 72537088
+    },
+    "93": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0636\u062d\u0649",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B6%D8%AD%D9%89",
+      "pageId": 44453,
+      "revId": 72537090
+    },
+    "94": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0634\u0631\u062d",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B4%D8%B1%D8%AD",
+      "pageId": 44451,
+      "revId": 72537096
+    },
+    "95": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062a\u064a\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AA%D9%8A%D9%86",
+      "pageId": 44450,
+      "revId": 72537098
+    },
+    "96": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0639\u0644\u0642",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B9%D9%84%D9%82",
+      "pageId": 44449,
+      "revId": 72537099
+    },
+    "97": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0642\u062f\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%82%D8%AF%D8%B1",
+      "pageId": 44448,
+      "revId": 72537101
+    },
+    "98": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u064a\u0646\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A8%D9%8A%D9%86%D8%A9",
+      "pageId": 44447,
+      "revId": 72537105
+    },
+    "99": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0632\u0644\u0632\u0644\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B2%D9%84%D8%B2%D9%84%D8%A9",
+      "pageId": 44446,
+      "revId": 73064145
+    },
+    "100": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0639\u0627\u062f\u064a\u0627\u062a",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B9%D8%A7%D8%AF%D9%8A%D8%A7%D8%AA",
+      "pageId": 44445,
+      "revId": 72537107
+    },
+    "101": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0642\u0627\u0631\u0639\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%82%D8%A7%D8%B1%D8%B9%D8%A9",
+      "pageId": 13835,
+      "revId": 72537111
+    },
+    "102": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062a\u0643\u0627\u062b\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%AA%D9%83%D8%A7%D8%AB%D8%B1",
+      "pageId": 13836,
+      "revId": 72537116
+    },
+    "103": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0639\u0635\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%B9%D8%B5%D8%B1",
+      "pageId": 13837,
+      "revId": 72653158
+    },
+    "104": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0647\u0645\u0632\u0629",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%87%D9%85%D8%B2%D8%A9",
+      "pageId": 13838,
+      "revId": 72537119
+    },
+    "105": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u064a\u0644",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%81%D9%8A%D9%84",
+      "pageId": 13839,
+      "revId": 72931374
+    },
+    "106": {
+      "title": "\u0633\u0648\u0631\u0629 \u0642\u0631\u064a\u0634",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D9%82%D8%B1%D9%8A%D8%B4",
+      "pageId": 12119,
+      "revId": 72537121
+    },
+    "107": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0627\u0639\u0648\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%A7%D8%B9%D9%88%D9%86",
+      "pageId": 12118,
+      "revId": 72537124
+    },
+    "108": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0643\u0648\u062b\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%83%D9%88%D8%AB%D8%B1",
+      "pageId": 12115,
+      "revId": 72537125
+    },
+    "109": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0643\u0627\u0641\u0631\u0648\u0646",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%83%D8%A7%D9%81%D8%B1%D9%88%D9%86",
+      "pageId": 12116,
+      "revId": 72537126
+    },
+    "110": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0635\u0631",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%86%D8%B5%D8%B1",
+      "pageId": 12067,
+      "revId": 72537129
+    },
+    "111": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0633\u062f",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%B3%D8%AF",
+      "pageId": 12065,
+      "revId": 72537131
+    },
+    "112": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0625\u062e\u0644\u0627\u0635",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D8%A5%D8%AE%D9%84%D8%A7%D8%B5",
+      "pageId": 12063,
+      "revId": 73120172
+    },
+    "113": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0644\u0642",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%81%D9%84%D9%82",
+      "pageId": 12064,
+      "revId": 72537134
+    },
+    "114": {
+      "title": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0627\u0633",
+      "url": "https://ar.wikipedia.org/wiki/%D8%B3%D9%88%D8%B1%D8%A9_%D8%A7%D9%84%D9%86%D8%A7%D8%B3",
+      "pageId": 11959,
+      "revId": 72592366
+    }
+  }
+}

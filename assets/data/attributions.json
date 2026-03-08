@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "name": "Tanzil Quran Text (Uthmani)",
+      "license": "CC BY 3.0",
+      "url": "https://tanzil.net/docs/text_license",
+      "date": "Verified 2026-02-06"
+    },
+    {
+      "name": "Surah Metadata (quranjson)",
+      "license": "MIT",
+      "url": "https://github.com/semarketir/quranjson",
+      "date": "Release 2016"
+    },
+    {
+      "name": "Surah Summaries (Arabic Wikipedia)",
+      "license": "CC BY-SA 4.0",
+      "url": "https://ar.wikipedia.org",
+      "date": "Generated 2026-01-28"
+    },
+    {
+      "name": "Pickthall Translation (English)",
+      "license": "Public Domain (US)",
+      "url": "https://www.gutenberg.org/ebooks/16955",
+      "date": "Publication 1930"
+    },
+    {
+      "name": "ALQuran Cloud API (Audio Streaming)",
+      "license": "License not specified (streaming only)",
+      "url": "https://alquran.cloud/api",
+      "date": "Accessed 2026-02-06"
+    }
+  ]
+}

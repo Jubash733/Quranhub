@@ -39,12 +39,14 @@ class QuranAssetDataSourceImpl implements QuranAssetDataSource {
 
   @override
   Future<String?> getTranslation(AyahRef ref, String languageCode) async {
-    return null;
+    await _loadText();
+    return _cacheMap?[ref.key]?.translationFor(languageCode);
   }
 
   @override
   Future<String?> getTafsir(AyahRef ref, String languageCode) async {
-    return null;
+    await _loadText();
+    return _cacheMap?[ref.key]?.tafsirFor(languageCode);
   }
 
   @override

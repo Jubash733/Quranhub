@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dependencies/dio/dio.dart';
@@ -30,6 +32,13 @@ class AudioCacheEntry {
 
 class AudioCacheDataSource {
   static const int maxCacheBytes = 500 * 1024 * 1024;
+  static const Map<String, String> _headers = {
+    'User-Agent': 'Mozilla/5.0',
+    'Accept': '*/*',
+  };
+  static const Duration _connectTimeout = Duration(seconds: 10);
+  static const Duration _receiveTimeout = Duration(seconds: 30);
+  static const int _maxDownloadRetries = 2;
 
   AudioCacheDataSource({
     required this.isarService,
@@ -84,13 +93,44 @@ class AudioCacheDataSource {
     final filePath = path.join(editionDir.path, fileName);
     final file = File(filePath);
     if (!await file.exists()) {
-      try {
-        await dio.download(url, filePath);
-      } catch (_) {
-        if (await file.exists()) {
-          await file.delete();
+      dio.options.connectTimeout = _connectTimeout;
+      for (var attempt = 0; attempt <= _maxDownloadRetries; attempt++) {
+        try {
+          log(
+            'Downloading $url -> $filePath (attempt ${attempt + 1})',
+            name: 'AudioCacheDataSource',
+          );
+          final response = await dio.download(
+            url,
+            filePath,
+            options: Options(
+              headers: _headers,
+              receiveTimeout: _receiveTimeout,
+              sendTimeout: _connectTimeout,
+              followRedirects: true,
+            ),
+            deleteOnError: true,
+          );
+          log(
+            'Download complete (status: ${response.statusCode})',
+            name: 'AudioCacheDataSource',
+          );
+          break;
+        } catch (e, st) {
+          log(
+            'Download failed (attempt ${attempt + 1})',
+            name: 'AudioCacheDataSource',
+            error: e,
+            stackTrace: st,
+          );
+          if (await file.exists()) {
+            await file.delete();
+          }
+          if (attempt >= _maxDownloadRetries) {
+            rethrow;
+          }
+          await Future.delayed(Duration(milliseconds: 350 * (attempt + 1)));
         }
-        rethrow;
       }
     }
     final sizeBytes = await file.length();

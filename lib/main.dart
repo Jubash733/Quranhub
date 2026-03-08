@@ -1,4 +1,4 @@
-﻿import 'package:ai_assistant/presentation/cubit/ai_assistant_cubit.dart';
+import 'package:ai_assistant/presentation/cubit/ai_assistant_cubit.dart';
 import 'package:ai_assistant/presentation/ui/ai_assistant_screen.dart';
 import 'package:bookmark/presentation/bloc/bloc.dart';
 import 'package:bookmark/presentation/ui/bookmark_screen.dart';
@@ -38,11 +38,35 @@ import 'package:dependencies/hooks_riverpod/hooks_riverpod.dart'
 
 import 'dart:async';
 import 'package:quran/data/database/database_helper.dart';
+import 'core/services/notification_service.dart';
+import 'core/services/workmanager_service.dart';
+import 'package:core/network/ai_api.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  
+  // Pass all uncaught errors from the framework to Crashlytics.
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
+  await dotenv.load(fileName: ".env");
   await AppConfig.load();
   Injections().init();
+  
+  await NotificationService().init();
+  await WorkmanagerService().init();
+  AiService().init();
 
   runApp(const riverpod.ProviderScope(child: MyApp()));
   unawaited(sl<DatabaseHelper>().ensureQuranCoreData());

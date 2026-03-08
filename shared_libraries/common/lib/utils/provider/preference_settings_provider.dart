@@ -16,6 +16,7 @@ class PreferenceSettingsProvider extends ChangeNotifier {
     _getAudioSpeed();
     _getAudioRepeatCount();
     _getAudioSleepMinutes();
+    _getPackStorageLimitBytes();
   }
 
   bool _isDarkTheme = false;
@@ -45,6 +46,9 @@ class PreferenceSettingsProvider extends ChangeNotifier {
 
   int _audioSleepMinutes = 0;
   int get audioSleepMinutes => _audioSleepMinutes;
+
+  int _packStorageLimitBytes = 1024 * 1024 * 1024;
+  int get packStorageLimitBytes => _packStorageLimitBytes;
 
   void _getTheme() async {
     _isDarkTheme = await preferenceSettingsHelper.isDarkTheme;
@@ -91,6 +95,12 @@ class PreferenceSettingsProvider extends ChangeNotifier {
 
   void _getAudioSleepMinutes() async {
     _audioSleepMinutes = await preferenceSettingsHelper.storedAudioSleepMinutes;
+    notifyListeners();
+  }
+
+  void _getPackStorageLimitBytes() async {
+    _packStorageLimitBytes =
+        await preferenceSettingsHelper.storedPackStorageLimitBytes;
     notifyListeners();
   }
 
@@ -143,6 +153,12 @@ class PreferenceSettingsProvider extends ChangeNotifier {
   void setAudioSleepMinutes(int value) {
     preferenceSettingsHelper.setAudioSleepMinutes(value);
     _audioSleepMinutes = value;
+    notifyListeners();
+  }
+
+  void setPackStorageLimitBytes(int value) {
+    preferenceSettingsHelper.setPackStorageLimitBytes(value);
+    _packStorageLimitBytes = value;
     notifyListeners();
   }
 }

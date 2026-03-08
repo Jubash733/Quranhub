@@ -9,6 +9,7 @@ import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:quran/domain/repositories/ai_assistant_repository.dart';
 import 'package:quran/domain/repositories/tafsir_repository.dart';
 import 'package:quran/domain/repositories/translation_repository.dart';
+import 'package:resources/constant/api_constant.dart';
 
 class AiAssistantRepositoryImpl extends AiAssistantRepository {
   final AiAssistantLocalDataSource localDataSource;
@@ -29,8 +30,12 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
   Future<Either<FailureResponse, AiTadabburEntity>> getTadabbur(
     AyahRef ref, {
     String languageCode = 'ar',
+    String? userPrompt,
   }) async {
     try {
+      if (!_isAiConfigured()) {
+        return const Left(FailureResponse(message: 'AI_NOT_CONFIGURED'));
+      }
       final promptVersion = AppConfig.promptVersion;
       const promptType = 'tadabbur';
       const resolvedLanguage = 'ar';
@@ -59,6 +64,7 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
         tafsir: tafsir,
         languageCode: resolvedLanguage,
         promptVersion: promptVersion,
+        userPrompt: userPrompt,
       );
 
       String response;
@@ -88,15 +94,18 @@ class AiAssistantRepositoryImpl extends AiAssistantRepository {
     }
   }
 
-  
   String _buildPrompt({
     required String verseText,
     required String translation,
     required String tafsir,
     required String languageCode,
     required String promptVersion,
+    String? userPrompt,
   }) {
     final isArabic = languageCode == 'ar';
+    final requestLine = (userPrompt ?? '').trim().isEmpty
+        ? ''
+        : '\nUser request: ${userPrompt!.trim()}';
     final intro = isArabic
         ? 'أنت مساعد للتدبر في القرآن. اكتب بالعربية الفصحى وبأسلوب واضح ومختصر.'
         : 'You are a Quran reflection assistant. Write in clear English.';
@@ -112,7 +121,7 @@ $verseText
 $translation
 
 التفسير (إن توفر):
-$tafsir
+$tafsir$requestLine
 
 رجاءً أجب بهذه الأقسام:
 1) خلاصة المعنى (سطران كحد أقصى)
@@ -133,7 +142,7 @@ Translation:
 $translation
 
 Tafsir (if available):
-$tafsir
+$tafsir$requestLine
 
 Please respond with these sections:
 1) Summary of meaning (short)
@@ -144,7 +153,6 @@ Please respond with these sections:
 ''';
   }
 
-  
   String _fallbackResponse({
     required String verseText,
     required String translation,
@@ -194,8 +202,8 @@ Disclaimer: "AI output is assistant only, not fatwa".
     AyahRef ref,
     String languageCode,
   ) async {
-    final result =
-        await translationRepository.getAyahTranslation(ref, languageCode: languageCode);
+    final result = await translationRepository.getAyahTranslation(ref,
+        languageCode: languageCode);
     return result.fold((_) => '', (data) => data.text);
   }
 
@@ -206,5 +214,12 @@ Disclaimer: "AI output is assistant only, not fatwa".
     final result =
         await tafsirRepository.getAyahTafsir(ref, languageCode: languageCode);
     return result.fold((_) => '', (data) => data.text);
+  }
+
+  bool _isAiConfigured() {
+    final resolvedKey = AppConfig.aiApiKey.isNotEmpty
+        ? AppConfig.aiApiKey
+        : ApiConstant.aiApiKey;
+    return resolvedKey.isNotEmpty;
   }
 }

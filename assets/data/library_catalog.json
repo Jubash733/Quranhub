@@ -1,31 +1,20 @@
-﻿[
+[
   {
-    "itemId": "translation_en_pickthall",
-    "title": "ترجمة القرآن - Pickthall",
+    "itemId": "translation.en.pickthall",
+    "title": "ترجمة القرآن - Pickthall (EN)",
     "author": "Marmaduke Pickthall",
-    "description": "ترجمة إنجليزية متاحة عبر الإنترنت فقط حاليًا.",
+    "description": "ترجمة إنجليزية بنص كامل (Public Domain). تُحمّل بعد التثبيت.",
     "category": "translation",
-    "sizeBytes": 0,
-    "source": "Tanzil.net",
-    "downloadUrl": null,
+    "sizeBytes": 2833360,
+    "source": "Project Gutenberg (EBook #16955)",
+    "downloadUrl": "https://www.gutenberg.org/cache/epub/16955/pg16955.txt",
     "isBundled": false
   },
   {
-    "itemId": "translation_ar_muyassar",
-    "title": "التفسير الميسر (كنص ترجمة)",
-    "author": "مجمع الملك فهد",
-    "description": "نص عربي ميسر متاح عبر الإنترنت فقط حاليًا.",
-    "category": "translation",
-    "sizeBytes": 0,
-    "source": "Tanzil.net",
-    "downloadUrl": null,
-    "isBundled": false
-  },
-  {
-    "itemId": "tafsir_placeholder",
-    "title": "تفسير (يتطلب حزمة مرخصة)",
+    "itemId": "tafsir.ar.placeholder",
+    "title": "تفسير عربي (غير متاح للتحميل بعد)",
     "author": "—",
-    "description": "يتطلب مصدر بيانات مرخّص قبل الإتاحة للتحميل.",
+    "description": "لا يوجد مصدر بترخيص مفتوح واضح حتى الآن. سيتم تفعيله عند توفر مصدر مرخّص.",
     "category": "tafsir",
     "sizeBytes": 0,
     "source": "—",
@@ -34,7 +23,7 @@
   },
   {
     "itemId": "asbab_placeholder",
-    "title": "أسباب النزول (يتطلب حزمة مرخصة)",
+    "title": "أسباب النزول (يتطلب حزمة مرخّصة)",
     "author": "—",
     "description": "يتطلب مصدر بيانات مرخّص قبل الإتاحة للتحميل.",
     "category": "asbab",
@@ -45,7 +34,7 @@
   },
   {
     "itemId": "irab_placeholder",
-    "title": "إعراب القرآن (يتطلب حزمة مرخصة)",
+    "title": "إعراب القرآن (يتطلب حزمة مرخّصة)",
     "author": "—",
     "description": "يتطلب مصدر بيانات مرخّص قبل الإتاحة للتحميل.",
     "category": "irab",
@@ -56,7 +45,7 @@
   },
   {
     "itemId": "topics_placeholder",
-    "title": "موضوعات الآيات (يتطلب حزمة مرخصة)",
+    "title": "موضوعات الآيات (يتطلب حزمة مرخّصة)",
     "author": "—",
     "description": "يتطلب مصدر بيانات مرخّص قبل الإتاحة للتحميل.",
     "category": "topics",
@@ -67,7 +56,7 @@
   },
   {
     "itemId": "qiraat_placeholder",
-    "title": "قراءات (يتطلب حزمة مرخصة)",
+    "title": "قراءات (يتطلب حزمة مرخّصة)",
     "author": "—",
     "description": "يتطلب مصدر بيانات مرخّص قبل الإتاحة للتحميل.",
     "category": "qiraat",

@@ -13,11 +13,18 @@ class AiAssistantCubit extends Cubit<AiAssistantState> {
   AiAssistantCubit({required this.getAiTadabburUsecase})
       : super(AiAssistantState(status: ViewData.initial()));
 
-  Future<void> generate(AyahRef ref, String languageCode) async {
+  Future<void> generate(
+    AyahRef ref,
+    String languageCode, {
+    String? userPrompt,
+  }) async {
     emit(AiAssistantState(status: ViewData.loading(message: '')));
 
-    final result =
-        await getAiTadabburUsecase.call(ref, languageCode: languageCode);
+    final result = await getAiTadabburUsecase.call(
+      ref,
+      languageCode: languageCode,
+      userPrompt: userPrompt,
+    );
 
     result.fold(
       (failure) => emit(
@@ -25,5 +32,9 @@ class AiAssistantCubit extends Cubit<AiAssistantState> {
       ),
       (data) => emit(AiAssistantState(status: ViewData.loaded(data: data))),
     );
+  }
+
+  void reset() {
+    emit(AiAssistantState(status: ViewData.initial()));
   }
 }

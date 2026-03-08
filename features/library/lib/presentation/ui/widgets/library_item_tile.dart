@@ -1,7 +1,9 @@
 ﻿import 'dart:math';
 
 import 'package:dependencies/hooks_riverpod/hooks_riverpod.dart';
+import 'package:dependencies/provider/provider.dart' as legacy_provider;
 import 'package:flutter/material.dart';
+import 'package:common/utils/provider/preference_settings_provider.dart';
 import 'package:library_feature/presentation/controllers/library_providers.dart';
 import 'package:library_feature/presentation/ui/library_item_viewer.dart';
 import 'package:library_domain/domain/entities/library_download_status.dart';
@@ -16,6 +18,14 @@ class LibraryItemTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(libraryControllerProvider.notifier);
+    final usedSpace = ref.watch(
+      libraryControllerProvider.select((state) => state.usedSpaceBytes),
+    );
+    final prefSettings = legacy_provider.Provider.of<PreferenceSettingsProvider>(
+      context,
+      listen: false,
+    );
+    final limitBytes = prefSettings.packStorageLimitBytes;
     final progress = _progressValue(item);
     final timeRemaining = ref.watch(
       libraryControllerProvider.select(
@@ -93,7 +103,12 @@ class LibraryItemTile extends ConsumerWidget {
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: _buildActions(context, controller),
+              children: _buildActions(
+                context,
+                controller,
+                usedSpace,
+                limitBytes,
+              ),
             ),
           ],
         ),
@@ -104,6 +119,8 @@ class LibraryItemTile extends ConsumerWidget {
   List<Widget> _buildActions(
     BuildContext context,
     dynamic controller,
+    int usedSpace,
+    int limitBytes,
   ) {
     if (item.isBundled || item.status == LibraryDownloadStatus.completed) {
       return [
@@ -178,7 +195,16 @@ class LibraryItemTile extends ConsumerWidget {
 
     return [
       FilledButton.icon(
-        onPressed: () => controller.startDownload(item),
+        onPressed: () {
+          final projected = usedSpace + item.sizeBytes;
+          if (limitBytes > 0 && projected > limitBytes) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(context.l10n.packStorageLimitReached)),
+            );
+            return;
+          }
+          controller.startDownload(item);
+        },
         icon: const Icon(Icons.download),
         label: Text(context.l10n.download),
       ),

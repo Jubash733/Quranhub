@@ -1,0 +1,17 @@
+{
+  "packs": [
+    {
+      "id": "translation.en.pickthall",
+      "name": "English - Pickthall",
+      "type": "translation",
+      "language": "en",
+      "version": "1930",
+      "size": 2833360,
+      "localPath": "library_packs/translation/translation.en.pickthall/translation.en.pickthall.txt",
+      "remoteUrl": "https://www.gutenberg.org/cache/epub/16955/pg16955.txt",
+      "format": "gutenberg-3way",
+      "variant": "P",
+      "sourceUrl": "https://www.gutenberg.org/ebooks/16955"
+    }
+  ]
+}

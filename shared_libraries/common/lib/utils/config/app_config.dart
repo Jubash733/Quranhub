@@ -11,6 +11,14 @@ class AppConfig {
 
   static Future<void> load() async {
     try {
+      const envBaseUrl = String.fromEnvironment('AI_BASE_URL');
+      const envApiKey = String.fromEnvironment('AI_API_KEY');
+      if (envBaseUrl.isNotEmpty) {
+        aiBaseUrl = envBaseUrl;
+      }
+      if (envApiKey.isNotEmpty) {
+        aiApiKey = envApiKey;
+      }
       final raw = await rootBundle.loadString('assets/config/app_config.json');
       final payload = jsonDecode(raw) as Map<String, dynamic>;
       aiBaseUrl = payload['aiBaseUrl'] as String? ?? aiBaseUrl;

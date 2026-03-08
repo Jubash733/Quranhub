@@ -14,6 +14,7 @@ class PreferenceSettingsHelper {
   static const audioSpeed = 'audio_speed';
   static const audioRepeatCount = 'audio_repeat_count';
   static const audioSleepMinutes = 'audio_sleep_minutes';
+  static const packStorageLimitBytes = 'pack_storage_limit_bytes';
 
   Future<bool> get isDarkTheme async {
     final prefs = await sharedPreferences;
@@ -60,6 +61,11 @@ class PreferenceSettingsHelper {
     return prefs.getInt(audioSleepMinutes) ?? 0;
   }
 
+  Future<int> get storedPackStorageLimitBytes async {
+    final prefs = await sharedPreferences;
+    return prefs.getInt(packStorageLimitBytes) ?? (1024 * 1024 * 1024);
+  }
+
   void setDarkTheme(bool value) async {
     final prefs = await sharedPreferences;
     prefs.setBool(darkTheme, value);
@@ -103,5 +109,10 @@ class PreferenceSettingsHelper {
   void setAudioSleepMinutes(int value) async {
     final prefs = await sharedPreferences;
     prefs.setInt(audioSleepMinutes, value);
+  }
+
+  void setPackStorageLimitBytes(int value) async {
+    final prefs = await sharedPreferences;
+    prefs.setInt(packStorageLimitBytes, value);
   }
 }

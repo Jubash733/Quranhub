@@ -1,73 +1,33 @@
-import 'package:dependencies/dio/dio.dart';
-import 'package:common/utils/config/app_config.dart';
-import 'package:resources/constant/api_constant.dart';
+import 'package:quran/data/ai/ai_provider.dart';
 
 abstract class AiAssistantRemoteDataSource {
   Future<String> generateTadabbur({required String prompt});
 }
 
 class AiAssistantRemoteDataSourceImpl extends AiAssistantRemoteDataSource {
-  final Dio dio;
+  final List<AiProvider> providers;
 
-  AiAssistantRemoteDataSourceImpl({required this.dio});
+  AiAssistantRemoteDataSourceImpl({required this.providers});
 
   @override
   Future<String> generateTadabbur({required String prompt}) async {
-    final baseUrl = AppConfig.aiBaseUrl.isNotEmpty
-        ? AppConfig.aiBaseUrl
-        : ApiConstant.aiBaseUrl;
-    final apiKey = AppConfig.aiApiKey.isNotEmpty
-        ? AppConfig.aiApiKey
-        : ApiConstant.aiApiKey;
-    if (baseUrl.isEmpty) {
-      throw Exception('AI endpoint not configured');
+    if (providers.isEmpty) {
+      throw Exception('No AI providers configured');
     }
 
-    final response = await dio.post(
-      baseUrl,
-      data: {
-        'prompt': prompt,
-      },
-      options: Options(
-        headers: apiKey.isEmpty
-            ? null
-            : {
-                'Authorization': 'Bearer $apiKey',
-              },
-      ),
-    );
-
-    return _extractText(response.data);
-  }
-
-  String _extractText(dynamic data) {
-    if (data is String) {
-      return data;
-    }
-    if (data is Map<String, dynamic>) {
-      if (data['text'] is String) {
-        return data['text'] as String;
-      }
-      if (data['message'] is String) {
-        return data['message'] as String;
-      }
-      if (data['choices'] is List) {
-        final choices = data['choices'] as List;
-        if (choices.isNotEmpty) {
-          final first = choices.first;
-          if (first is Map<String, dynamic>) {
-            final message = first['message'];
-            if (message is Map<String, dynamic> &&
-                message['content'] is String) {
-              return message['content'] as String;
-            }
-            if (first['text'] is String) {
-              return first['text'] as String;
-            }
-          }
-        }
+    // Iterate through providers (fallback strategy)
+    for (final provider in providers) {
+      try {
+        return await provider.generateText(
+          prompt: prompt,
+          systemInstruction:
+              'You are a helpful Quran assistant providing Tadabbur insights.',
+        );
+      } catch (e) {
+        // Log error and continue to next provider
+        continue;
       }
     }
-    throw Exception('Unsupported AI response format');
+    throw Exception('All AI providers failed');
   }
 }

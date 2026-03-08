@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:common/utils/provider/preference_settings_provider.dart';
 import 'package:common/utils/state/view_data_state.dart';
@@ -11,15 +12,21 @@ import 'package:dependencies/shared_preferences/shared_preferences.dart';
 import 'package:detail_surah/presentation/cubits/ayah_translation/ayah_translation_cubit.dart';
 import 'package:detail_surah/presentation/cubits/ayah_tafsir/ayah_tafsir_cubit.dart';
 import 'package:detail_surah/presentation/cubits/bookmark_verses/bookmark_verses_cubit.dart';
+import 'package:detail_surah/presentation/cubits/tadabbur/tadabbur_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:quran/domain/entities/ayah_audio_entity.dart';
 import 'package:quran/domain/entities/detail_surah_entity.dart';
 import 'package:quran/domain/usecases/get_ayah_audio_usecase.dart';
+import 'package:quran/domain/usecases/cache_ayah_audio_usecase.dart';
+import 'package:quran/domain/usecases/get_app_settings_usecase.dart';
+import 'package:resources/constant/named_routes.dart';
 import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
+import 'package:ai_assistant/presentation/cubit/ai_assistant_cubit.dart';
+import 'package:detail_surah/presentation/ui/widget/tadabbur_tab.dart';
 
 class VersesWidget extends StatefulWidget {
   final VerseEntity verses;
@@ -29,6 +36,7 @@ class VersesWidget extends StatefulWidget {
   final bool highlight;
   final AudioPlayer player = AudioPlayer();
   final VoidCallback? onPlayRequest;
+  final void Function(String word)? onWordTap;
 
   VersesWidget({
     super.key,
@@ -38,6 +46,7 @@ class VersesWidget extends StatefulWidget {
     required this.surahNumber,
     this.highlight = false,
     this.onPlayRequest,
+    this.onWordTap,
   });
 
   @override
@@ -45,10 +54,17 @@ class VersesWidget extends StatefulWidget {
 }
 
 class _VersesWidgetState extends State<VersesWidget> {
+  static const String _packUnavailableMessage = 'PACK_UNAVAILABLE';
+  static const Map<String, String> _audioHeaders = {
+    'User-Agent': 'Mozilla/5.0',
+    'Accept': '*/*',
+  };
+  static const int _maxAudioRetries = 2;
   bool isBookmark = false;
   bool _isAudioLoading = false;
   AyahAudioEntity? _currentAudio;
   Duration _lastPosition = Duration.zero;
+  String? _lastAudioErrorMessage;
   StreamSubscription<Duration>? _positionSubscription;
   StreamSubscription<PlayerState>? _playerStateSubscription;
   final _sl = GetIt.instance;
@@ -80,12 +96,10 @@ class _VersesWidgetState extends State<VersesWidget> {
       }
     });
 
-    _positionSubscription =
-        widget.player.positionStream.listen((position) {
+    _positionSubscription = widget.player.positionStream.listen((position) {
       _lastPosition = position;
     });
-    _playerStateSubscription =
-        widget.player.playerStateStream.listen((state) {
+    _playerStateSubscription = widget.player.playerStateStream.listen((state) {
       if (!state.playing) {
         _persistPosition();
       }
@@ -141,7 +155,7 @@ class _VersesWidgetState extends State<VersesWidget> {
         }
         setState(() => _isAudioLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(failure.message)),
+          SnackBar(content: Text(_friendlyAudioError(failure.message))),
         );
       },
       (audio) async {
@@ -149,31 +163,99 @@ class _VersesWidgetState extends State<VersesWidget> {
           return;
         }
         _currentAudio = audio;
-        try {
-          final source = audio.localPath != null
-              ? AudioSource.uri(Uri.file(audio.localPath!))
-              : AudioSource.uri(Uri.parse(audio.url));
-          await widget.player.setAudioSource(source);
-          await widget.player.setSpeed(widget.prefSetProvider.audioSpeed);
-          final savedPosition = await _loadSavedPosition(audio);
-          if (savedPosition > Duration.zero) {
-            await widget.player.seek(savedPosition);
-          }
-          await widget.player.play();
-        } catch (e) {
-          log("Error loading audio source: $e");
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(context.l10n.unexpectedError)),
-            );
-          }
-        } finally {
-          if (mounted) {
-            setState(() => _isAudioLoading = false);
-          }
+        _lastAudioErrorMessage = null;
+        final played = await _tryPlayAudio(audio);
+        if (!played && mounted) {
+          final message = _lastAudioErrorMessage ?? '';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(_friendlyAudioError(message))),
+          );
+        }
+        if (mounted) {
+          setState(() => _isAudioLoading = false);
         }
       },
     );
+  }
+
+  Future<bool> _tryPlayAudio(
+    AyahAudioEntity audio, {
+    int attempt = 0,
+  }) async {
+    try {
+      await _setAudioSourceWithFallback(audio);
+      await widget.player.setSpeed(widget.prefSetProvider.audioSpeed);
+      final savedPosition = await _loadSavedPosition(audio);
+      if (savedPosition > Duration.zero) {
+        await widget.player.seek(savedPosition);
+      }
+      await widget.player.play();
+      return true;
+    } catch (e, st) {
+      _lastAudioErrorMessage = e.toString();
+      log(
+        'Error loading audio source for ${audio.ref.surah}:${audio.ref.ayah} (${audio.edition})',
+        error: e,
+        stackTrace: st,
+      );
+      if (attempt < _maxAudioRetries) {
+        await Future.delayed(Duration(milliseconds: 350 * (attempt + 1)));
+        return _tryPlayAudio(audio, attempt: attempt + 1);
+      }
+      return false;
+    }
+  }
+
+  Future<void> _setAudioSourceWithFallback(AyahAudioEntity audio) async {
+    final localPath = audio.localPath;
+    if (localPath != null && localPath.isNotEmpty) {
+      try {
+        await widget.player
+            .setAudioSource(AudioSource.uri(Uri.file(localPath)));
+        return;
+      } catch (_) {
+        // Fallback to remote if cached file fails.
+      }
+    }
+    try {
+      await widget.player.setAudioSource(
+        AudioSource.uri(
+          Uri.parse(audio.url),
+          headers: _audioHeaders,
+        ),
+      );
+      return;
+    } catch (e, st) {
+      log(
+        'Streaming failed for ${audio.ref.surah}:${audio.ref.ayah} -> ${audio.url}',
+        error: e,
+        stackTrace: st,
+      );
+      final cachedResult = await _sl<CacheAyahAudioUsecase>()
+          .call(audio.ref, edition: audio.edition);
+      AyahAudioEntity? cachedAudio;
+      cachedResult.fold(
+        (_) => cachedAudio = null,
+        (cached) => cachedAudio = cached,
+      );
+      final cachedPath = cachedAudio?.localPath;
+      if (cachedPath != null && cachedPath.isNotEmpty) {
+        await widget.player
+            .setAudioSource(AudioSource.uri(Uri.file(cachedPath)));
+        return;
+      }
+      Error.throwWithStackTrace(e, st);
+    }
+  }
+
+  String _friendlyAudioError(String message) {
+    final lower = message.toLowerCase();
+    if (lower.contains('connection aborted') ||
+        lower.contains('socketexception') ||
+        lower.contains('timeout')) {
+      return context.l10n.audioConnectionError;
+    }
+    return message.isEmpty ? context.l10n.unexpectedError : message;
   }
 
   Future<void> _persistPosition({bool reset = false}) async {
@@ -208,24 +290,36 @@ class _VersesWidgetState extends State<VersesWidget> {
     });
   }
 
-
-  void _showTranslationBottomSheet(BuildContext context) {
+  Future<void> _showTranslationBottomSheet() async {
     final ref = AyahRef(
       surah: widget.surahNumber,
       ayah: widget.verses.number.inSurah,
     );
 
-    final languageCode = widget.prefSetProvider.locale.languageCode;
+    final localeCode = widget.prefSetProvider.locale.languageCode;
+    final settings = await _sl<GetAppSettingsUsecase>().call();
+    if (!mounted) {
+      return;
+    }
+    final translationLanguageCode = settings.translationLanguage.isNotEmpty
+        ? settings.translationLanguage
+        : 'en';
+    final tafsirLanguageCode =
+        settings.tafsirLanguage.isNotEmpty ? settings.tafsirLanguage : 'ar';
+    final translationCubit = context.read<AyahTranslationCubit>();
+    final tafsirCubit = context.read<AyahTafsirCubit>();
+    final tadabburCubit = context.read<TadabburCubit>();
+    final aiCubit = context.read<AiAssistantCubit>();
     final showTranslation = widget.prefSetProvider.showTranslation;
     final showTafsir = widget.prefSetProvider.showTafsir;
     if (showTranslation) {
-      context
-          .read<AyahTranslationCubit>()
-          .fetchTranslation(ref, languageCode);
+      translationCubit.fetchTranslation(ref, translationLanguageCode);
     }
     if (showTafsir) {
-      context.read<AyahTafsirCubit>().fetchTafsir(ref, languageCode);
+      tafsirCubit.fetchTafsir(ref, tafsirLanguageCode);
     }
+    tadabburCubit.loadNote(ref, localeCode);
+    aiCubit.reset();
 
     showModalBottomSheet(
       context: context,
@@ -241,14 +335,20 @@ class _VersesWidgetState extends State<VersesWidget> {
           tabs.add(Tab(text: context.l10n.translation));
           views.add(_buildTranslationTab(
             ref,
-            languageCode,
+            translationLanguageCode,
             showTafsirButton: showTafsir,
           ));
         }
         if (showTafsir) {
           tabs.add(Tab(text: context.l10n.tafsir));
-          views.add(_buildTafsirTab(ref, languageCode));
+          views.add(_buildTafsirTab(ref, tafsirLanguageCode));
         }
+        tabs.add(Tab(text: context.l10n.tadabbur));
+        views.add(TadabburTab(
+          ref: ref,
+          languageCode: localeCode,
+          prefSetProvider: widget.prefSetProvider,
+        ));
         return MultiBlocProvider(
           providers: [
             BlocProvider.value(
@@ -256,6 +356,12 @@ class _VersesWidgetState extends State<VersesWidget> {
             ),
             BlocProvider.value(
               value: context.read<AyahTafsirCubit>(),
+            ),
+            BlocProvider.value(
+              value: context.read<TadabburCubit>(),
+            ),
+            BlocProvider.value(
+              value: context.read<AiAssistantCubit>(),
             ),
           ],
           child: Padding(
@@ -413,9 +519,8 @@ class _VersesWidgetState extends State<VersesWidget> {
           return _buildErrorState(
             title: context.l10n.tafsirErrorTitle,
             message: state.status.message,
-            onRetry: () => context
-                .read<AyahTafsirCubit>()
-                .fetchTafsir(ref, languageCode),
+            onRetry: () =>
+                context.read<AyahTafsirCubit>().fetchTafsir(ref, languageCode),
           );
         }
 
@@ -440,7 +545,8 @@ class _VersesWidgetState extends State<VersesWidget> {
   Widget _buildLoadingState() {
     return Center(
       child: CircularProgressIndicator(
-        color: widget.prefSetProvider.isDarkTheme ? Colors.white : kPurplePrimary,
+        color:
+            widget.prefSetProvider.isDarkTheme ? Colors.white : kPurplePrimary,
       ),
     );
   }
@@ -462,6 +568,12 @@ class _VersesWidgetState extends State<VersesWidget> {
     required String message,
     required VoidCallback onRetry,
   }) {
+    final isPackUnavailable = message == _packUnavailableMessage;
+    final displayMessage = message.isEmpty
+        ? context.l10n.unavailable
+        : isPackUnavailable
+            ? context.l10n.packNotInstalled
+            : message;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -478,12 +590,11 @@ class _VersesWidgetState extends State<VersesWidget> {
           ),
           const SizedBox(height: 6.0),
           Text(
-            message,
+            displayMessage,
             style: kHeading6.copyWith(
               fontSize: 12.0,
-              color: widget.prefSetProvider.isDarkTheme
-                  ? kGreyLight
-                  : kDarkPurple,
+              color:
+                  widget.prefSetProvider.isDarkTheme ? kGreyLight : kDarkPurple,
             ),
           ),
           const SizedBox(height: 16.0),
@@ -495,6 +606,20 @@ class _VersesWidgetState extends State<VersesWidget> {
               label: Text(context.l10n.retry),
             ),
           ),
+          if (isPackUnavailable) ...[
+            const SizedBox(height: 10.0),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  NamedRoutes.libraryScreen,
+                ),
+                icon: const Icon(Icons.download),
+                label: Text(context.l10n.downloadPack),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -508,9 +633,8 @@ class _VersesWidgetState extends State<VersesWidget> {
     VoidCallback? onShowTafsir,
     bool isArabic = false,
   }) {
-    final actionColor = widget.prefSetProvider.isDarkTheme
-        ? Colors.white
-        : kPurplePrimary;
+    final actionColor =
+        widget.prefSetProvider.isDarkTheme ? Colors.white : kPurplePrimary;
     final lineHeight = isArabic ? 1.9 : 1.6;
     final arabicStyle = arabicBodyStyle(
       widget.prefSetProvider.arabicFontFamily,
@@ -609,209 +733,302 @@ class _VersesWidgetState extends State<VersesWidget> {
   @override
   Widget build(BuildContext context) {
     final highlightColor = kPurplePrimary.withValues(alpha: 0.12);
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      padding: const EdgeInsets.all(12.0),
-      margin: const EdgeInsets.only(bottom: 12.0),
-      decoration: BoxDecoration(
-        color: widget.highlight ? highlightColor : Colors.transparent,
-        borderRadius: BorderRadius.circular(16.0),
-        border: widget.highlight
-            ? Border.all(color: kPurplePrimary.withValues(alpha: 0.4))
-            : null,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 13.0),
-            decoration: BoxDecoration(
-              color: kPurplePrimary.withValues(
-                alpha: 0.065,
+    return GestureDetector(
+      onLongPress: _showAyahMenu,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.all(12.0),
+        margin: const EdgeInsets.only(bottom: 12.0),
+        decoration: BoxDecoration(
+          color: widget.highlight ? highlightColor : Colors.transparent,
+          borderRadius: BorderRadius.circular(16.0),
+          border: widget.highlight
+              ? Border.all(color: kPurplePrimary.withValues(alpha: 0.4))
+              : null,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 13.0),
+              decoration: BoxDecoration(
+                color: kPurplePrimary.withValues(
+                  alpha: 0.065,
+                ),
+                borderRadius: BorderRadius.circular(14.0),
               ),
-              borderRadius: BorderRadius.circular(14.0),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 35.0,
-                  height: 35.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100.0),
-                    color: kPurplePrimary,
-                  ),
-                  child: Center(
-                    child: Text(
-                      widget.verses.number.inSurah.toString(),
-                      style: kHeading6.copyWith(
-                        color: Colors.white,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w500,
+              child: Row(
+                children: [
+                  Container(
+                    width: 35.0,
+                    height: 35.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.0),
+                      color: kPurplePrimary,
+                    ),
+                    child: Center(
+                      child: Text(
+                        widget.verses.number.inSurah.toString(),
+                        style: kHeading6.copyWith(
+                          color: Colors.white,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const Spacer(),
-                StreamBuilder<PlayerState>(
-                  stream: widget.player.playerStateStream,
-                  builder: (context, snapshot) {
-                    final playerState = snapshot.data;
-                    final processingState = playerState?.processingState;
-                    final playing = playerState?.playing;
+                  const Spacer(),
+                  StreamBuilder<PlayerState>(
+                    stream: widget.player.playerStateStream,
+                    builder: (context, snapshot) {
+                      final playerState = snapshot.data;
+                      final processingState = playerState?.processingState;
+                      final playing = playerState?.playing;
 
-                    if (processingState == ProcessingState.loading ||
-                        processingState == ProcessingState.buffering) {
-                      return SizedBox(
-                        width: 18.0,
-                        height: 18.0,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 3.0,
-                          color: widget.prefSetProvider.isDarkTheme
-                              ? Colors.white
-                              : kPurplePrimary,
-                        ),
-                      );
-                    } else if (_isAudioLoading) {
-                      return SizedBox(
-                        width: 18.0,
-                        height: 18.0,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 3.0,
-                          color: widget.prefSetProvider.isDarkTheme
-                              ? Colors.white
-                              : kPurplePrimary,
-                        ),
-                      );
-                    } else if (playing != true) {
-                      return InkWell(
-                        onTap: () async {
-                          widget.onPlayRequest?.call();
-                          await _playAudio();
-                        },
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Image.asset('assets/icon_play.png', width: 16.0),
-                      );
-                    } else if (processingState != ProcessingState.completed) {
-                      return InkWell(
-                        onTap: () {
-                          _persistPosition();
-                          widget.player.stop();
-                          widget.player.seek(Duration.zero);
-                        },
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: const Icon(
-                          Icons.pause,
-                          size: 24.0,
-                          color: kPurplePrimary,
-                        ),
-                      );
-                    } else {
-                      return InkWell(
-                        onTap: () => widget.player.seek(Duration.zero),
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Image.asset('assets/icon_play.png', width: 16.0),
-                      );
-                    }
-                  },
-                ),
-                const SizedBox(width: 12.0),
-                BlocBuilder<BookmarkVersesCubit, BookmarkVersesState>(
-                    builder: (context, state) {
-                  final isAddedBookmark = state.isBookmark;
-
-                  return InkWell(
-                    onTap: () async {
-                      if (isAddedBookmark) {
-                        await context
-                            .read<BookmarkVersesCubit>()
-                            .removeBookmarkVerse(widget.verses, widget.surah);
-                        if (!context.mounted) {
-                          return;
-                        }
-
-                        context.showCustomFlashMessage(
-                          status: 'success',
-                          title: context.l10n.bookmarkRemovedTitle,
-                          darkTheme: widget.prefSetProvider.isDarkTheme,
-                          message: context.l10n.bookmarkRemovedMessage(
-                            widget.surah,
-                            widget.verses.number.inSurah,
+                      if (processingState == ProcessingState.loading ||
+                          processingState == ProcessingState.buffering) {
+                        return SizedBox(
+                          width: 18.0,
+                          height: 18.0,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3.0,
+                            color: widget.prefSetProvider.isDarkTheme
+                                ? Colors.white
+                                : kPurplePrimary,
+                          ),
+                        );
+                      } else if (_isAudioLoading) {
+                        return SizedBox(
+                          width: 18.0,
+                          height: 18.0,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3.0,
+                            color: widget.prefSetProvider.isDarkTheme
+                                ? Colors.white
+                                : kPurplePrimary,
+                          ),
+                        );
+                      } else if (playing != true) {
+                        return InkWell(
+                          onTap: () async {
+                            widget.onPlayRequest?.call();
+                            await _playAudio();
+                          },
+                          borderRadius: BorderRadius.circular(10.0),
+                          child:
+                              Image.asset('assets/icon_play.png', width: 16.0),
+                        );
+                      } else if (processingState != ProcessingState.completed) {
+                        return InkWell(
+                          onTap: () {
+                            _persistPosition();
+                            widget.player.stop();
+                            widget.player.seek(Duration.zero);
+                          },
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: const Icon(
+                            Icons.pause,
+                            size: 24.0,
+                            color: kPurplePrimary,
                           ),
                         );
                       } else {
-                        await context
-                            .read<BookmarkVersesCubit>()
-                            .saveBookmarkVerse(widget.verses, widget.surah);
-                        if (!context.mounted) {
-                          return;
-                        }
-
-                        context.showCustomFlashMessage(
-                          status: 'success',
-                          title: context.l10n.bookmarkAddedTitle,
-                          darkTheme: widget.prefSetProvider.isDarkTheme,
-                          message: context.l10n.bookmarkAddedMessage(
-                            widget.surah,
-                            widget.verses.number.inSurah,
-                          ),
+                        return InkWell(
+                          onTap: () => widget.player.seek(Duration.zero),
+                          borderRadius: BorderRadius.circular(10.0),
+                          child:
+                              Image.asset('assets/icon_play.png', width: 16.0),
                         );
                       }
-
-                      setState(() {
-                        isBookmark = !isAddedBookmark;
-                      });
                     },
-                    child: isBookmark
-                        ? const Icon(Icons.bookmark_rounded,
-                            size: 24.0, color: kPurpleSecondary)
-                        : Image.asset('assets/icon_bookmark.png', width: 16.0),
-                  );
-                }),
-                const SizedBox(width: 6.0),
-              ],
+                  ),
+                  const SizedBox(width: 12.0),
+                  BlocBuilder<BookmarkVersesCubit, BookmarkVersesState>(
+                      builder: (context, state) {
+                    final isAddedBookmark = state.isBookmark;
+
+                    return InkWell(
+                      onTap: () async {
+                        if (isAddedBookmark) {
+                          await context
+                              .read<BookmarkVersesCubit>()
+                              .removeBookmarkVerse(widget.verses, widget.surah);
+                          if (!context.mounted) {
+                            return;
+                          }
+
+                          context.showCustomFlashMessage(
+                            status: 'success',
+                            title: context.l10n.bookmarkRemovedTitle,
+                            darkTheme: widget.prefSetProvider.isDarkTheme,
+                            message: context.l10n.bookmarkRemovedMessage(
+                              widget.surah,
+                              widget.verses.number.inSurah,
+                            ),
+                          );
+                        } else {
+                          await context
+                              .read<BookmarkVersesCubit>()
+                              .saveBookmarkVerse(widget.verses, widget.surah);
+                          if (!context.mounted) {
+                            return;
+                          }
+
+                          context.showCustomFlashMessage(
+                            status: 'success',
+                            title: context.l10n.bookmarkAddedTitle,
+                            darkTheme: widget.prefSetProvider.isDarkTheme,
+                            message: context.l10n.bookmarkAddedMessage(
+                              widget.surah,
+                              widget.verses.number.inSurah,
+                            ),
+                          );
+                        }
+
+                        setState(() {
+                          isBookmark = !isAddedBookmark;
+                        });
+                      },
+                      child: isBookmark
+                          ? const Icon(Icons.bookmark_rounded,
+                              size: 24.0, color: kPurpleSecondary)
+                          : Image.asset('assets/icon_bookmark.png',
+                              width: 16.0),
+                    );
+                  }),
+                  const SizedBox(width: 6.0),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 12.0),
-          InkWell(
-            onTap: () => _showTranslationBottomSheet(context),
-            borderRadius: BorderRadius.circular(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    widget.verses.text.arab,
-                    textAlign: TextAlign.right,
-                    style: arabicVerseStyle(
-                      widget.prefSetProvider.arabicFontFamily,
-                      scale: widget.prefSetProvider.arabicFontScale,
-                    ).copyWith(
-                      color: widget.prefSetProvider.isDarkTheme
-                          ? Colors.white
-                          : kDarkPurple,
+            const SizedBox(height: 12.0),
+            InkWell(
+              onTap: _showTranslationBottomSheet,
+              borderRadius: BorderRadius.circular(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Wrap(
+                      alignment: WrapAlignment.end,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 4,
+                      children: widget.verses.text.arab.split(' ').map((word) {
+                        return InkWell(
+                          onTap: () => widget.onWordTap?.call(word),
+                          child: Text(
+                            word,
+                            textAlign: TextAlign.right,
+                            style: arabicVerseStyle(
+                              widget.prefSetProvider.arabicFontFamily,
+                              scale: widget.prefSetProvider.arabicFontScale,
+                            ).copyWith(
+                              color: widget.prefSetProvider.isDarkTheme
+                                  ? Colors.white
+                                  : kDarkPurple,
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ),
-                ),
-                const SizedBox(height: 18.0),
-                Text(
-                  widget.verses.text.transliteration.en,
-                  style: kHeading6.copyWith(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w400,
-                    height: 1.4,
-                    color: widget.prefSetProvider.isDarkTheme
-                        ? kGreyLight
-                        : kDarkPurple,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
+                  if (widget.prefSetProvider.showTranslation) ...[
+                    const SizedBox(height: 18.0),
+                    Text(
+                      widget.verses.text.transliteration.en,
+                      style: kHeading6.copyWith(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        height: 1.4,
+                        color: widget.prefSetProvider.isDarkTheme
+                            ? kGreyLight
+                            : kDarkPurple,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showAyahMenu() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: widget.prefSetProvider.isDarkTheme ? kGlassBlack : kGlassWhite,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          boxShadow: [
+            const BoxShadow(
+                color: Colors.black12, blurRadius: 10, spreadRadius: 2)
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 8),
+                // Drag handle
+                Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                        color: kGrey.withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(2))),
+                const SizedBox(height: 20),
+
+                // Menu Items
+                _buildMenuItem(Icons.copy_rounded, context.l10n.copy, () {
+                  Navigator.pop(context);
+                  _copyText(context, widget.verses.text.arab);
+                }),
+                _buildMenuItem(Icons.share_rounded, context.l10n.share, () {
+                  Navigator.pop(context);
+                  _shareText(widget.verses.text.arab);
+                }),
+                _buildMenuItem(Icons.play_arrow_rounded, "Play Audio", () {
+                  Navigator.pop(context);
+                  _playAudio();
+                }),
+                _buildMenuItem(Icons.menu_book_rounded, context.l10n.showTafsir,
+                    () {
+                  Navigator.pop(context);
+                  _showTranslationBottomSheet();
+                }),
+                const SizedBox(height: 30),
               ],
             ),
           ),
-        ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildMenuItem(IconData icon, String label, VoidCallback onTap) {
+    final isDark = widget.prefSetProvider.isDarkTheme;
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: isDark ? kDarkPurple : kGrey92,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Icon(icon, color: isDark ? Colors.white : kPurplePrimary),
+      ),
+      title: Text(label,
+          style:
+              kHeading6.copyWith(color: isDark ? Colors.white : kBlackPurple)),
+      onTap: onTap,
     );
   }
 }

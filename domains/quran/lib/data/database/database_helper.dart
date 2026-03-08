@@ -18,6 +18,7 @@ class DatabaseHelper {
 
   static Database? _database;
 
+  // Dev note: bump this when changing DB/FTS schema to force rebuild on device.
   static const int _dbVersion = 3;
 
   Future<Database?> get database async {
@@ -33,6 +34,13 @@ class DatabaseHelper {
   static const String _tblQuranFts = 'quranFts';
   static const String _tblMeta = 'quranMeta';
   static const String _metaFtsAvailable = 'fts_available';
+  static const List<String> _ftsRequiredColumns = [
+    'arabicNorm',
+    'translationArNorm',
+    'translationEnNorm',
+    'surah',
+    'ayah',
+  ];
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
@@ -176,6 +184,7 @@ class DatabaseHelper {
       return;
     }
     await _createCoreTables(db);
+    await _ensureFtsSchema(db);
     final count = Sqflite.firstIntValue(
           await db.rawQuery('SELECT COUNT(*) FROM $_tblQuranAyah'),
         ) ??
@@ -292,15 +301,15 @@ class DatabaseHelper {
       SELECT q.surah, q.ayah, q.text,
              s.nameAr AS surahNameAr, s.nameEn AS surahNameEn,
              t.text AS translation
-      FROM $_tblQuranFts f
+      FROM $_tblQuranFts
       JOIN $_tblQuranAyah q
-        ON q.surah = f.surah AND q.ayah = f.ayah
+        ON q.surah = $_tblQuranFts.surah AND q.ayah = $_tblQuranFts.ayah
       JOIN $_tblQuranSurah s
         ON s.surah = q.surah
       LEFT JOIN $_tblQuranTranslation t
         ON t.surah = q.surah AND t.ayah = q.ayah AND t.languageCode = ?
         AND (? IS NULL OR t.edition = ?)
-      WHERE f MATCH ?
+      WHERE $_tblQuranFts MATCH ?
       LIMIT $limit;
     ''', [languageCode, edition, edition, ftsQuery]);
   }
@@ -424,11 +433,33 @@ class DatabaseHelper {
   }
 
   Future<bool> _isFtsAvailable(Database db) async {
+    final actualIsFts = await _isFtsVirtualTable(db);
     final row = await _getMeta(db, _metaFtsAvailable);
     if (row == null) {
+      await _setMeta(db, _metaFtsAvailable, actualIsFts ? '1' : '0');
+      return actualIsFts;
+    }
+    if (row == '1' && !actualIsFts) {
+      await _setMeta(db, _metaFtsAvailable, '0');
+      return false;
+    }
+    if (row == '0' && actualIsFts) {
+      await _setMeta(db, _metaFtsAvailable, '1');
       return true;
     }
     return row == '1';
+  }
+
+  Future<bool> _isFtsVirtualTable(Database db) async {
+    final rows = await db.rawQuery(
+      'SELECT sql FROM sqlite_master WHERE name = ?',
+      [_tblQuranFts],
+    );
+    if (rows.isEmpty) {
+      return false;
+    }
+    final sql = (rows.first['sql'] as String?)?.toLowerCase() ?? '';
+    return sql.contains('virtual table') && sql.contains('fts');
   }
 
   Future<String?> _getMeta(Database db, String key) async {
@@ -448,6 +479,39 @@ class DatabaseHelper {
       {'key': key, 'value': value},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<void> _ensureFtsSchema(Database db) async {
+    final required = _ftsRequiredColumns.toSet();
+    var hasAll = false;
+    try {
+      final columns = await db.rawQuery('PRAGMA table_info($_tblQuranFts)');
+      if (columns.isNotEmpty) {
+        final names = columns
+            .map((row) => row['name'] as String?)
+            .whereType<String>()
+            .toSet();
+        hasAll = required.every(names.contains);
+      } else {
+        final rows = await db.rawQuery(
+          'SELECT sql FROM sqlite_master WHERE name = ?',
+          [_tblQuranFts],
+        );
+        final sql = (rows.isNotEmpty ? rows.first['sql'] : '')?.toString() ?? '';
+        final normalized = sql.toLowerCase();
+        hasAll = required.every(
+          (column) => normalized.contains(column.toLowerCase()),
+        );
+      }
+    } catch (_) {
+      hasAll = false;
+    }
+    if (hasAll) {
+      return;
+    }
+    await db.execute('DROP TABLE IF EXISTS $_tblQuranFts');
+    await _createCoreTables(db);
+    await _setMeta(db, 'fts_version', '0');
   }
 
   // LAST READ QURAN

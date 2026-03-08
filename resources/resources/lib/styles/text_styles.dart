@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-enum ArabicFontFamily { amiri, cairo }
+enum ArabicFontFamily { amiri, cairo, uthmani }
 
 ArabicFontFamily arabicFontFamilyFromString(String? value) {
   switch (value) {
     case 'cairo':
       return ArabicFontFamily.cairo;
+    case 'uthmani':
+      return ArabicFontFamily.uthmani;
     case 'amiri':
     default:
       return ArabicFontFamily.amiri;
@@ -14,13 +16,23 @@ ArabicFontFamily arabicFontFamilyFromString(String? value) {
 }
 
 String arabicFontFamilyKey(ArabicFontFamily family) {
-  return family == ArabicFontFamily.cairo ? 'cairo' : 'amiri';
+  if (family == ArabicFontFamily.cairo) return 'cairo';
+  if (family == ArabicFontFamily.uthmani) return 'uthmani';
+  return 'amiri';
 }
 
 TextStyle arabicVerseStyle(
   ArabicFontFamily family, {
   double scale = 1.0,
 }) {
+  if (family == ArabicFontFamily.uthmani) {
+    return TextStyle(
+      fontFamily: 'Uthmani',
+      fontSize: 28 * scale,
+      fontWeight: FontWeight.w400,
+      height: 1.6,
+    );
+  }
   final isAmiri = family == ArabicFontFamily.amiri;
   final base = isAmiri ? GoogleFonts.amiri() : GoogleFonts.cairo();
   return base.copyWith(
@@ -34,6 +46,14 @@ TextStyle arabicBodyStyle(
   ArabicFontFamily family, {
   double scale = 1.0,
 }) {
+  if (family == ArabicFontFamily.uthmani) {
+    return TextStyle(
+      fontFamily: 'Uthmani',
+      fontSize: 18 * scale,
+      fontWeight: FontWeight.w400,
+      height: 1.6,
+    );
+  }
   final isAmiri = family == ArabicFontFamily.amiri;
   final base = isAmiri ? GoogleFonts.amiri() : GoogleFonts.cairo();
   return base.copyWith(

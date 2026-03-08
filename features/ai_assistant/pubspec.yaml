@@ -14,6 +14,8 @@ dependencies:
   # Domain
   quran:
     path: ../../domains/quran
+  detail_surah:
+    path: ../detail_surah
 
   # Resources
   resources:

@@ -7,5 +7,6 @@ abstract class AiAssistantRepository {
   Future<Either<FailureResponse, AiTadabburEntity>> getTadabbur(
     AyahRef ref, {
     String languageCode,
+    String? userPrompt,
   });
 }

@@ -50,9 +50,9 @@ class SearchRepositoryImpl extends SearchRepository {
           languageCode: languageCode,
         );
         if (rows.isNotEmpty) {
-          return Right(
-            rows.map((row) => _mapDbToResult(row, languageCode)).toList(),
-          );
+          final mapped =
+              rows.map((row) => _mapDbToResult(row, languageCode)).toList();
+          return Right(_sortByMushaf(mapped));
         }
       }
 
@@ -70,7 +70,7 @@ class SearchRepositoryImpl extends SearchRepository {
           break;
         }
       }
-      return Right(results);
+      return Right(_sortByMushaf(results));
     } catch (e) {
       return Left(FailureResponse(message: e.toString()));
     }
@@ -79,11 +79,12 @@ class SearchRepositoryImpl extends SearchRepository {
   SearchResultEntity _mapToResult(LocalAyahData data, String languageCode) {
     final surahName =
         languageCode == 'ar' ? data.surahNameAr : data.surahNameEn;
+    final translation = data.translationFor(languageCode) ?? '';
     return SearchResultEntity(
       ref: AyahRef(surah: data.surah, ayah: data.ayah),
       surahName: surahName,
       text: data.textArabic,
-      translation: '',
+      translation: translation,
     );
   }
 
@@ -95,6 +96,19 @@ class SearchRepositoryImpl extends SearchRepository {
       text: row.text,
       translation: row.translation ?? '',
     );
+  }
+
+  List<SearchResultEntity> _sortByMushaf(
+    List<SearchResultEntity> results,
+  ) {
+    results.sort((a, b) {
+      final surahCompare = a.ref.surah.compareTo(b.ref.surah);
+      if (surahCompare != 0) {
+        return surahCompare;
+      }
+      return a.ref.ayah.compareTo(b.ref.ayah);
+    });
+    return results;
   }
 
   bool _containsArabic(String text) {

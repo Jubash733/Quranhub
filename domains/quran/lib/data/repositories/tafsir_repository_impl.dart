@@ -1,7 +1,7 @@
 import 'package:common/utils/error/failure_response.dart';
 import 'package:dependencies/dartz/dartz.dart';
+import 'package:quran/data/data_sources/quran_pack_data_source.dart';
 import 'package:quran/data/data_sources/tafsir_cache_data_source.dart';
-import 'package:quran/data/data_sources/tafsir_remote_data_source.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:quran/domain/entities/ayah_tafsir_entity.dart';
 import 'package:quran/domain/repositories/tafsir_repository.dart';
@@ -11,14 +11,15 @@ import 'package:resources/constant/api_constant.dart';
 class TafsirRepositoryImpl extends TafsirRepository {
   TafsirRepositoryImpl({
     required this.cacheDataSource,
-    required this.remoteDataSource,
+    required this.packDataSource,
     required this.settingsRepository,
   });
 
   final TafsirCacheDataSource cacheDataSource;
-  final TafsirRemoteDataSource remoteDataSource;
+  final QuranPackDataSource packDataSource;
   final AppSettingsRepository settingsRepository;
   static const _cacheTtl = Duration(days: 7);
+  static const _packUnavailableMessage = 'PACK_UNAVAILABLE';
 
   @override
   Future<Either<FailureResponse, AyahTafsirEntity>> getAyahTafsir(
@@ -43,18 +44,16 @@ class TafsirRepositoryImpl extends TafsirRepository {
       );
     }
     try {
-      final text = await remoteDataSource.getAyahTafsir(
-        ref,
-        edition: edition,
-      );
-      if (text.isNotEmpty) {
-        await cacheDataSource.cacheTafsir(
-          ref,
-          languageCode: languageCode,
-          edition: edition,
-          text: text,
-        );
+      final text = await packDataSource.getTafsir(ref, edition);
+      if (text == null || text.trim().isEmpty) {
+        return const Left(FailureResponse(message: _packUnavailableMessage));
       }
+      await cacheDataSource.cacheTafsir(
+        ref,
+        languageCode: languageCode,
+        edition: edition,
+        text: text,
+      );
       return Right(
         AyahTafsirEntity(
           ref: ref,
@@ -63,15 +62,6 @@ class TafsirRepositoryImpl extends TafsirRepository {
         ),
       );
     } on Exception catch (e) {
-      if (cached != null) {
-        return Right(
-          AyahTafsirEntity(
-            ref: ref,
-            text: cached.text,
-            languageCode: languageCode,
-          ),
-        );
-      }
       return Left(FailureResponse(message: e.toString()));
     }
   }
