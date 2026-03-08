@@ -5,11 +5,13 @@ class AyahTafsirEntity extends Equatable {
   const AyahTafsirEntity({
     required this.ref,
     required this.text,
+    required this.languageCode,
   });
 
   final AyahRef ref;
   final String text;
+  final String languageCode;
 
   @override
-  List<Object?> get props => [ref, text];
+  List<Object?> get props => [ref, text, languageCode];
 }

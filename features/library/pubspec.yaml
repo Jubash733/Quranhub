@@ -1,0 +1,38 @@
+﻿name: library_feature
+description: Library feature for Quran app.
+version: 0.0.1
+publish_to: "none"
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  freezed_annotation: ^2.4.4
+
+  # Resources
+  resources:
+    path: ../../resources/resources
+
+  # Domains
+  library_domain:
+    path: ../../domains/library
+
+  # Shared libraries
+  common:
+    path: ../../shared_libraries/common
+  core:
+    path: ../../shared_libraries/core
+  dependencies:
+    path: ../../shared_libraries/dependencies
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  build_runner: ^2.4.12
+  freezed: ^2.5.7
+
+flutter:

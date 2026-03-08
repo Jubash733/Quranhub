@@ -13,12 +13,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _fetchSurah(FetchSurah event, Emitter<HomeState> emit) async {
     try {
-      emit(state.copyWith(statusSurah: ViewData.loading(message: 'Loading')));
+      emit(
+        state.copyWith(statusSurah: ViewData.loading(message: '')),
+      );
 
       final response = await getSurahUsecase.call();
 
       if (response.length() == 0) {
-        emit(state.copyWith(statusSurah: ViewData.noData(message: 'Kosong')));
+        emit(
+          state.copyWith(statusSurah: ViewData.noData(message: '')),
+        );
       } else {
         response.fold(
             (failure) => emit(state.copyWith(

@@ -9,7 +9,10 @@ class GetAyahTranslationUsecase {
 
   const GetAyahTranslationUsecase({required this.repository});
 
-  Future<Either<FailureResponse, AyahTranslationEntity>> call(AyahRef ref) {
-    return repository.getAyahTranslation(ref);
+  Future<Either<FailureResponse, AyahTranslationEntity>> call(
+    AyahRef ref, {
+    String languageCode = 'ar',
+  }) {
+    return repository.getAyahTranslation(ref, languageCode: languageCode);
   }
 }

@@ -1,15 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+enum ArabicFontFamily { amiri, cairo, uthmani }
+
+ArabicFontFamily arabicFontFamilyFromString(String? value) {
+  switch (value) {
+    case 'cairo':
+      return ArabicFontFamily.cairo;
+    case 'uthmani':
+      return ArabicFontFamily.uthmani;
+    case 'amiri':
+    default:
+      return ArabicFontFamily.amiri;
+  }
+}
+
+String arabicFontFamilyKey(ArabicFontFamily family) {
+  if (family == ArabicFontFamily.cairo) return 'cairo';
+  if (family == ArabicFontFamily.uthmani) return 'uthmani';
+  return 'amiri';
+}
+
+TextStyle arabicVerseStyle(
+  ArabicFontFamily family, {
+  double scale = 1.0,
+}) {
+  if (family == ArabicFontFamily.uthmani) {
+    return TextStyle(
+      fontFamily: 'Uthmani',
+      fontSize: 28 * scale,
+      fontWeight: FontWeight.w400,
+      height: 1.6,
+    );
+  }
+  final isAmiri = family == ArabicFontFamily.amiri;
+  final base = isAmiri ? GoogleFonts.amiri() : GoogleFonts.cairo();
+  return base.copyWith(
+    fontSize: (isAmiri ? 30 : 28) * scale,
+    fontWeight: FontWeight.w400,
+    height: isAmiri ? 1.8 : 1.6,
+  );
+}
+
+TextStyle arabicBodyStyle(
+  ArabicFontFamily family, {
+  double scale = 1.0,
+}) {
+  if (family == ArabicFontFamily.uthmani) {
+    return TextStyle(
+      fontFamily: 'Uthmani',
+      fontSize: 18 * scale,
+      fontWeight: FontWeight.w400,
+      height: 1.6,
+    );
+  }
+  final isAmiri = family == ArabicFontFamily.amiri;
+  final base = isAmiri ? GoogleFonts.amiri() : GoogleFonts.cairo();
+  return base.copyWith(
+    fontSize: (isAmiri ? 18 : 17) * scale,
+    fontWeight: FontWeight.w400,
+    height: isAmiri ? 1.7 : 1.55,
+  );
+}
+
 // text style
-final TextStyle kHeading5 =
-    GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w400);
-final TextStyle kHeading6 = GoogleFonts.poppins(
-    fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.15);
-final TextStyle kSubtitle = GoogleFonts.poppins(
-    fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.15);
-final TextStyle kBodyText = GoogleFonts.poppins(
-    fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.25);
+final TextStyle kHeading5 = GoogleFonts.cairo(
+  fontSize: 24,
+  fontWeight: FontWeight.w600,
+  height: 1.2,
+);
+final TextStyle kHeading6 = GoogleFonts.cairo(
+  fontSize: 18,
+  fontWeight: FontWeight.w600,
+  height: 1.25,
+);
+final TextStyle kSubtitle = GoogleFonts.cairo(
+  fontSize: 14,
+  fontWeight: FontWeight.w400,
+  height: 1.35,
+);
+final TextStyle kBodyText = GoogleFonts.cairo(
+  fontSize: 12,
+  fontWeight: FontWeight.w400,
+  height: 1.4,
+);
+
+final TextStyle kArabicVerse = arabicVerseStyle(ArabicFontFamily.amiri);
+final TextStyle kArabicBody = arabicBodyStyle(ArabicFontFamily.amiri);
 
 // text theme
 final kTextTheme = TextTheme(

@@ -2,12 +2,15 @@ import 'dart:convert';
 
 import 'package:dependencies/dio/dio.dart';
 import 'package:quran/data/models/ayah_translation_dto.dart';
-import 'package:quran/data/models/detail_surah_dto.dart';
+import 'package:quran/data/models/surah_dto.dart';
 import 'package:quran/domain/entities/ayah_ref.dart';
 import 'package:resources/constant/api_constant.dart';
 
 abstract class TranslationRemoteDataSource {
-  Future<AyahTranslationDTO> getAyahTranslation(AyahRef ref);
+  Future<AyahTranslationDTO> getAyahTranslation(
+    AyahRef ref, {
+    required String edition,
+  });
 }
 
 class TranslationRemoteDataSourceImpl extends TranslationRemoteDataSource {
@@ -16,22 +19,25 @@ class TranslationRemoteDataSourceImpl extends TranslationRemoteDataSource {
   TranslationRemoteDataSourceImpl({required this.dio});
 
   @override
-  Future<AyahTranslationDTO> getAyahTranslation(AyahRef ref) async {
+  Future<AyahTranslationDTO> getAyahTranslation(
+    AyahRef ref, {
+    required String edition,
+  }) async {
     try {
-      final response = await dio.get('${ApiConstant.baseUrl}surah/${ref.surah}');
+      final response = await dio.get(
+        '${ApiConstant.alquranBaseUrl}/ayah/${ref.surah}:${ref.ayah}/$edition',
+      );
       final payload =
           response.data is String ? jsonDecode(response.data) : response.data;
-      final detail = DetailSurahResponseDTO.fromJson(payload).data;
-      final verse = detail.verses.firstWhere(
-        (item) => item.number.inSurah == ref.ayah,
-        orElse: () => throw Exception(
-            'Ayah not found for surah ${ref.surah}, ayah ${ref.ayah}'),
-      );
-      // Map from API fields: surah number + inSurah (avoid global inQuran ids).
+      final data = payload['data'] as Map<String, dynamic>? ?? {};
+      final text = data['text'] as String? ?? '';
       return AyahTranslationDTO(
-        surahNumber: detail.number,
-        ayahNumber: verse.number.inSurah,
-        translation: verse.translation,
+        surahNumber: ref.surah,
+        ayahNumber: ref.ayah,
+        translation: TranslationDTO(
+          en: text,
+          id: text,
+        ),
       );
     } catch (e) {
       rethrow;

@@ -31,6 +31,14 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+**/build/
+**/android/build/
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.podspec
+
+# Tooling temp
+tools/tmp/
 
 # Symbolication related
 app.*.symbols

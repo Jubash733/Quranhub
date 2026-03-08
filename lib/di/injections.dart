@@ -1,4 +1,5 @@
-import 'package:core/di/dependency.dart';
+﻿import 'package:core/di/dependency.dart';
+import 'package:library_domain/di/dependency.dart';
 import 'package:quran/di/dependency.dart';
 
 class Injections {
@@ -8,5 +9,9 @@ class Injections {
 
     // Feature Quran
     RegisterQuranModule();
+
+    // Feature Library
+    RegisterLibraryModule();
   }
 }
+

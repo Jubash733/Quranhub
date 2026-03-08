@@ -2,6 +2,7 @@ import 'package:common/utils/provider/preference_settings_provider.dart';
 import 'package:dependencies/show_up_animation/show_up_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:quran/domain/entities/detail_surah_entity.dart';
+import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 
@@ -17,6 +18,7 @@ class BannerVersesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.l10n.isArabic;
     return Stack(
       children: [
         ShowUpAnimation(
@@ -48,16 +50,20 @@ class BannerVersesWidget extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  surah.name.transliteration.id,
+                  isArabic ? surah.name.short : surah.name.transliteration.en,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: kHeading6.copyWith(
                     fontSize: 26.0,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 4.0),
+                const SizedBox(height: 2.0),
                 Text(
-                  surah.name.translation.id,
+                  isArabic ? surah.name.long : surah.name.translation.en,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: kHeading6.copyWith(
                     fontSize: 16.0,
                     color: Colors.white,
@@ -72,11 +78,13 @@ class BannerVersesWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 6.0,
                   children: [
                     Text(
-                      surah.revelation.id,
+                      isArabic ? surah.revelation.arab : surah.revelation.en,
                       style: kHeading6.copyWith(
                         color: Colors.white.withValues(
                           alpha: 0.9,
@@ -85,7 +93,6 @@ class BannerVersesWidget extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const SizedBox(width: 5.0),
                     Icon(
                       Icons.circle,
                       color: Colors.white.withValues(
@@ -93,9 +100,8 @@ class BannerVersesWidget extends StatelessWidget {
                       ),
                       size: 5,
                     ),
-                    const SizedBox(width: 5.0),
                     Text(
-                      '${surah.numberOfVerses} Ayat',
+                      '${surah.numberOfVerses} ${context.l10n.ayah}',
                       style: kHeading6.copyWith(
                         color: Colors.white.withValues(
                           alpha: 0.9,

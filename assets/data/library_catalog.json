@@ -1,0 +1,68 @@
+[
+  {
+    "itemId": "translation.en.pickthall",
+    "title": "ترجمة القرآن - Pickthall (EN)",
+    "author": "Marmaduke Pickthall",
+    "description": "ترجمة إنجليزية بنص كامل (Public Domain). تُحمّل بعد التثبيت.",
+    "category": "translation",
+    "sizeBytes": 2833360,
+    "source": "Project Gutenberg (EBook #16955)",
+    "downloadUrl": "https://www.gutenberg.org/cache/epub/16955/pg16955.txt",
+    "isBundled": false
+  },
+  {
+    "itemId": "tafsir.ar.placeholder",
+    "title": "تفسير عربي (غير متاح للتحميل بعد)",
+    "author": "—",
+    "description": "لا يوجد مصدر بترخيص مفتوح واضح حتى الآن. سيتم تفعيله عند توفر مصدر مرخّص.",
+    "category": "tafsir",
+    "sizeBytes": 0,
+    "source": "—",
+    "downloadUrl": null,
+    "isBundled": false
+  },
+  {
+    "itemId": "asbab_placeholder",
+    "title": "أسباب النزول (يتطلب حزمة مرخّصة)",
+    "author": "—",
+    "description": "يتطلب مصدر بيانات مرخّص قبل الإتاحة للتحميل.",
+    "category": "asbab",
+    "sizeBytes": 0,
+    "source": "—",
+    "downloadUrl": null,
+    "isBundled": false
+  },
+  {
+    "itemId": "irab_placeholder",
+    "title": "إعراب القرآن (يتطلب حزمة مرخّصة)",
+    "author": "—",
+    "description": "يتطلب مصدر بيانات مرخّص قبل الإتاحة للتحميل.",
+    "category": "irab",
+    "sizeBytes": 0,
+    "source": "—",
+    "downloadUrl": null,
+    "isBundled": false
+  },
+  {
+    "itemId": "topics_placeholder",
+    "title": "موضوعات الآيات (يتطلب حزمة مرخّصة)",
+    "author": "—",
+    "description": "يتطلب مصدر بيانات مرخّص قبل الإتاحة للتحميل.",
+    "category": "topics",
+    "sizeBytes": 0,
+    "source": "—",
+    "downloadUrl": null,
+    "isBundled": false
+  },
+  {
+    "itemId": "qiraat_placeholder",
+    "title": "قراءات (يتطلب حزمة مرخّصة)",
+    "author": "—",
+    "description": "يتطلب مصدر بيانات مرخّص قبل الإتاحة للتحميل.",
+    "category": "qiraat",
+    "sizeBytes": 0,
+    "source": "—",
+    "downloadUrl": null,
+    "isBundled": false
+  }
+]

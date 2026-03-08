@@ -5,5 +5,6 @@ import 'package:quran/domain/entities/ayah_translation_entity.dart';
 
 abstract class TranslationRepository {
   Future<Either<FailureResponse, AyahTranslationEntity>> getAyahTranslation(
-      AyahRef ref);
+      AyahRef ref,
+      {String languageCode});
 }

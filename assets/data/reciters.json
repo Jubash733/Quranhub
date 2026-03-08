@@ -1,0 +1,47 @@
+[
+  {
+    "identifier": "Alafasy_128kbps",
+    "language": "ar",
+    "name": "مشارى راشد العفاسي",
+    "englishName": "Alafasy",
+    "format": "mp3",
+    "type": "murattal",
+    "bitrate": "128"
+  },
+  {
+    "identifier": "Husary_128kbps",
+    "language": "ar",
+    "name": "محمود خليل الحصري",
+    "englishName": "Husary",
+    "format": "mp3",
+    "type": "murattal",
+    "bitrate": "128"
+  },
+  {
+    "identifier": "Abdul_Basit_Mujawwad_128kbps",
+    "language": "ar",
+    "name": "عبد الباسط عبد الصمد (مجود)",
+    "englishName": "Abdul Basit (Mujawwad)",
+    "format": "mp3",
+    "type": "mujawwad",
+    "bitrate": "128"
+  },
+  {
+    "identifier": "Minshawy_Mujawwad_192kbps",
+    "language": "ar",
+    "name": "محمد صديق المنشاوي (مجود)",
+    "englishName": "Minshawy (Mujawwad)",
+    "format": "mp3",
+    "type": "mujawwad",
+    "bitrate": "192"
+  },
+  {
+    "identifier": "MaherAlMuaiqly128kbps",
+    "language": "ar",
+    "name": "ماهر المعيقلي",
+    "englishName": "Maher Al Muaiqly",
+    "format": "mp3",
+    "type": "murattal",
+    "bitrate": "128"
+  }
+]

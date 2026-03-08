@@ -3,6 +3,7 @@ import 'package:dependencies/provider/provider.dart';
 import 'package:dependencies/show_up_animation/show_up_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:resources/constant/named_routes.dart';
+import 'package:resources/extensions/context_extensions.dart';
 import 'package:resources/styles/color.dart';
 import 'package:resources/styles/text_styles.dart';
 
@@ -21,7 +22,7 @@ class OnBoardScreen extends StatelessWidget {
               children: [
                 ShowUpAnimation(
                   child: Text(
-                    'Quran App',
+                    context.l10n.appTitle,
                     style: kHeading6.copyWith(
                       fontSize: 28.0,
                       fontWeight: FontWeight.w700,
@@ -31,7 +32,7 @@ class OnBoardScreen extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 ShowUpAnimation(
                   child: Text(
-                    'Pelajari Quran dan\nBacalah sekali setiap hari',
+                    context.l10n.onboardingSubtitle,
                     textAlign: TextAlign.center,
                     style: kHeading6.copyWith(
                       fontSize: 18.0,
@@ -79,7 +80,7 @@ class OnBoardScreen extends StatelessWidget {
                             child: Consumer<PreferenceSettingsProvider>(
                               builder: (context, prefSetProvider, _) {
                                 return Text(
-                                  ' Mulai Yuk! ',
+                                  context.l10n.startNow,
                                   style: kHeading6.copyWith(
                                       color: prefSetProvider.isDarkTheme
                                           ? kBlackPurple

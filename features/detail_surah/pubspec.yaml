@@ -15,6 +15,9 @@ dependencies:
   # Domain
   quran:
     path: ../../domains/quran
+
+  ai_assistant:
+    path: ../ai_assistant
     
   # Resources
   resources:

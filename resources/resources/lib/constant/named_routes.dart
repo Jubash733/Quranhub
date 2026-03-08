@@ -6,4 +6,12 @@ class NamedRoutes {
   static const homeScreen = 'homeScreen';
   static const detailScreen = 'detailScreen';
   static const bookmarkScreen = 'bookmarkScreen';
+  static const searchScreen = 'searchScreen';
+  static const aiAssistantScreen = 'aiAssistantScreen';
+  static const settingsScreen = 'settingsScreen';
+  static const audioStorageScreen = 'audioStorageScreen';
+  static const attributionsScreen = 'attributionsScreen';
+  static const libraryScreen = 'libraryScreen';
+  static const libraryManageScreen = 'libraryManageScreen';
+  static const myLibraryScreen = 'myLibraryScreen';
 }

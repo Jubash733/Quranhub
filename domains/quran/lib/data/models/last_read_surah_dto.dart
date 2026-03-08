@@ -20,9 +20,9 @@ class LastReadSurahDTO {
       LastReadSurahDTO(
         id: 1,
         number: detailSurah.number,
-        surah: detailSurah.name.transliteration.id,
+        surah: detailSurah.name.short,
         numberOfVerses: detailSurah.numberOfVerses,
-        revelation: detailSurah.revelation.id,
+        revelation: detailSurah.revelation.arab,
       );
 
   factory LastReadSurahDTO.fromMap(Map<String, dynamic> map) =>
